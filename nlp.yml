@@ -4,6 +4,13 @@ provider:
   gateway: http://127.0.0.1:8080
 functions:
   nlp:
-    lang: python3-http-debian-nlp
+    lang: python3-http-debian
     handler: ./nlp
     image: localhost:5000/nlp:latest
+    environment:
+      minio_hostname: 192.168.1.143:9000
+      minio_access_key: w03a0G86K6235mb8xoDA
+      minio_secret_key: d4L5/MlJGf9/p5O+Ote/ay4iesM6Gr78cLl3UR0/
+      write_debug: true
+    build_args:
+      ADDITIONAL_PACKAGE: 'g++ cmake unzip libcurl4-openssl-dev'

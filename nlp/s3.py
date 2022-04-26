@@ -1,5 +1,6 @@
 import logging
 import boto3
+from botocore.client import Config
 from botocore.exceptions import ClientError
 import os
 """
@@ -8,7 +9,14 @@ Utility module for S3 buckets
 @author: Bob Schmitz
 """
 
-_s3_client = boto3.client('s3')
+hostname=os.getenv['minio_hostname']
+_s3_client = boto3.client('s3',
+    endpoint_url=f'http://{hostname}',
+    aws_access_key_id=os.getenv['minio_access_key'],
+    aws_secret_access_key=os.getenv['minio_secret_key'],
+    config=Config(signature_version='s3v4'),
+    region_name='us-east-1'
+)
 
 def s3_delete(bucket, object_name):
     """Download a file to an S3 bucket

@@ -1,5 +1,5 @@
 FROM openfaas/of-watchdog:0.7.7 as watchdog
-FROM python:slim-buster
+FROM python:3.7-slim-buster
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
@@ -7,7 +7,7 @@ RUN chmod +x /usr/bin/fwatchdog
 ARG ADDITIONAL_PACKAGE
 # Alternatively use ADD https:// (which will not be cached by Docker builder)
 
-RUN apt-get -qy update && apt-get -qy install gcc make ${ADDITIONAL_PACKAGE}
+RUN apt-get -qy update && apt-get -qy install ${ADDITIONAL_PACKAGE}
 
 # Add non root user
 RUN addgroup --system app && adduser app --system --ingroup app
@@ -37,11 +37,7 @@ RUN chown -R app:app ../
 
 ARG TEST_COMMAND=tox
 ARG TEST_ENABLED=true
-RUN if [ "$TEST_ENABLED" = "false" ]; then \
-	echo "skipping tests"; \
-	else \
-	eval "$TEST_COMMAND"; \
-	fi
+RUN [ "$TEST_ENABLED" = "false" ] && echo "skipping tests" || eval "$TEST_COMMAND"
 
 WORKDIR /home/app/
 

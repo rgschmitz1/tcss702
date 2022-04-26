@@ -7,6 +7,8 @@ RUN chmod +x /usr/bin/fwatchdog
 ARG ADDITIONAL_PACKAGE
 # Alternatively use ADD https:// (which will not be cached by Docker builder)
 
+RUN apt-get -qy update && apt-get -qy install gcc make ${ADDITIONAL_PACKAGE}
+
 # Add non root user
 RUN addgroup --system app && adduser app --system --ingroup app
 RUN chown app /home/app
@@ -21,12 +23,7 @@ COPY index.py           .
 COPY requirements.txt   .
 
 USER root
-RUN apt-get -qy update && \
-	apt-get -qy install gcc make ${ADDITIONAL_PACKAGE} && \
-	pip install -r requirements.txt && \
-	apt-get -qy purge gcc make && \
-	apt-get -y autoremove && \
-	&& rm -rf /var/lib/apt/lists/*
+RUN pip install -r requirements.txt
 
 # Build the function directory and install any user-specified components
 USER app
@@ -35,12 +32,7 @@ RUN mkdir -p function
 RUN touch ./function/__init__.py
 WORKDIR /home/app/function/
 COPY function/requirements.txt	.
-RUN apt-get -qy update && \
-	apt-get -qy install gcc make && \
-	pip install --user -r requirements.txt && \
-	apt-get -qy purge gcc make && \
-	apt-get -y autoremove && \
-	&& rm -rf /var/lib/apt/lists/*
+RUN pip install --user -r requirements.txt
 
 #install function code
 USER root
@@ -49,12 +41,8 @@ COPY function/   .
 RUN chown -R app:app ../
 
 ARG TEST_COMMAND=tox
-ARG TEST_ENABLED=false
-RUN if [ "$TEST_ENABLED" == "false" ]; then \
-    echo "skipping tests";\
-    else \
-    eval "$TEST_COMMAND"; \
-    fi
+ARG TEST_ENABLED=true
+RUN [ "$TEST_ENABLED" = "false" ] && echo "skipping tests" || eval "$TEST_COMMAND"
 
 WORKDIR /home/app/
 
