@@ -19,4 +19,6 @@ fi
 cd $(dirname $0)/..
 sed -i "s|\(.*access_key: \).*|\1${ACCESSKEY}|" nlp.yml
 sed -i "s|\(.*secret_key: \).*|\1${SECRETKEY}|" nlp.yml
+
+faas-cli up -f nlp.yml
 exit $?

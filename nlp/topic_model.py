@@ -39,10 +39,10 @@ class topic_model:
         self.__mc = mc
 
 
-    def lambda_function_1(self,
-                          training_data='/tmp/news_train.csv',
-                          bucket_name_in=f'topic-modeling-{region}',
-                          bucket_name_out=f'topic-modeling-{region}-{arch}'):
+    def preprocess(self,
+                   training_data='/tmp/news_train.csv',
+                   bucket_name_in=f'topic-modeling-{region}',
+                   bucket_name_out=f'topic-modeling-{region}-{arch}'):
         # =============================================================================
         #     LOAD news_train.csv FROM S3 BUCKET
         #     We will use the last 80% of the dataset for model training
@@ -63,11 +63,11 @@ class topic_model:
         self.__mc.fput_object(bucket_name_out, 'corpus_tfidf.p', '/tmp/corpus_tfidf.p')
 
 
-    def lambda_function_2(self,
-                          corpus_tfidf='/tmp/corpus_tfidf.p',
-                          dictionary='/tmp/dictionary.p',
-                          bucket_name_in=f'topic-modeling-{region}-{arch}',
-                          bucket_name_out=f'topic-modeling-{region}-{arch}'):
+    def train(self,
+              corpus_tfidf='/tmp/corpus_tfidf.p',
+              dictionary='/tmp/dictionary.p',
+              bucket_name_in=f'topic-modeling-{region}-{arch}',
+              bucket_name_out=f'topic-modeling-{region}-{arch}'):
         # =============================================================================
         #     LOAD corpus_tfidf AND dictionary FROM S3 BUCKET
         # =============================================================================
@@ -92,12 +92,12 @@ class topic_model:
             self.__mc.fput_object(bucket_name_out, os.path.basename(mfile), mfile)
 
 
-    def lambda_function_3(self,
-                          test_data='/tmp/news_test_smaller.csv',
-                          dictionary='/tmp/dictionary.p',
-                          bucket_name_in=[f'topic-modeling-{region}',
-                                          f'topic-modeling-{region}-{arch}'],
-                          bucket_name_out=f'topic-modeling-{region}-{arch}'):
+    def query(self,
+              test_data='/tmp/news_test_smaller.csv',
+              dictionary='/tmp/dictionary.p',
+              bucket_name_in=[f'topic-modeling-{region}',
+                              f'topic-modeling-{region}-{arch}'],
+              bucket_name_out=f'topic-modeling-{region}-{arch}'):
         # =============================================================================
         #     LOAD lda_model AND dictionary AND news_test.csv FROM S3 BUCKET
         #     We will use the last 20% of the dataset to query the model
