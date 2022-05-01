@@ -13,11 +13,8 @@ functions:
     environment:
       write_timeout: 600s
       read_timeout: 600s
-      exec_timeout: 600s
-#      healthcheck_interval: 600s
-      mode: http
       minio_hostname: minio.default.svc.cluster.local:9000
-      minio_access_key: 3JP13UiT87fg93jh5S78
-      minio_secret_key: 3A77wqDLVLDX+4Z/i1Sd+ioq+Jd+raX9WJ433N0N
+      minio_access_key: INSERT_ACCESS_KEY
+      minio_secret_key: INSERT_SECRET_KEY
       write_debug: true
       NLTK_DATA: /home/app/function/nltk_data

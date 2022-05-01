@@ -1,15 +1,11 @@
-#FROM openfaas/of-watchdog:0.8.2 as watchdog
-
 # Build image stage
 FROM python:slim-buster as build
-
-#COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
-#RUN chmod +x /usr/bin/fwatchdog
 
 ARG ADDITIONAL_BUILD_PACKAGE
 # Alternatively use ADD https:// (which will not be cached by Docker builder)
 
-RUN apt-get -qy update && apt-get -qy install ${ADDITIONAL_BUILD_PACKAGE}
+RUN apt-get -qy update && apt-get -qy install ${ADDITIONAL_BUILD_PACKAGE} && \
+	rm -fr /var/lib/apt/lists/*
 
 # Add non root user
 RUN addgroup --system app && adduser app --system --ingroup app
@@ -23,9 +19,9 @@ COPY --chown=app index.py .
 COPY --chown=app requirements.txt .
 RUN pip install -r requirements.txt
 
-RUN mkdir -p function
-RUN touch ./function/__init__.py
+RUN mkdir function
 WORKDIR /home/app/function
+RUN touch __init__.py
 COPY --chown=app function/requirements.txt .
 RUN pip install -r requirements.txt
 
@@ -33,8 +29,9 @@ COPY --chown=app function/ .
 
 ARG TEST_COMMAND=tox
 ARG TEST_ENABLED=true
-RUN [ "$TEST_ENABLED" = "false" ] && echo "skipping tests" || (pip install tox==3.*; eval "$TEST_COMMAND")
-RUN rm -fr ../.cache ../.local
+RUN [ "$TEST_ENABLED" = "false" ] && echo "skipping tests" || \
+	(pip install tox==3.*; eval "$TEST_COMMAND" && rm -fr .tox)
+RUN rm -fr ../.cache
 
 # Production image stage
 FROM python:slim-buster
@@ -45,7 +42,7 @@ RUN chmod +x /usr/bin/fwatchdog
 
 ARG ADDITIONAL_PACKAGE
 RUN apt-get -qy update && \
-	apt-get -qy install ${ADDITIONAL_PACKAGE}; \
+	apt-get -qy install ${ADDITIONAL_PACKAGE} && \
 	rm -rf /var/lib/apt/lists/*
 
 # Add non root user
