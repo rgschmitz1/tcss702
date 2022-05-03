@@ -31,7 +31,7 @@ def handle(event, context):
 
     inspector.inspectAllDeltas()
     # Include functionName
-    inspector.addAttribute("functionName", body['fn'])
+    inspector.addAttribute("functionName", fn[body['fn']].__name__)
 
     iret = inspector.finish()
     ret = {

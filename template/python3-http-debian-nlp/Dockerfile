@@ -1,5 +1,7 @@
+FROM ghcr.io/openfaas/of-watchdog:0.9.3 as watchdog
+
 # Build image stage
-FROM python:slim-buster as build
+FROM python:slim-bullseye as build
 
 ARG ADDITIONAL_BUILD_PACKAGE
 # Alternatively use ADD https:// (which will not be cached by Docker builder)
@@ -34,10 +36,9 @@ RUN [ "$TEST_ENABLED" = "false" ] && echo "skipping tests" || \
 RUN rm -fr ../.cache
 
 # Production image stage
-FROM python:slim-buster
+FROM python:slim-bullseye
 
-ADD https://github.com/openfaas/of-watchdog/releases/download/0.9.3/fwatchdog-amd64 /usr/bin/fwatchdog
-#COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
+COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
 ARG ADDITIONAL_PACKAGE

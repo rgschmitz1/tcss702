@@ -79,9 +79,9 @@ class topic_model:
         corpus_tfidf = pickle.load(open(corpus_tfidf, 'rb'))
         dictionary = pickle.load(open(dictionary, 'rb'))
         # DOESN'T WORK IN LAMBDA
-    #    lda_model = gensim.models.LdaMulticore(corpus_tfidf, num_topics=5,
-    #                                           id2word=dictionary, passes=2,
-    #                                           workers=2)
+        # lda_model = models.LdaMulticore(corpus_tfidf, num_topics=5,
+        #                                 id2word=dictionary, passes=2,
+        #                                 workers=2)
         lda_model = models.LdaModel(corpus_tfidf, num_topics=5, id2word=dictionary)
 
         # =============================================================================
