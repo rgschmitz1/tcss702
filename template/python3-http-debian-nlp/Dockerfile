@@ -1,12 +1,14 @@
-FROM ghcr.io/openfaas/of-watchdog:0.9.3 as watchdog
+FROM ghcr.io/openfaas/of-watchdog:0.9.3 AS watchdog
 
 # Build image stage
-FROM python:slim-bullseye as build
+FROM python:slim-bullseye AS builder
 
+ARG DEBIAN_FRONTEND=noninteractive
 ARG ADDITIONAL_BUILD_PACKAGE
 # Alternatively use ADD https:// (which will not be cached by Docker builder)
 
-RUN apt-get -qy update && apt-get -qy install ${ADDITIONAL_BUILD_PACKAGE} && \
+RUN apt-get -qy update && \
+	apt-get -qy install ${ADDITIONAL_BUILD_PACKAGE} && \
 	rm -fr /var/lib/apt/lists/*
 
 # Add non root user
@@ -19,21 +21,26 @@ ENV PATH=/home/app/venv/bin:$PATH
 
 COPY --chown=app index.py .
 COPY --chown=app requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 RUN mkdir function
 WORKDIR /home/app/function
+
 RUN touch __init__.py
 COPY --chown=app function/requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY --chown=app function/ .
+
+RUN rm -fr ../.cache
+
+# Test image stage
+FROM builder AS tester
 
 ARG TEST_COMMAND=tox
 ARG TEST_ENABLED=true
 RUN [ "$TEST_ENABLED" = "false" ] && echo "skipping tests" || \
 	(pip install tox==3.*; eval "$TEST_COMMAND" && rm -fr .tox)
-RUN rm -fr ../.cache
 
 # Production image stage
 FROM python:slim-bullseye
@@ -41,6 +48,7 @@ FROM python:slim-bullseye
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
+ARG DEBIAN_FRONTEND
 ARG ADDITIONAL_PACKAGE
 RUN apt-get -qy update && \
 	apt-get -qy install ${ADDITIONAL_PACKAGE} && \
@@ -51,7 +59,7 @@ RUN addgroup --system app && adduser app --system --ingroup app
 USER app
 WORKDIR /home/app
 
-COPY --from=build --chown=app /home/app /home/app
+COPY --from=builder --chown=app /home/app /home/app
 ENV PATH=/home/app/venv/bin:$PATH
 
 # Set up of-watchdog for HTTP mode

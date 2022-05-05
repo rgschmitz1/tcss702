@@ -1,0 +1,1 @@
+ibmcloud ks cluster create classic --zone dal10 --flavor b3c.4x16 --hardware shared --gateway-enabled --workers 1 --name tcss702-test-bobs --version 1.22.9 --private-service-endpoint --public-service-endpoint
