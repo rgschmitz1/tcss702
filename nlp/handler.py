@@ -6,9 +6,14 @@ from .topic_model import topic_model
 
 #def handle(event):
 def handle(event, context):
+    with open("/var/openfaas/secrets/minio-access-key") as f:
+        access_key = f.read()
+    with open("/var/openfaas/secrets/minio-secret-key") as f:
+        secret_key = f.read()
+
     mc = Minio(os.environ['minio_hostname'],
-               access_key=os.environ['minio_access_key'],
-               secret_key=os.environ['minio_secret_key'],
+               access_key=access_key,
+               secret_key=secret_key,
                secure=False)
 
     tm = topic_model(mc)

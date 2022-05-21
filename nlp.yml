@@ -6,16 +6,18 @@ functions:
   nlp:
     lang: python3-http-debian-nlp
     handler: ./nlp
-    image: localhost:5000/nlp:latest
+    image: schmitzr1984/nlp:latest
     build_args:
       ADDITIONAL_BUILD_PACKAGE: 'gcc g++ cmake unzip libcurl4-openssl-dev'
+      ADDITIONAL_PACKAGE: 'openssl gzip'
       TEST_ENABLED: false
     environment:
       write_timeout: 600s
       read_timeout: 600s
       exec_timeout: 600s
       minio_hostname: minio.default.svc.cluster.local:9000
-      minio_access_key: 4n941pzS4HQn2237R1KY
-      minio_secret_key: TUJofj/j214TiI8/nEPN0k+F+8DCTg2+vv1r7Bk6
       write_debug: true
       NLTK_DATA: /home/app/function/nltk_data
+    secrets:
+    - minio-access-key
+    - minio-secret-key
