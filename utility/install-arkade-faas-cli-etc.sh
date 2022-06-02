@@ -7,22 +7,22 @@ rm -rf $HOME/.arkade
 curl -SLfs https://get.arkade.dev | sudo sh
 
 # Install faas-cli
-arkade get faas-cli
+curl -sSL https://cli.openfaas.com | sudo -E sh
 
 # Install helm
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
-chmod 700 get_helm.sh
-./get_helm.sh
+curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash
 
 # Install minio clent
 wget https://dl.min.io/client/mc/release/linux-amd64/mc
-sudo install -o root -g root -m 07555 mc /usr/local/bin/mc
+sudo install -o root -g root -m 0755 mc /usr/local/bin/mc
+rm mc
 
 # Install kubectl
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
 curl -LO "https://dl.k8s.io/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl.sha256"
 echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
 sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+rm kubectl*
 
 # Install terraform
 sudo apt update && sudo apt install -y gnupg software-properties-common curl
