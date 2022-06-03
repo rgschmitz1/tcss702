@@ -10,9 +10,17 @@ execute_nlp_fn() {
 		exit 1
 	fi
 }
+start=$(date +%s)
+
 prompt_info "Invoking NLP preprocess function"
 execute_nlp_fn '{"fn":"p"}'
 prompt_info "Invoking NLP training function"
 execute_nlp_fn '{"fn":"t"}'
 prompt_info "Invoking NLP query function"
 execute_nlp_fn '{"fn":"q"}'
+
+end=$(date +%s)
+runtime=$((end-start))
+echo "Start time: $start"
+echo "End time: $end"
+echo "Total runtime: $runtime"
