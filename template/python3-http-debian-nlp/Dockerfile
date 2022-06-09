@@ -1,11 +1,13 @@
-FROM ghcr.io/openfaas/of-watchdog:0.9.3 AS watchdog
+FROM ghcr.io/openfaas/of-watchdog:0.9.6 AS watchdog
 
 # Build image stage
 FROM python:slim-bullseye AS builder
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG ADDITIONAL_BUILD_PACKAGE
-# Alternatively use ADD https:// (which will not be cached by Docker builder)
+
+# Upgrade pip and setuptools
+RUN pip install --upgrade pip setuptools
 
 RUN apt-get -qy update && \
 	apt-get -qy install ${ADDITIONAL_BUILD_PACKAGE} && \
@@ -16,19 +18,18 @@ RUN addgroup --system app && adduser app --system --ingroup app
 USER app
 WORKDIR /home/app
 
-RUN python -m venv venv
-ENV PATH=/home/app/venv/bin:$PATH
+ENV PATH=/home/app/.local/bin:$PATH
 
 COPY --chown=app index.py .
 COPY --chown=app requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --user -r requirements.txt
 
 RUN mkdir function
 WORKDIR /home/app/function
 
 RUN touch __init__.py
 COPY --chown=app function/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --user -r requirements.txt
 
 COPY --chown=app function/ .
 
@@ -60,7 +61,7 @@ USER app
 WORKDIR /home/app
 
 COPY --from=builder --chown=app /home/app /home/app
-ENV PATH=/home/app/venv/bin:$PATH
+ENV PATH=/home/app/.local/bin:$PATH
 
 # Set up of-watchdog for HTTP mode
 ENV fprocess="python index.py"

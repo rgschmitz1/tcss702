@@ -14,7 +14,7 @@ IPADDR=$(ip -br address show enp2s0 | grep -Eo '([0-9]+\.){3}[0-9]+')
 # Forward the gateway to your machine
 kubectl rollout status -n openfaas deploy/gateway
 pgrep -f kubectl.*8080 > /dev/null && (pkill -f kubectl.*8080; sleep 3)
-kubectl port-forward --address 127.0.0.1,$IPADDR -n openfaas svc/gateway 8080:8080 &
+kubectl port-forward -n openfaas svc/gateway 8080:8080 &
 if [ $? -ne 0 ]; then
 	echo "Failed to port-forward openfaas service"
 	exit 1
