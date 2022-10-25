@@ -1,7 +1,7 @@
 FROM ghcr.io/openfaas/of-watchdog:0.9.6 AS watchdog
 
 # Build image stage
-FROM python:slim-bullseye AS builder
+FROM python:3.11.0-slim-bullseye AS builder
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG ADDITIONAL_BUILD_PACKAGE
@@ -44,7 +44,7 @@ RUN [ "$TEST_ENABLED" = "false" ] && echo "skipping tests" || \
 	(pip install tox==3.*; eval "$TEST_COMMAND" && rm -fr .tox)
 
 # Production image stage
-FROM python:slim-bullseye
+FROM python:3.11.0-slim-bullseye
 
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
