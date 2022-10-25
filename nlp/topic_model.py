@@ -57,9 +57,11 @@ class topic_model:
         # =============================================================================
         #     SAVE corpus_tfidf AND dictionary TO S3 BUCKET
         # =============================================================================
-        pickle.dump(dictionary, open('/tmp/dictionary.p', 'wb'))
+        with open('/tmp/dictionary.p', 'wb') as f:
+            pickle.dump(dictionary, f)
         self.__mc.fput_object(bucket_name_out, 'dictionary.p', '/tmp/dictionary.p')
-        pickle.dump(corpus_tfidf, open('/tmp/corpus_tfidf.p', 'wb'))
+        with open('/tmp/corpus_tfidf.p', 'wb') as f:
+            pickle.dump(corpus_tfidf, f)
         self.__mc.fput_object(bucket_name_out, 'corpus_tfidf.p', '/tmp/corpus_tfidf.p')
 
 
@@ -109,7 +111,8 @@ class topic_model:
         for mfile in model_files:
             if not os.path.exists(mfile):
                 self.__mc.fget_object(bucket_name_in[1], os.path.basename(mfile), mfile)
-        dictionary = pickle.load(open(dictionary, 'rb'))
+        with open(dictionary, 'rb') as f:
+            dictionary = pickle.load(f)
         lda_model = models.LdaModel.load(model_files[0])
         df_query = pd.read_csv(test_data, on_bad_lines='skip',
                                usecols=['publish_date', 'headline_text'])
