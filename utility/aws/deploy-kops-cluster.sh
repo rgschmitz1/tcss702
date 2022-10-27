@@ -141,6 +141,24 @@ else
 	export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
 fi
 
+# Check for user input
+while [ -n "$1" ]; do
+	case $1 in
+		-d)
+			if delete_cluster; then
+				exit 0
+			else
+				printf "\nERROR: Encountered an issue deleting cluster\n"
+				exit 1
+			fi
+		;;
+		*)
+			printf "\nERROR: invalid argument!\n"
+			exit 1
+		;;
+	esac
+done
+
 # Verify kops state store has been created
 if ! (aws s3 ls | grep -q $(basename $KOPS_STATE_STORE) || create_kops_state_store); then
 	printf "\nERROR: failed to create kops state store in S3\n"
