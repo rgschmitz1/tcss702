@@ -1,74 +1,164 @@
 #!/bin/bash
 
-# Create k8s cluster configuration
-export NAME=tcss702.rgschmitz.com
-export AWS_REGION=us-east-2a
-export MASTER_SIZE=t3.medium
-export NODE_SIZE=t3.large
-export CLOUD=aws
-export SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
-export NETWORK_CNI=calico
-export KOPS_STATE_STORE=tcss702-rgschmitz-com-state-store
+# kops configuration variables
+NAME=tcss702.rgschmitz.com  # Domain was purchased from namecheap.com
+CLOUD=aws
+REGION=us-east-2
+MASTER_SIZE=t3.medium
+NODE_SIZE=t3.large
+SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
+NETWORK_CNI=calico
+TIMEOUT=20m
+export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
-# This IAM user should be created in AWS with the following permissions:
-#   AmazonEC2FullAccess
-#   AmazonRoute53FullAccess
-#   AmazonS3FullAccess
-#   IAMFullAccess
-#   AmazonVPCFullAccess
-#   AmazonSQSFullAccess
-#   AmazonEventBridgeFullAccess
-export AWS_PROFILE=tcss702
 
-# you should see a list of all your IAM users using:
-#   aws iam list-users
+# An IAM user must be created in AWS with permissions to create a cluster
+create_kops_iam_user() {
+	# IAM policies
+	local policy=(\
+		AmazonEC2FullAccess \
+		AmazonRoute53FullAccess \
+		AmazonS3FullAccess \
+		IAMFullAccess \
+		AmazonVPCFullAccess \
+		AmazonSQSFullAccess \
+		AmazonEventBridgeFullAccess \
+	)
 
-# Because "aws configure" doesn't export these vars for kops to use, we export them now
-export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
-export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
+	# Profile name will be grepped from this file incase it changes later
+	local profile=$(awk -F'=' '/export AWS_PROFILE/ {print $NF}' $0)
+
+	aws iam create-group --group-name $profile || return $?
+
+	# Attach policies to group
+	for p in ${policy[@]}; do
+		aws iam attach-group-policy \
+			--policy-arn arn:aws:iam::aws:policy/$p \
+			--group-name $profile || return $?
+	done
+
+	aws iam create-user --user-name $profile || return $?
+
+	aws iam add-user-to-group --user-name $profile --group-name $profile || \
+		return $?
+
+	# Create Access Key ID and Secret Access Key
+	local tmp=$(mktemp)
+	if ! aws iam create-access-key --user-name $profile > $tmp; then
+		local ret=$?
+		rm $tmp
+		return $ret
+	fi
+	local access_key=$(jq -r .AccessKey.AccessKeyId < $tmp)
+	local secret_key=$(jq -r .AccessKey.SecretAccessKey < $tmp)
+
+	# Populate AWS credentials
+	cat <<- _CREDENTIALS >> $HOME/.aws/credentials
+
+	[$profile]
+	aws_access_key_id=$access_key
+	aws_secret_access_key=$secret_key
+	_CREDENTIALS
+
+	# Populate AWS config
+	cat <<- _CONFIG >> $HOME/.aws/config
+
+	[profile $profile]
+	region=$REGION
+	_CONFIG
+
+	# Remove temporary AWS config file
+	rm $tmp
+
+	# Verify kops user was successfully created
+	aws iam get-user --user $profile
+	return $?
+}
+
 
 # An S3 bucket must be created to store the state of the k8s cluster
-#   aws s3 mb s3://$KOPS_STATE_STORE
-#   aws s3api put-bucket-versioning \
-#   	--bucket $KOPS_STATE_STORE \
-#   	--versioning-configuration Status=Enabled
-#   aws s3api put-bucket-encryption \
-#   	--bucket $KOPS_STATE_STORE \
-#   	--server-side-encryption-configuration \
-#   	'{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}'
+create_kops_state_store() {
+	local state_store=$(basename $KOPS_STATE_STORE)
+	aws s3 mb s3://$state_store || return $?
+	aws s3api put-bucket-versioning \
+		--bucket $state_store \
+		--versioning-configuration Status=Enabled || return $?
+	aws s3api put-bucket-encryption \
+		--bucket $state_store \
+		--server-side-encryption-configuration \
+		'{"Rules":[{"ApplyServerSideEncryptionByDefault":{"SSEAlgorithm":"AES256"}}]}'
+	return $?
+}
+
 
 # Setup AWS Route53 to access cluster via DNS subdomain,
-#   ID=$(uuidgen) && aws route53 create-hosted-zone --name $NAME --caller-reference $ID | jq .DelegationSet.NameServers
-#
-# You will now go to your registrar's page and log in.
-# You will need to create a new SUBDOMAIN, and use the 4 NS records received from the above command for the new SUBDOMAIN.
-# This MUST be done in order to use your cluster.
-# Do NOT change your top level NS record, or you might take your site offline.
+create_route53_dns() {
+	local id=$(uuidgen) && \
+		aws route53 create-hosted-zone --name $NAME --caller-reference $id | \
+		jq .DelegationSet.NameServers
+	local ret=$?
+	cat <<-_SUBDOMAIN
+	You will need to create a new SUBDOMAIN, and use the 4 NS records received from the above command for the new SUBDOMAIN.
+	This MUST be done in order to use your cluster.
+	Do NOT change your top level NS record, or you might take your site offline.
+	_SUBDOMAIN
+	return $ret
+}
 
-# Check if kops configuration file exists, then export the kops state store variable
-if [ ! -f $HOME/.kops.yaml ]; then
-	echo '---' > $HOME/.kops.yaml
-fi
-if ! grep -q kops_state_store $HOME/.kops.yaml; then
-	echo "kops_state_store: s3://$KOPS_STATE_STORE" >> $HOME/.kops.yaml
+
+# Create kubernetes cluster
+create_cluster() {
+	# Create cluster configuration
+	kops create cluster \
+		--name $NAME \
+		--cloud $CLOUD \
+		--zones ${REGION}a \
+		--master-size $MASTER_SIZE \
+		--node-size $NODE_SIZE \
+		--networking $NETWORK_CNI \
+		--ssh-public-key $SSH_PUBLIC_KEY
+	# Deploy cluster
+	kops update cluster --name $NAME --yes --admin
+}
+
+
+# Delete kubernetes cluster
+delete_cluster() {
+	kops delete cluster --name $NAME --yes
+	return $?
+}
+
+
+# Verify kops user has been created
+if ! (grep -q kops $HOME/.aws/credentials || create_kops_iam_credentials); then
+	printf "\nERROR: failed to generate kops user\n"
+	exit 1
+else
+	export AWS_PROFILE=kops
+
+	# awscli do not export these variables for kops to use
+	export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
+	export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
 fi
 
-# Create cluster configuration
-kops create cluster \
-	--name $NAME \
-	--cloud $CLOUD \
-	--zones $AWS_REGION \
-	--master-size $MASTER_SIZE \
-	--node-size $NODE_SIZE \
-	--networking $NETWORK_CNI \
-	--ssh-public-key $SSH_PUBLIC_KEY
-# Deploy cluster
-kops update cluster --name $NAME --yes --admin
+# Verify kops state store has been created
+if ! (aws s3 ls | grep -q $(basename $KOPS_STATE_STORE) || create_kops_state_store); then
+	printf "\nERROR: failed to create kops state store in S3\n"
+	exit 1
+fi
+
+# Route53 DNS needs to be deployed to use kops
+if ! (aws route53 list-hosted-zones | grep -q $NAME || create_route53_dns); then
+	printf "\nERROR: failed to create Route53\n"
+	exit 1
+fi
+
 # Wait until the cluster is up and ready to use
-kops validate cluster --wait 20m
-
-printf "\nThis script took $SECONDS seconds to finish\n"
-
-# ---
-# Use the following to delete the k8s cluster
-#   kops delete cluster --name $NAME --yes
+if create_cluster && kops validate cluster --wait $TIMEOUT; then
+	runtime=$(date -ud "@$SECONDS" "+%M minutes, %S seconds")
+	printf "\nSuccessfully deployed cluster in $runtime\n"
+else
+	printf "\nERROR: Failed to deploy cluster\n"
+	delete_cluster
+	exit 1
+fi
