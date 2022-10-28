@@ -21,16 +21,22 @@ def handle(event, context):
 
     # Uncompress normal and tumor samples
     uncompress_normal_sample = subprocess.run('tar -xf /tmp/normal.tar.xz -C /tmp', shell=True)
+    print(uncompress_normal_sample)
     uncompress_tumor_sample = subprocess.run('tar -xf /tmp/tumor.tar.xz -C /tmp', shell=True)
+    print(uncompress_tumor_sample)
 
     # Extract reference sequence and BWA index
     uncompress_ref_seq = subprocess.run('tar -xf /home/app/function/genome/GRCh38.d1.vd1.fa.tar.gz -C /tmp', shell=True)
+    print(uncompress_ref_seq)
     uncompress_bwa_idx = subprocess.run('tar -xf /home/app/function/genome/GRCh83.d1.vd1_BWA.tar.gz -C /tmp', shell=True)
+    print(uncompress_bwa_idx)
 
     # Align normal
     align_normal = subprocess.run('bwa mem -t 8 -T 0 /tmp/GRCh38.d1.vd1.fa /tmp/normal_1.fq /tmp/normal_2.fq | samtools sort -o /tmp/normal_realign.bam', shell=True)
+    print(align_normal)
     # Align tumor
     align_tumor = subprocess.run('bwa mem -t 8 -T 0 /tmp/GRCh38.d1.vd1.fa /tmp/tumor_1.fq /tmp/tumor_2.fq | samtools sort -o /tmp/tumor_realign.bam', shell=True)
+    print(align_tumor)
 
     # Put aligned normal and tumor bam in minio
     mc.fput_object('bwa-mem', 'normal_realign.bam', '/tmp/normal_realign.bam')

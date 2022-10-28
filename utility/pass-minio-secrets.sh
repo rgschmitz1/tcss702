@@ -1,5 +1,7 @@
 #!/bin/bash
-. $(dirname $0)/color_prompt.sh
+
+. $(dirname $0)/color-prompt.sh
+
 ACCESSKEY=$(kubectl get secret -n default minio -o jsonpath="{.data.accesskey}" | base64 --decode)
 if [ -z "$ACCESSKEY" ]; then
 	prompt_error "ERROR: ACCESSKEY variable is empty"
