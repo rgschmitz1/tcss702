@@ -1,15 +1,33 @@
 #!/bin/bash
 
 # kops configuration variables
-NAME=tcss702.rgschmitz.com  # Domain was purchased from namecheap.com
+NAME=tcss702.rgschmitz.com
 CLOUD=aws
 REGION=us-east-2
 MASTER_SIZE=t3.medium
-NODE_SIZE=t3.large
+NODE_SIZE=t3.xlarge
+NODE_COUNT=1
 SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 NETWORK_CNI=calico
-TIMEOUT=20m
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
+
+# This is the time specified for cluster validation, the cluster will be deleted if this timeout is exceeded during validation
+TIMEOUT=20m
+
+
+# Display script usage/flags for user
+usage() {
+	cat <<- _USAGE
+	Usage: $(basename $0) [Options]
+
+	Description: This script will instantiate a kubernetes cluster on AWS
+
+	Options:
+	  -d|--delete, deletes a running cluster and all underlying infrastructure
+	  -f|--filename <cluster-spec.yml>, pass a custom cluster spec
+	  -h|--help, print this message
+	_USAGE
+}
 
 
 # Check for and install dependencies
@@ -125,14 +143,19 @@ create_route53_dns() {
 # Create kubernetes cluster
 create_cluster() {
 	# Create cluster configuration
-	kops create cluster \
-		--name $NAME \
-		--cloud $CLOUD \
-		--zones ${REGION}a \
-		--master-size $MASTER_SIZE \
-		--node-size $NODE_SIZE \
-		--networking $NETWORK_CNI \
-		--ssh-public-key $SSH_PUBLIC_KEY
+	if [ -n "$CLUSTER_SPEC" ]; then
+		kops create -f $CLUSTER_SPEC
+	else
+		kops create cluster \
+			--name $NAME \
+			--cloud $CLOUD \
+			--zones ${REGION}a \
+			--master-size $MASTER_SIZE \
+			--node-size $NODE_SIZE \
+			--node-count $NODE_COUNT \
+			--networking $NETWORK_CNI \
+			--ssh-public-key $SSH_PUBLIC_KEY
+	fi
 	# Deploy cluster
 	kops update cluster --name $NAME --yes --admin
 }
@@ -166,7 +189,7 @@ fi
 # Check for user input
 while [ -n "$1" ]; do
 	case $1 in
-		-d)
+		-d|--delete)
 			if delete_cluster; then
 				exit 0
 			else
@@ -174,8 +197,23 @@ while [ -n "$1" ]; do
 				exit 1
 			fi
 		;;
+		-h|--help)
+			usage
+			exit
+		;;
+		-f|--filename)
+			if [[ -z "$2" || ! -f "$2" ]]; then
+				printf "\nERROR: a cluster specification file must be passed with this option\n"
+				usage
+				exit 1
+			fi
+			CLUSTER_SPEC="$2"
+			shift
+			shift
+		;;
 		*)
 			printf "\nERROR: invalid argument!\n"
+			usage
 			exit 1
 		;;
 	esac

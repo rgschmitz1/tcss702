@@ -1,7 +1,7 @@
 apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
-  creationTimestamp: "2022-10-21T21:45:42Z"
+  creationTimestamp: "2022-10-28T19:32:19Z"
   name: tcss702.rgschmitz.com
 spec:
   api:
@@ -34,7 +34,7 @@ spec:
   kubernetesApiAccess:
   - 0.0.0.0/0
   - ::/0
-  kubernetesVersion: 1.24.7
+  kubernetesVersion: 1.25.3
   masterPublicName: api.tcss702.rgschmitz.com
   networkCIDR: 172.20.0.0/16
   networking:
@@ -59,7 +59,7 @@ spec:
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  creationTimestamp: "2022-10-21T21:45:43Z"
+  creationTimestamp: "2022-10-28T19:32:20Z"
   labels:
     kops.k8s.io/cluster: tcss702.rgschmitz.com
   name: master-us-east-2a
@@ -69,11 +69,8 @@ spec:
     httpPutResponseHopLimit: 3
     httpTokens: required
   machineType: t3.medium
-  manager: CloudGroup
   maxSize: 1
   minSize: 1
-  nodeLabels:
-    kops.k8s.io/instancegroup: master-us-east-2a
   role: Master
   subnets:
   - us-east-2a
@@ -83,7 +80,8 @@ spec:
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  creationTimestamp: "2022-10-21T21:45:43Z"
+  creationTimestamp: "2022-10-28T19:32:20Z"
+  generation: 1
   labels:
     kops.k8s.io/cluster: tcss702.rgschmitz.com
   name: nodes-us-east-2a
@@ -92,12 +90,10 @@ spec:
   instanceMetadata:
     httpPutResponseHopLimit: 1
     httpTokens: required
-  machineType: t3.large
-  manager: CloudGroup
+  machineType: t3.xlarge
+  maxPrice: "0.15"
   maxSize: 1
   minSize: 1
-  nodeLabels:
-    kops.k8s.io/instancegroup: nodes-us-east-2a
   role: Node
   subnets:
   - us-east-2a
