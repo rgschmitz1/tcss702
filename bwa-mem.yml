@@ -9,7 +9,7 @@ functions:
     image: schmitzr1984/bwa-mem:latest
     build_args:
 #      ADDITIONAL_BUILD_PACKAGE: 'gcc g++ cmake unzip libcurl4-openssl-dev'
-      ADDITIONAL_PACKAGE: 'bwa samtools'
+      ADDITIONAL_PACKAGE: 'bwa samtools xz-utils'
       TEST_ENABLED: false
     environment:
       write_timeout: 600s
