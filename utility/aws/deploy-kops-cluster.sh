@@ -164,6 +164,8 @@ create_cluster() {
 # Delete kubernetes cluster
 delete_cluster() {
 	kops delete cluster --name $NAME --yes
+	# Delete ssh key record
+	ssh-keygen -f "$HOME/.ssh/known_hosts" -R "api.$NAME"
 	return $?
 }
 
