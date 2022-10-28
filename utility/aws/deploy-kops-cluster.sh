@@ -23,6 +23,7 @@ install_dependencies() {
 		sudo install -o root -g root -m 0755 kops-linux-amd64 /usr/local/bin/kops && \
 		rm kops-linux-amd64 || return 1
 	fi
+	$(dirname $0)/install-awscli.sh
 	return 0
 }
 

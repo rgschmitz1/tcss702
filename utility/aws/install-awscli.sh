@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Check if awscli is already installed
+which aws > /dev/null && exit 0
+
 # Check if unzip is installed
 if ! which unzip > /dev/null; then
 	sudo apt update
