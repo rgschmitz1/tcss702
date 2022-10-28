@@ -12,6 +12,21 @@ TIMEOUT=20m
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
 
+# Check for and install dependencies
+install_dependencies() {
+	if ! which jq > /dev/null; then
+		sudo apt update
+		sudo apt install -y jq || return $?
+	fi
+	if ! which kops > /dev/null; then
+		curl -LO https://github.com/kubernetes/kops/releases/download/v1.25.2/kops-linux-amd64 && \
+		sudo install -o root -g root -m 0755 kops-linux-amd64 /usr/local/bin/kops && \
+		rm kops-linux-amd64 || return 1
+	fi
+	return 0
+}
+
+
 # An IAM user must be created in AWS with permissions to create a cluster
 create_kops_iam_user() {
 	# IAM policies
@@ -128,6 +143,12 @@ delete_cluster() {
 	return $?
 }
 
+
+# Check for script dependencies
+if ! install_dependencies; then
+	printf "\nERROR: failed to install script dependencies\n"
+	exit 1
+fi
 
 # Verify kops user has been created
 if ! (grep -q kops $HOME/.aws/credentials || create_kops_iam_credentials); then
