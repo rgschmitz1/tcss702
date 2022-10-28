@@ -1,5 +1,5 @@
 # Install openfaas with arkade, configure for long running functions
-TIMEOUT=10m
+TIMEOUT=15m
 arkade install openfaas \
     --set gateway.upstreamTimeout=$TIMEOUT \
     --set gateway.writeTimeout=$TIMEOUT \

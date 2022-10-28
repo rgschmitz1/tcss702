@@ -1,6 +1,6 @@
 #!/bin/bash
 
-$(dirname $0)/pass-minio-secrets.sh
+$(dirname $0)/pass-minio-secrets.sh || exit $?
 
 # Make nlp buckets
 if [ -z "$(mc ls minio/topic-modeling-us-east-1)" ]; then

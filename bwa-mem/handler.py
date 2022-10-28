@@ -45,13 +45,6 @@ def handle(event, context):
 #        inspector.addAttribute("startWallClock", event['startWallClock'])
 
     body = json.loads(event.body)
-#    print(body['fn'], flush=True)
-
-#    fn = {"p": tm.preprocess,
-#          "t": tm.train,
-#          "q": tm.query}
-
-#    fn[body['fn']]()
 
     inspector.inspectAllDeltas()
     # Include functionName
