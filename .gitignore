@@ -1,5 +1,5 @@
 build
 data/GRCh38.d1.vd1.fa.tar.gz
-data/GRCh83.d1.vd1_BWA.tar.gz
+data/GRCh38.d1.vd1_BWA.tar.gz
 data/normal.tar.xz
 data/tumor.tar.xz

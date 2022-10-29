@@ -8,21 +8,21 @@ https://storage.cloud.google.com/gatk-tutorials/workshop_1903/3-somatic/bams/nor
 # tumor.bam
 https://storage.cloud.google.com/gatk-tutorials/workshop_1903/3-somatic/bams/tumor.bam
 
-# normal and tumor bam files were preprocessed by biobambam converting them from bam to fastq
+# normal and tumor bam files were processed by biobambam2 converting them from bam to fastq
 # fastq files were then compressed using:
 #   tar -cJf normal.tar.xz normal_1.fq normal_2.fq
 #   tar -cJf tumor.tar.xz tumor_1.fq tumor_2.fq
 
-# GRCh38.d1.vd1 Reference Sequence
-https://api.gdc.cancer.gov/data/254f697d-310d-4d7d-a27b-27fbf767a834
 # GDC.h38.d1.vd1 BWA Index Files
+(Note the filename is incorrect when downloaded from source, should be GRCh38.d1.vd1_BWA.tar.gz)
 https://api.gdc.cancer.gov/data/25217ec9-af07-4a17-8db9-101271ee7225
 
 # Reference sequence and BWA index files were recompressed using XZ for a smaller package size
 
-# all files were included into a docker image 'tcss702-bwa-mem:latest'
+# files are included in docker image 'schmitzr1984/tcss702-bwa-mem-reference:latest'
 
 
 nlp data
 ------------
+# news_data.tar.xz is derived from,
 https://www.kaggle.com/datasets/therohk/million-headlines

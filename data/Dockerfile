@@ -1,7 +1,6 @@
 FROM busybox:1.35.0-uclibc
 COPY \
-	GRCh38.d1.vd1.fa.tar.gz \
-	GRCh83.d1.vd1_BWA.tar.gz \
+	GRCh38.d1.vd1_BWA.tar.gz \
 	normal.tar.xz \
 	tumor.tar.xz \
 	/

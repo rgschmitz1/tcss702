@@ -60,10 +60,8 @@ RUN addgroup --system app && adduser app --system --ingroup app
 USER app
 WORKDIR /home/app
 
-# Add reference sequence and BWA index
-#COPY --from=schmitzr1984/tcss702-bwa-mem-reference --chown=app /GRCh38.d1.vd1.fa.tar.gz function/genome/
-COPY --from=schmitzr1984/tcss702-bwa-mem-reference --chown=app /GRCh83.d1.vd1_BWA.tar.gz function/genome/
-RUN touch ./function/genome/GRCh38.d1.vd1.fa
+# Add reference sequence BWA index
+COPY --from=schmitzr1984/tcss702-bwa-mem-reference --chown=app /GRCh38.d1.vd1_BWA.tar.gz function/genome/
 
 COPY --from=builder --chown=app /home/app /home/app
 ENV PATH=/home/app/.local/bin:$PATH
