@@ -12,7 +12,7 @@ NETWORK_CNI=calico
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
 # This is the time specified for cluster validation, the cluster will be deleted if this timeout is exceeded during validation
-TIMEOUT=20m
+TIMEOUT=45m
 
 
 # Display script usage/flags for user
@@ -238,7 +238,7 @@ if create_cluster && kops validate cluster --wait $TIMEOUT; then
 	runtime=$(date -ud "@$SECONDS" "+%M minutes, %S seconds")
 	printf "\nSuccessfully deployed cluster in $runtime\n"
 else
-	printf "\nERROR: Failed to deploy cluster\n"
 	delete_cluster
+	printf "\nERROR: Failed to deploy cluster\n"
 	exit 1
 fi
