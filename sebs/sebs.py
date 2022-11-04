@@ -17,7 +17,7 @@ class SeBS():
         download_begin = datetime.datetime.now()
         self.__mc.fget_object(in_bucket, key, download_path)
         download_stop = datetime.datetime.now()
-        with open(download_path, "r") as f
+        with open(download_path, "r") as f:
             data = f.read()
 
         process_begin = datetime.datetime.now()
