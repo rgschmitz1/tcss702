@@ -4,11 +4,13 @@
 NAME=tcss702.rgschmitz.com
 CLOUD=aws
 REGION=us-east-2
-MASTER_SIZE=t3.medium
-NODE_SIZE=t3.xlarge
+MASTER_SIZE=m5.large
+MASTER_COUNT=1
+NODE_SIZE=c5n.2xlarge
 NODE_COUNT=1
 SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 NETWORK_CNI=calico
+K8S_VERSION=1.25.3
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
 # This is the time specified for cluster validation, the cluster will be deleted if this timeout is exceeded during validation
@@ -151,10 +153,12 @@ create_cluster() {
 			--cloud $CLOUD \
 			--zones ${REGION}a \
 			--master-size $MASTER_SIZE \
+			--master-count $MASTER_COUNT \
 			--node-size $NODE_SIZE \
 			--node-count $NODE_COUNT \
 			--networking $NETWORK_CNI \
-			--ssh-public-key $SSH_PUBLIC_KEY
+			--ssh-public-key $SSH_PUBLIC_KEY \
+			--kubernetes-version=${K8S_VERSION}
 	fi
 	# Deploy cluster
 	kops update cluster --name $NAME --yes --admin
