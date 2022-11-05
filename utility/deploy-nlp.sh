@@ -1,6 +1,8 @@
 #!/bin/bash
 
-$(dirname $0)/pass-minio-secrets.sh || exit $?
+cd $(dirname $0)
+
+./pass-minio-secrets.sh || exit $?
 
 # Make nlp buckets
 if [ -z "$(mc ls minio/topic-modeling-us-east-1)" ]; then
@@ -14,7 +16,7 @@ if [ -z "$(mc ls minio/topic-modeling-us-east-1)" ]; then
 	rm -fr $TEMP
 fi
 
-cd $(dirname $0)/..
+cd ../openfaas
 
 faas-cli up -f nlp.yml
 exit $?

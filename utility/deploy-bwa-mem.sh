@@ -20,7 +20,7 @@ for f in normal.tar.xz tumor.tar.xz; do
 	fi
 done
 
-cd ..
+cd ../openfaas
 
 faas-cli up -f bwa-mem.yml
 exit $?

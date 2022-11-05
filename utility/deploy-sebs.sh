@@ -16,7 +16,7 @@ if [ -z "$(mc ls $bucket/$key)" ] && ! mc cp ../data/$key $bucket; then
 	exit 1
 fi
 
-cd ..
+cd ../openfaas
 
 faas-cli up -f bwa-mem.yml
 exit $?
