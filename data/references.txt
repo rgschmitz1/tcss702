@@ -26,3 +26,9 @@ nlp data
 ------------
 # news_data.tar.xz is derived from,
 https://www.kaggle.com/datasets/therohk/million-headlines
+
+
+sebs data
+------------
+# sample data from serverless benchmark data
+https://github.com/spcl/serverless-benchmarks-data/tree/master/500.scientific/504.dna-visualisation
