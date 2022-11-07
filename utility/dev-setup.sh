@@ -13,17 +13,7 @@ check_exit_status() {
 
 # Check for required binaries
 prompt_info "Checking for installed binary dependencies"
-if which arkade > /dev/null || curl -sLS https://get.arkade.dev | sudo sh; then
-	for bin in kind kubectl helm faas-cli mc; do
-		which $bin > /dev/null || \
-		(arkade get $bin && sudo install -m 0755 $HOME/.arkade/bin/$bin /usr/local/bin)
-	done
-	# Create a simlink for faas-cli
-	which faas > /dev/null || sudo ln -fs /usr/local/bin/faas-cli /usr/local/bin/faas
-else
-	prompt_error "Did not find arkade, debug me!"
-	exit 1
-fi
+./install-arkade-faas-cli-etc.sh
 
 # Deploy kind (k8s in docker) along with local container registry
 prompt_info "Setting up kind cluster with local container registry"
