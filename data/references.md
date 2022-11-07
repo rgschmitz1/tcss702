@@ -19,7 +19,7 @@ tar -cJf tumor.tar.xz tumor_1.fq tumor_2.fq
 ```
 
 ### GDC.h38.d1.vd1 BWA Index Files
-  Note the filename is incorrect when downloaded from source, should be GRCh38.d1.vd1_BWA.tar.gz
+    Note the filename is incorrect when downloaded from source, should be GRCh38.d1.vd1_BWA.tar.gz
 
 https://api.gdc.cancer.gov/data/25217ec9-af07-4a17-8db9-101271ee7225
 
