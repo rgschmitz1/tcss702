@@ -15,8 +15,8 @@ functions:
       write_timeout: 600s
       read_timeout: 600s
       exec_timeout: 600s
-#      minio_hostname: minio.default.svc.cluster.local:9000
+      minio_hostname: minio.default.svc.cluster.local:9000
       write_debug: true
-#    secrets:
-#    - minio-access-key
-#    - minio-secret-key
+    secrets:
+    - minio-access-key
+    - minio-secret-key

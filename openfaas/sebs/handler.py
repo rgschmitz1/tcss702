@@ -31,10 +31,12 @@ def handle(event, context):
     sebs = SeBS(mc)
 
     # Use dictionary to switch between functions
-    fn = {"dna_visualization": sebs.dna_visualization,
-          "graph_bfs": sebs.graph_bfs,
-          "graph_mst": sebs.graph_mst,
-          "graph_pagerank", sebs.graph_pagerank}
+    fn = {
+        "dna_visualization": sebs.dna_visualization,
+        "graph_bfs": sebs.graph_bfs,
+        "graph_mst": sebs.graph_mst,
+        "graph_pagerank": sebs.graph_pagerank
+    }
 
     fn_name = body['fn']
     if fn_name == "dna_visualization":
