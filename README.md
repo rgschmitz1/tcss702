@@ -1,5 +1,7 @@
-# tcss702
-Investigating Open-Source Cloud-Native Application Solutions
+# TCSS702 - Computer Science and Systems capstone project
+
+## Purpose
+Investigating open-source cloud-native application solutions in comparison to 
 
 ## Abbreviations
 The target deployment platforms that this capstone will investigate are described below.
