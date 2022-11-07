@@ -3,7 +3,7 @@
 # kops configuration variables
 NAME=tcss702.rgschmitz.com
 CLOUD=aws
-REGION=us-east-2
+REGION=us-east-2c
 MASTER_SIZE=m5.large
 MASTER_COUNT=1
 NODE_SIZE=c5n.2xlarge
@@ -13,8 +13,8 @@ NETWORK_CNI=calico
 K8S_VERSION=1.25.3
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
-# This is the time specified for cluster validation, the cluster will be deleted if this timeout is exceeded during validation
-TIMEOUT=45m
+# The cluster will be deleted if this timeout is exceeded during validation
+TIMEOUT=20m
 
 
 # Display script usage/flags for user
@@ -26,6 +26,7 @@ usage() {
 
 	Options:
 	  -d|--delete, deletes a running cluster and all underlying infrastructure
+	  -e|--edit, edit cluster configuration before deployment
 	  -f|--filename <cluster-spec.yml>, pass a custom cluster spec
 	  -h|--help, print this message
 	_USAGE
@@ -100,7 +101,7 @@ create_kops_iam_user() {
 	cat <<- _CONFIG >> $HOME/.aws/config
 
 	[profile $profile]
-	region=$REGION
+	region=${REGION%?}
 	_CONFIG
 
 	# Remove temporary AWS config file
@@ -131,7 +132,7 @@ create_kops_state_store() {
 create_route53_dns() {
 	local id=$(uuidgen) && \
 		aws route53 create-hosted-zone --name $NAME --caller-reference $id | \
-		jq .DelegationSet.NameServers
+			jq .DelegationSet.NameServers
 	local ret=$?
 	cat <<-_SUBDOMAIN
 	You will need to create a new SUBDOMAIN, and use the 4 NS records received from the above command for the new SUBDOMAIN.
@@ -145,23 +146,36 @@ create_route53_dns() {
 # Create kubernetes cluster
 create_cluster() {
 	# Create cluster configuration
+	if [ -z "$CLUSTER_SPEC" ]; then
+		cmd="kops create cluster
+			--name $NAME
+			--cloud $CLOUD
+			--zones $REGION
+			--master-size $MASTER_SIZE
+			--master-count $MASTER_COUNT
+			--node-size $NODE_SIZE
+			--node-count $NODE_COUNT
+			--networking $NETWORK_CNI
+			--ssh-public-key $SSH_PUBLIC_KEY
+			--kubernetes-version=$K8S_VERSION"
+		if [ -n "$_EDIT" ]; then
+			CLUSTER_SPEC=$(mktemp --suff=.yml)
+			cmd+=" --dry-run -o yaml > $CLUSTER_SPEC"
+		fi
+		eval $cmd
+	fi
+	# Edit cluster spec before deploying
+	[ -n "$_EDIT" ] && vim $CLUSTER_SPEC
+	# Create a ssh publickey if deployed from cluster spec
 	if [ -n "$CLUSTER_SPEC" ]; then
 		kops create -f $CLUSTER_SPEC
-	else
-		kops create cluster \
-			--name $NAME \
-			--cloud $CLOUD \
-			--zones ${REGION}a \
-			--master-size $MASTER_SIZE \
-			--master-count $MASTER_COUNT \
-			--node-size $NODE_SIZE \
-			--node-count $NODE_COUNT \
-			--networking $NETWORK_CNI \
-			--ssh-public-key $SSH_PUBLIC_KEY \
-			--kubernetes-version=${K8S_VERSION}
+		kops create sshpublickey $NAME -i $SSH_PUBLIC_KEY
 	fi
 	# Deploy cluster
+	local start=$(date +%s)
 	kops update cluster --name $NAME --yes --admin
+	local end=$(date +%s)
+	_RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
 }
 
 
@@ -195,6 +209,10 @@ fi
 # Check for user input
 while [ -n "$1" ]; do
 	case $1 in
+		-e|--edit)
+			_EDIT=1
+			shift
+		;;
 		-d|--delete)
 			if delete_cluster; then
 				exit 0
@@ -239,8 +257,8 @@ fi
 
 # Wait until the cluster is up and ready to use
 if create_cluster && kops validate cluster --wait $TIMEOUT; then
-	runtime=$(date -ud "@$SECONDS" "+%M minutes, %S seconds")
-	printf "\nSuccessfully deployed cluster in $runtime\n"
+	printf "\nSuccessfully deployed cluster in $_RUNTIME\n"
+	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\""
 else
 	delete_cluster
 	printf "\nERROR: Failed to deploy cluster\n"
