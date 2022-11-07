@@ -18,5 +18,5 @@ fi
 
 cd ../openfaas
 
-faas-cli up -f bwa-mem.yml
+faas-cli up -f sebs.yml
 exit $?

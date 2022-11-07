@@ -1,7 +1,6 @@
 from minio import Minio
 import json
 import os
-import subprocess
 from .Inspector import Inspector
 from .sebs import SeBS
 
@@ -25,23 +24,27 @@ def handle(event, context):
     # Parse input json data
     body = json.loads(event.body)
 
-    #payload = body['payload']
-    #bucket = body['bucket']
-
     # Get minio client object to download/upload data
     mc = minio_client()
+
     # Initalize SeBS object
     sebs = SeBS(mc)
 
-    # Download sample
-    #mc.fget_object(bucket, inputfile, f'/tmp/{inputfile}')
+    # Use dictionary to switch between functions
+    fn = {"dna_visualization": sebs.dna_visualization,
+          "graph_bfs": sebs.graph_bfs,
+          "graph_mst": sebs.graph_mst,
+          "graph_pagerank", sebs.graph_pagerank}
 
-    # Uncompress sample
-    #uncompress_sample = subprocess.run(f'tar -xf /tmp/{inputfile} -C /tmp', shell=True)
-    #print(uncompress_sample, flush=True)
-
-    # Put aligned normal and tumor bam in minio
-    #mc.fput_object(bucket, aligned_bam, f'/tmp/{aligned_bam}')
+    fn_name = body['fn']
+    if fn_name == "dna_visualization":
+        bucket = body['bucket']
+        key = body['key']
+        fn_ret = fn[fn_name](key, bucket, bucket)
+    else:
+        size = body['size']
+        fn_ret = fn[fn_name](size)
+    print(fn_ret, flush=True)
 
     # Collect inspector deltas
     inspector.inspectAllDeltas()
