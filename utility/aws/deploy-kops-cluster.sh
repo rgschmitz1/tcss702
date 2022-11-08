@@ -6,7 +6,8 @@ PROFILE=kops
 # kops configuration variables
 NAME=tcss702.rgschmitz.com
 CLOUD=aws
-REGION=us-east-2c
+REGION=us-east-2
+ZONES=us-east-2c
 MASTER_SIZE=m5.large
 MASTER_COUNT=1
 NODE_SIZE=c5n.2xlarge
@@ -101,7 +102,7 @@ create_kops_iam_user() {
 	cat <<- _CONFIG >> $HOME/.aws/config
 
 	[profile $PROFILE]
-	region=${REGION%?}
+	region=$REGION
 	_CONFIG
 
 	# Remove temporary AWS config file
@@ -150,7 +151,7 @@ create_cluster() {
 		cmd="kops create cluster
 			--name $NAME
 			--cloud $CLOUD
-			--zones $REGION
+			--zones $ZONES
 			--master-size $MASTER_SIZE
 			--master-count $MASTER_COUNT
 			--node-size $NODE_SIZE
@@ -199,9 +200,8 @@ if ! (grep -q $PROFILE $HOME/.aws/credentials || create_kops_iam_user); then
 	printf "\nERROR: failed to generate $PROFILE user\n"
 	exit 1
 else
+	# awscli does not export these variables for kops to use
 	export AWS_PROFILE=$PROFILE
-
-	# awscli do not export these variables for kops to use
 	export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
 	export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
 fi
@@ -209,10 +209,6 @@ fi
 # Check for user input
 while [ -n "$1" ]; do
 	case $1 in
-		-e|--edit)
-			_EDIT=1
-			shift
-		;;
 		-d|--delete)
 			if delete_cluster; then
 				exit 0
@@ -221,9 +217,9 @@ while [ -n "$1" ]; do
 				exit 1
 			fi
 		;;
-		-h|--help)
-			usage
-			exit
+		-e|--edit)
+			_EDIT=1
+			shift
 		;;
 		-f|--filename)
 			if [[ -z "$2" || ! -f "$2" ]]; then
@@ -234,6 +230,10 @@ while [ -n "$1" ]; do
 			CLUSTER_SPEC="$2"
 			shift
 			shift
+		;;
+		-h|--help)
+			usage
+			exit
 		;;
 		*)
 			printf "\nERROR: invalid argument!\n"
