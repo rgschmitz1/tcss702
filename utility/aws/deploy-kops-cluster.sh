@@ -62,8 +62,8 @@ create_kops_iam_user() {
 		AmazonEventBridgeFullAccess \
 	)
 
-	# Profile name will be grepped from this file incase it changes later
-	local profile=$(awk -F'=' '/export AWS_PROFILE/ {print $NF}' $0)
+	# user profile name
+	local profile=kops
 
 	aws iam create-group --group-name $profile || return $?
 
