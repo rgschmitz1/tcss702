@@ -173,7 +173,7 @@ create_cluster() {
 	fi
 	# Deploy cluster
 	local start=$(date +%s)
-	kops update cluster --name $NAME --yes --admin
+	kops update cluster --name $NAME --yes --admin=8760h
 	local end=$(date +%s)
 	_RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
 }
