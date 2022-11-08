@@ -255,10 +255,10 @@ create_custer() {
 	eksctl create cluster \
 		--name $NAME \
 		--region $REGION \
-		--zones $ZONES
+		--zones $ZONES \
 		--instance-types $NODE_SIZE \
 		--nodes $NODE_COUNT \
-		--version $K8S_VERSION
+		--version $K8S_VERSION \
 		--auto-kubeconfig \
 		--spot
 	ret=$?
