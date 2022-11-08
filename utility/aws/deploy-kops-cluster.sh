@@ -49,7 +49,7 @@ install_dependencies() {
 		rm kops-linux-amd64 || return 1
 	fi
 	$(dirname $0)/install-awscli.sh
-	return 0
+	return $?
 }
 
 

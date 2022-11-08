@@ -3,19 +3,35 @@
 # AWS user profile name
 PROFILE=eks
 
-# kops configuration variables
-NAME=tcss702-eks.rgschmitz.com
-REGION=us-east-2c
-#MASTER_SIZE=m5.large
-#MASTER_COUNT=1
+# EKS configuration variables
+NAME=tcss702-eks
+REGION=us-east-2
+ZONES=us-east-2b,us-east-2c
 NODE_SIZE=c5n.2xlarge
 NODE_COUNT=1
 #SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 #NETWORK_CNI=calico
-#K8S_VERSION=1.23
+K8S_VERSION=1.23
 
 # The cluster will be deleted if this timeout is exceeded during validation
 #TIMEOUT=20m
+
+
+# Display script usage/flags for user
+usage() {
+	cat <<- _USAGE
+	Usage: $(basename $0) [Options]
+
+	Description: This script will instantiate an EKS kubernetes cluster on AWS
+
+	Options:
+	  -d|--delete, deletes a running cluster and all underlying infrastructure
+	  -e|--edit, edit cluster configuration before deployment
+	  -f|--filename <cluster-spec.yml>, pass a custom cluster spec
+	  -h|--help, print this message
+	_USAGE
+}
+
 
 # Check for and install dependencies
 install_dependencies() {
@@ -29,8 +45,9 @@ install_dependencies() {
 		eksctl version 2> /dev/null || return $?
 	fi
 	$(dirname $0)/install-awscli.sh
-	return 0
+	return $?
 }
+
 
 # An IAM user must be created in AWS with permissions to create a cluster
 create_eks_iam_user() {
@@ -219,7 +236,7 @@ create_eks_iam_user() {
 	cat <<- _CONFIG >> $HOME/.aws/config
 
 	[profile $PROFILE]
-	region=${REGION%?}
+	region=$REGION
 	_CONFIG
 
 	# Remove temporary AWS config file
@@ -229,6 +246,30 @@ create_eks_iam_user() {
 	aws iam get-user --user $PROFILE
 	return $?
 }
+
+
+# Create an EKS cluster
+create_custer() {
+	local start=$(date +%s)
+	eksctl create cluster \
+		--name $NAME \
+		--region $REGION \
+		--zones $ZONES
+		--instance-types $NODE_SIZE \
+		--nodes $NODE_COUNT \
+		--version $K8S_VERSION
+		--auto-kubeconfig \
+		--spot
+	local end=$(date +%s)
+	_RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
+}
+
+
+# Delete EKS cluster
+delete_cluster() {
+	eksctl delete cluster --name $NAME --region $REGION
+}
+
 
 # Check for script dependencies
 if ! install_dependencies; then
@@ -244,4 +285,49 @@ else
 	export AWS_PROFILE=$PROFILE
 fi
 
-echo $?
+# Check for user input
+while [ -n "$1" ]; do
+	case $1 in
+		-d|--delete)
+			if delete_cluster; then
+				exit 0
+			else
+				printf "\nERROR: Encountered an issue deleting cluster\n"
+				exit 1
+			fi
+		;;
+		-e|--edit)
+			_EDIT=1
+			shift
+		;;
+		-f|--filename)
+			if [[ -z "$2" || ! -f "$2" ]]; then
+				printf "\nERROR: a cluster specification file must be passed with this option\n"
+				usage
+				exit 1
+			fi
+			CLUSTER_SPEC="$2"
+			shift
+			shift
+		;;
+		-h|--help)
+			usage
+			exit
+		;;
+		*)
+			printf "\nERROR: invalid argument!\n"
+			usage
+			exit 1
+		;;
+	esac
+done
+
+# Create a k8s cluster on AWS EKS
+if create_custer; then
+	printf "\nSuccessfully deployed cluster in $_RUNTIME\n"
+	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\""
+else
+	delete_cluster
+	printf "\nERROR: Failed to deploy cluster\n"
+	exit 1
+fi
