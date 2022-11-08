@@ -1,5 +1,7 @@
-# tcss702
-Investigating Open-Source Cloud-Native Application Solutions
+# TCSS702 - Computer Science and Systems capstone project
+
+## Purpose
+Investigating open-source cloud-native application solutions in comparison to 
 
 ## Abbreviations
 The target deployment platforms that this capstone will investigate are described below.
@@ -8,8 +10,8 @@ The target deployment platforms that this capstone will investigate are describe
 | --- | --- | --- | ---
 | SU | Single | Unmanaged | Kubernetes/OpenFaaS cluster
 | MU | Multi | Unmanaged | Kubernetes/OpenFaaS cluster
-| MM | Multi | Managed | IBM Cloud Kubernetes Service
-| FaaS | Multi | Managed | Serverless IBM Cloud Functions Platform (FaaS)
+| MM | Multi | Managed | AWS Elastic Kubernetes Service
+| FaaS | Multi | Managed | Serverless AWS Lambda Platform (FaaS)
 
 ## Timeline
 
