@@ -9,7 +9,7 @@ REGION=us-east-2
 ZONES=us-east-2b,us-east-2c
 NODE_SIZE=c5n.2xlarge
 NODE_COUNT=1
-#SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
+SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 #NETWORK_CNI=calico
 K8S_VERSION=1.23
 
@@ -259,6 +259,8 @@ create_custer() {
 		--instance-types $NODE_SIZE \
 		--nodes $NODE_COUNT \
 		--version $K8S_VERSION \
+		--ssh-access=true \
+		--ssh-public-key=$SSH_PUBLIC_KEY \
 		--auto-kubeconfig \
 		--spot
 	ret=$?
