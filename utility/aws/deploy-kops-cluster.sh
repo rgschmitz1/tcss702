@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# AWS user profile name
+PROFILE=kops
+
 # kops configuration variables
 NAME=tcss702.rgschmitz.com
 CLOUD=aws
@@ -62,26 +65,23 @@ create_kops_iam_user() {
 		AmazonEventBridgeFullAccess \
 	)
 
-	# user profile name
-	local profile=kops
-
-	aws iam create-group --group-name $profile || return $?
+	aws iam create-group --group-name $PROFILE || return $?
 
 	# Attach policies to group
 	for p in ${policy[@]}; do
 		aws iam attach-group-policy \
 			--policy-arn arn:aws:iam::aws:policy/$p \
-			--group-name $profile || return $?
+			--group-name $PROFILE || return $?
 	done
 
-	aws iam create-user --user-name $profile || return $?
+	aws iam create-user --user-name $PROFILE || return $?
 
-	aws iam add-user-to-group --user-name $profile --group-name $profile || \
+	aws iam add-user-to-group --user-name $PROFILE --group-name $PROFILE || \
 		return $?
 
 	# Create Access Key ID and Secret Access Key
 	local tmp=$(mktemp)
-	if ! aws iam create-access-key --user-name $profile > $tmp; then
+	if ! aws iam create-access-key --user-name $PROFILE > $tmp; then
 		local ret=$?
 		rm $tmp
 		return $ret
@@ -92,7 +92,7 @@ create_kops_iam_user() {
 	# Populate AWS credentials
 	cat <<- _CREDENTIALS >> $HOME/.aws/credentials
 
-	[$profile]
+	[$PROFILE]
 	aws_access_key_id=$access_key
 	aws_secret_access_key=$secret_key
 	_CREDENTIALS
@@ -100,7 +100,7 @@ create_kops_iam_user() {
 	# Populate AWS config
 	cat <<- _CONFIG >> $HOME/.aws/config
 
-	[profile $profile]
+	[profile $PROFILE]
 	region=${REGION%?}
 	_CONFIG
 
@@ -108,7 +108,7 @@ create_kops_iam_user() {
 	rm $tmp
 
 	# Verify kops user was successfully created
-	aws iam get-user --user $profile
+	aws iam get-user --user $PROFILE
 	return $?
 }
 
@@ -195,11 +195,11 @@ if ! install_dependencies; then
 fi
 
 # Verify kops user has been created
-if ! (grep -q kops $HOME/.aws/credentials || create_kops_iam_user); then
-	printf "\nERROR: failed to generate kops user\n"
+if ! (grep -q $PROFILE $HOME/.aws/credentials || create_kops_iam_user); then
+	printf "\nERROR: failed to generate $PROFILE user\n"
 	exit 1
 else
-	export AWS_PROFILE=kops
+	export AWS_PROFILE=$PROFILE
 
 	# awscli do not export these variables for kops to use
 	export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
