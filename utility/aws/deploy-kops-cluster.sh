@@ -173,10 +173,13 @@ create_cluster() {
 		kops create sshpublickey $NAME -i $SSH_PUBLIC_KEY
 	fi
 	# Deploy cluster
+	local ret
 	local start=$(date +%s)
 	kops update cluster --name $NAME --yes --admin=8760h
+	ret=$?
 	local end=$(date +%s)
 	_RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
+	return $ret
 }
 
 

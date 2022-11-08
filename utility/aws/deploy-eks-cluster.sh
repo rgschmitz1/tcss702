@@ -250,6 +250,7 @@ create_eks_iam_user() {
 
 # Create an EKS cluster
 create_custer() {
+	local ret
 	local start=$(date +%s)
 	eksctl create cluster \
 		--name $NAME \
@@ -260,14 +261,17 @@ create_custer() {
 		--version $K8S_VERSION
 		--auto-kubeconfig \
 		--spot
+	ret=$?
 	local end=$(date +%s)
 	_RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
+	return $ret
 }
 
 
 # Delete EKS cluster
 delete_cluster() {
 	eksctl delete cluster --name $NAME --region $REGION
+	return $?
 }
 
 

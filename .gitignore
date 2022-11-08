@@ -1,4 +1,8 @@
+# Ignore OpenFaaS build directory
 build
+# Ignore data files
 data/GRCh38.d1.vd1_BWA.tar.gz
 data/normal.tar.xz
 data/tumor.tar.xz
+# Ignore temporary files
+tmp.*
