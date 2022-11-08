@@ -195,7 +195,7 @@ if ! install_dependencies; then
 fi
 
 # Verify kops user has been created
-if ! (grep -q kops $HOME/.aws/credentials || create_kops_iam_credentials); then
+if ! (grep -q kops $HOME/.aws/credentials || create_kops_iam_user); then
 	printf "\nERROR: failed to generate kops user\n"
 	exit 1
 else
