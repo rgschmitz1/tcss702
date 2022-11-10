@@ -44,7 +44,7 @@ install_dependencies() {
 		sudo mv /tmp/eksctl /usr/local/bin
 		eksctl version 2> /dev/null || return $?
 	fi
-	$(dirname $0)/install-awscli.sh
+	./install-awscli.sh
 	return $?
 }
 
@@ -57,142 +57,13 @@ create_eks_iam_user() {
 		AmazonEC2FullAccess \
 		AWSCloudFormationFullAccess \
 	)
+	# self-managed IAM policies
 	local policies=(\
 		EksAllAccess \
 		IamLimitedAccess \
 	)
-
 	# get AWS account ID
 	local aws_id=$(aws sts get-caller-identity | jq -r .Account)
-
-	# check if EksAllAccess policy has been created
-	if ! aws iam get-policy --policy-arn arn:aws:iam::$aws_id:policy/EksAllAccess 2> /dev/null; then
-		# create policy json
-		local eks_all_access=$(cat <<-_POLICY
-			{
-			    "Version": "2012-10-17",
-			    "Statement": [
-			        {
-			            "Effect": "Allow",
-			            "Action": "eks:*",
-			            "Resource": "*"
-			        },
-			        {
-			            "Action": [
-			                "ssm:GetParameter",
-			                "ssm:GetParameters"
-			            ],
-			            "Resource": [
-			                "arn:aws:ssm:*:$aws_id:parameter/aws/*",
-			                "arn:aws:ssm:*::parameter/aws/*"
-			            ],
-			            "Effect": "Allow"
-			        },
-			        {
-			             "Action": [
-			               "kms:CreateGrant",
-			               "kms:DescribeKey"
-			             ],
-			             "Resource": "*",
-			             "Effect": "Allow"
-			        },
-			        {
-			             "Action": [
-			               "logs:PutRetentionPolicy"
-			             ],
-			             "Resource": "*",
-			             "Effect": "Allow"
-			        }
-			    ]
-			}
-		_POLICY
-		)
-
-		aws iam create-policy \
-			--policy-name EksAllAccess \
-			--policy-document "$eks_all_access"
-	fi
-
-	# check if IamLimitedAccess policy has been created
-	if ! aws iam get-policy --policy-arn arn:aws:iam::$aws_id:policy/IamLimitedAccess 2> /dev/null; then
-		# Create policy json
-		local iam_limited_access=$(cat <<-_POLICY
-			{
-			    "Version": "2012-10-17",
-			    "Statement": [
-			        {
-			            "Effect": "Allow",
-			            "Action": [
-			                "iam:CreateInstanceProfile",
-			                "iam:DeleteInstanceProfile",
-			                "iam:GetInstanceProfile",
-			                "iam:RemoveRoleFromInstanceProfile",
-			                "iam:GetRole",
-			                "iam:CreateRole",
-			                "iam:DeleteRole",
-			                "iam:AttachRolePolicy",
-			                "iam:PutRolePolicy",
-			                "iam:ListInstanceProfiles",
-			                "iam:AddRoleToInstanceProfile",
-			                "iam:ListInstanceProfilesForRole",
-			                "iam:PassRole",
-			                "iam:DetachRolePolicy",
-			                "iam:DeleteRolePolicy",
-			                "iam:GetRolePolicy",
-			                "iam:GetOpenIDConnectProvider",
-			                "iam:CreateOpenIDConnectProvider",
-			                "iam:DeleteOpenIDConnectProvider",
-			                "iam:TagOpenIDConnectProvider",
-			                "iam:ListAttachedRolePolicies",
-			                "iam:TagRole",
-			                "iam:GetPolicy",
-			                "iam:CreatePolicy",
-			                "iam:DeletePolicy",
-			                "iam:ListPolicyVersions"
-			            ],
-			            "Resource": [
-			                "arn:aws:iam::$aws_id:instance-profile/eksctl-*",
-			                "arn:aws:iam::$aws_id:role/eksctl-*",
-			                "arn:aws:iam::$aws_id:policy/eksctl-*",
-			                "arn:aws:iam::$aws_id:oidc-provider/*",
-			                "arn:aws:iam::$aws_id:role/aws-service-role/eks-nodegroup.amazonaws.com/AWSServiceRoleForAmazonEKSNodegroup",
-			                "arn:aws:iam::$aws_id:role/eksctl-managed-*"
-			            ]
-			        },
-			        {
-			            "Effect": "Allow",
-			            "Action": [
-			                "iam:GetRole"
-			            ],
-			            "Resource": [
-			                "arn:aws:iam::$aws_id:role/*"
-			            ]
-			        },
-			        {
-			            "Effect": "Allow",
-			            "Action": [
-			                "iam:CreateServiceLinkedRole"
-			            ],
-			            "Resource": "*",
-			            "Condition": {
-			                "StringEquals": {
-			                    "iam:AWSServiceName": [
-			                        "eks.amazonaws.com",
-			                        "eks-nodegroup.amazonaws.com",
-			                        "eks-fargate.amazonaws.com"
-			                    ]
-			                }
-			            }
-			        }
-			    ]
-			}
-		_POLICY
-		)
-
-		aws iam create-policy \
-			--policy-name IamLimitedAccess \
-			--policy-document "$iam_limited_access"
-	fi
 
 	aws iam create-group --group-name $PROFILE || return $?
 
@@ -202,8 +73,17 @@ create_eks_iam_user() {
 			--policy-arn arn:aws:iam::aws:policy/$p \
 			--group-name $PROFILE || return $?
 	done
+
 	# Attach self-managed policies to group
 	for p in ${policies[@]}; do
+		# Check if policy has already been created
+		if ! aws iam get-policy --policy-arn arn:aws:iam::$aws_id:policy/$p 2> /dev/null; then
+			# policy json
+			local json=$(sed "s/<account_id>/$aws_id/" $p.json)
+			aws iam create-policy \
+				--policy-name $p \
+				--policy-document "$json"
+		fi
 		aws iam attach-group-policy \
 			--policy-arn arn:aws:iam::$aws_id:policy/$p \
 			--group-name $PROFILE || return $?
@@ -276,6 +156,8 @@ delete_cluster() {
 	return $?
 }
 
+
+cd $(dirname $0)
 
 # Check for script dependencies
 if ! install_dependencies; then
