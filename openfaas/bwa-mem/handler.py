@@ -39,7 +39,7 @@ def handle(event, context):
     print(uncompress_sample, flush=True)
 
     # Extract BWA index
-    uncompress_bwa_idx = subprocess.run('tar -xf /home/app/function/genome/GRCh38.d1.vd1_BWA.tar.gz -C /tmp', shell=True)
+    uncompress_bwa_idx = subprocess.run('tar -xf /home/app/function/genome/GRCh38.d1.vd1_BWA.tar.zst -C /tmp', shell=True)
     print(uncompress_bwa_idx, flush=True)
 
     # Create an empty reference file in tmp, bwa will reference this for name only

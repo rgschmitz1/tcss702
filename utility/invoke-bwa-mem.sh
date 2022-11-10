@@ -12,8 +12,8 @@ execute_bwa-mem_fn() {
 }
 
 prompt_info "BWA-MEM function, align normal sample"
-execute_bwa-mem_fn '{"inputfile":"normal.tar.xz", "bucket":"bwa-mem"}'
+execute_bwa-mem_fn '{"inputfile":"normal.tar.zst", "bucket":"bwa-mem"}'
 prompt_info "BWA-MEM function, align tumor sample"
-execute_bwa-mem_fn '{"inputfile":"tumor.tar.xz", "bucket":"bwa-mem"}'
+execute_bwa-mem_fn '{"inputfile":"tumor.tar.zst", "bucket":"bwa-mem"}'
 
 printf "\nTotal runtime: $SECONDS\n"

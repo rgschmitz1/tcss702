@@ -9,7 +9,7 @@ bucket=minio/bwa-mem
 mc ls $bucket || mc mb $bucket
 
 # Move data into bucket for bwa-mem
-for f in normal.tar.xz tumor.tar.xz; do
+for f in normal.tar.zst tumor.tar.zst; do
 	[ -n "$(mc ls $bucket/$f)" ] && continue
 	if [ ! -f "../data/$f" ]; then
 		docker run -v $PWD/../data:/data --rm schmitzr1984/tcss702-bwa-mem-reference cp /$f /data
