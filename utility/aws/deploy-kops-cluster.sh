@@ -20,6 +20,11 @@ export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 # The cluster will be deleted if this timeout is exceeded during validation
 TIMEOUT=20m
 
+cd $(dirname $0)
+
+# Add colorized console prompt
+. ../color-prompt.sh || exit 1
+
 
 # Display script usage/flags for user
 usage() {
@@ -192,22 +197,15 @@ delete_cluster() {
 }
 
 
-cd $(dirname $0)
-if [ -z "$1" ]; then
-	printf "\nERROR: deployment type must be passed (e.g. single-tenant_unmanaged)\n"
-	exit 1
-fi
-deploy_type="$1"
-
 # Check for script dependencies
 if ! install_dependencies; then
-	printf "\nERROR: failed to install script dependencies\n"
+	prompt_error "ERROR: failed to install script dependencies"
 	exit 1
 fi
 
 # Verify kops user has been created
 if ! (grep -q $PROFILE $HOME/.aws/credentials || create_kops_iam_user); then
-	printf "\nERROR: failed to generate $PROFILE user\n"
+	prompt_error "ERROR: failed to generate $PROFILE user"
 	exit 1
 else
 	# awscli does not export these variables for kops to use
@@ -223,7 +221,7 @@ while [ -n "$1" ]; do
 			if delete_cluster; then
 				exit 0
 			else
-				printf "\nERROR: Encountered an issue deleting cluster\n"
+				prompt_error "ERROR: Encountered an issue deleting cluster"
 				exit 1
 			fi
 		;;
@@ -233,7 +231,7 @@ while [ -n "$1" ]; do
 		;;
 		-f|--filename)
 			if [[ -z "$2" || ! -f "$2" ]]; then
-				printf "\nERROR: a cluster specification file must be passed with this option\n"
+				prompt_error "ERROR: a cluster specification file must be passed with this option"
 				usage
 				exit 1
 			fi
@@ -246,7 +244,7 @@ while [ -n "$1" ]; do
 			exit
 		;;
 		*)
-			printf "\nERROR: invalid argument!\n"
+			prompt_error "ERROR: invalid argument!"
 			usage
 			exit 1
 		;;
@@ -255,20 +253,20 @@ done
 
 # Verify kops state store has been created
 if ! (aws s3 ls | grep -q $(basename $KOPS_STATE_STORE) || create_kops_state_store); then
-	printf "\nERROR: failed to create kops state store in S3\n"
+	prompt_error "ERROR: failed to create kops state store in S3"
 	exit 1
 fi
 
 # Route53 DNS needs to be deployed to use kops
 if ! (aws route53 list-hosted-zones | grep -q $NAME || create_route53_dns); then
-	printf "\nERROR: failed to create Route53\n"
+	prompt_error "ERROR: failed to create Route53"
 	exit 1
 fi
 
 # Create log for kops deployment
 log_dir=logs/kops
 [ -d "$log_dir" ] && mkdir -p $log_dir
-LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops_${deploy_type}.log
+LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops.log
 
 # Wait until the cluster is up and ready to use
 if create_cluster && kops validate cluster --wait $TIMEOUT; then
@@ -276,6 +274,6 @@ if create_cluster && kops validate cluster --wait $TIMEOUT; then
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 else
 	delete_cluster
-	printf "\nERROR: Failed to deploy cluster\n"
+	prompt_error "ERROR: Failed to deploy cluster"
 	exit 1
 fi

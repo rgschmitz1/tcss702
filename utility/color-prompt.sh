@@ -5,7 +5,7 @@ CYAN='\033[0;36m'
 NC='\033[0m'
 
 prompt() {
-	printf "${1}${2}${NC}\n"
+	printf "\n${1}${2}${NC}\n"
 }
 
 prompt_info() {

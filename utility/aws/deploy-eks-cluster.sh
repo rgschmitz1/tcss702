@@ -13,6 +13,11 @@ SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 #NETWORK_CNI=calico
 K8S_VERSION=1.23
 
+cd $(dirname $0)
+
+# Add colorized console prompt
+. ../color-prompt.sh || exit 1
+
 
 # Display script usage/flags for user
 usage() {
@@ -154,17 +159,15 @@ delete_cluster() {
 }
 
 
-cd $(dirname $0)
-
 # Check for script dependencies
 if ! install_dependencies; then
-	printf "\nERROR: failed to install script dependencies\n"
+	prompt_error "ERROR: failed to install script dependencies"
 	exit 1
 fi
 
 # Verify eks user has been created
 if ! (grep -q $PROFILE $HOME/.aws/credentials || create_eks_iam_user); then
-	printf "\nERROR: failed to generate $PROFILE user\n"
+	prompt_error "ERROR: failed to generate $PROFILE user"
 	exit 1
 else
 	export AWS_PROFILE=$PROFILE
@@ -177,7 +180,7 @@ while [ -n "$1" ]; do
 			if delete_cluster; then
 				exit 0
 			else
-				printf "\nERROR: Encountered an issue deleting cluster\n"
+				prompt_error "ERROR: Encountered an issue deleting cluster"
 				exit 1
 			fi
 		;;
@@ -187,7 +190,7 @@ while [ -n "$1" ]; do
 		;;
 		-f|--filename)
 			if [[ -z "$2" || ! -f "$2" ]]; then
-				printf "\nERROR: a cluster specification file must be passed with this option\n"
+				prompt_error "ERROR: a cluster specification file must be passed with this option"
 				usage
 				exit 1
 			fi
@@ -200,7 +203,7 @@ while [ -n "$1" ]; do
 			exit
 		;;
 		*)
-			printf "\nERROR: invalid argument!\n"
+			prompt_error "ERROR: invalid argument!"
 			usage
 			exit 1
 		;;
@@ -218,6 +221,6 @@ if create_custer; then
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 else
 	delete_cluster
-	printf "\nERROR: Failed to deploy cluster\n"
+	prompt_error "ERROR: Failed to deploy cluster"
 	exit 1
 fi
