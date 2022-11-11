@@ -14,7 +14,7 @@ NODE_SIZE=c5n.2xlarge
 NODE_COUNT=1
 SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 NETWORK_CNI=calico
-K8S_VERSION=1.25.3
+K8S_VERSION=1.23.9
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
 # The cluster will be deleted if this timeout is exceeded during validation
@@ -48,7 +48,7 @@ install_dependencies() {
 		sudo install -o root -g root -m 0755 kops-linux-amd64 /usr/local/bin/kops && \
 		rm kops-linux-amd64 || return 1
 	fi
-	$(dirname $0)/install-awscli.sh
+	./install-awscli.sh
 	return $?
 }
 
@@ -175,7 +175,7 @@ create_cluster() {
 	# Deploy cluster
 	local ret
 	local start=$(date +%s)
-	kops update cluster --name $NAME --yes --admin=8760h
+	kops update cluster --name $NAME --yes --admin=8760h | tee $LOG
 	ret=$?
 	local end=$(date +%s)
 	_RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
@@ -191,6 +191,13 @@ delete_cluster() {
 	return $?
 }
 
+
+cd $(dirname $0)
+if [ -z "$1" ]; then
+	printf "\nERROR: deployment type must be passed (e.g. single-tenant_unmanaged)\n"
+	exit 1
+fi
+deploy_type="$1"
 
 # Check for script dependencies
 if ! install_dependencies; then
@@ -258,10 +265,15 @@ if ! (aws route53 list-hosted-zones | grep -q $NAME || create_route53_dns); then
 	exit 1
 fi
 
+# Create log for kops deployment
+log_dir=logs/kops
+[ -d "$log_dir" ] && mkdir -p $log_dir
+LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops_${deploy_type}.log
+
 # Wait until the cluster is up and ready to use
 if create_cluster && kops validate cluster --wait $TIMEOUT; then
-	printf "\nSuccessfully deployed cluster in $_RUNTIME\n"
-	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\""
+	printf "\nSuccessfully deployed cluster in $_RUNTIME\n" | tee -a $LOG
+	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 else
 	delete_cluster
 	printf "\nERROR: Failed to deploy cluster\n"

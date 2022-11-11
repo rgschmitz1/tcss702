@@ -13,7 +13,8 @@ check_exit_status() {
 
 # Check for required binaries
 prompt_info "Checking for installed binary dependencies"
-./install-arkade-faas-cli-etc.sh
+check_exit_status install-arkade_helm_faas-cli_mc.sh \
+	"Encountered an error installing dependencies for local cluster creation"
 
 # Deploy kind (k8s in docker) along with local container registry
 prompt_info "Setting up kind cluster with local container registry"
@@ -22,15 +23,10 @@ check_exit_status setup-kind-with-registry.sh \
 
 # Install openfaas with arkade, configure for long running functions
 prompt_info "Installing OpenFaaS into Kubernetes cluster"
-check_exit_status deploy-openfaas.sh \
+check_exit_status setup-openfaas.sh \
 	"Encountered an error setting up OpenFaaS"
 
 # Install minio
 prompt_info "Setting up Minio"
-check_exit_status deploy-minio.sh \
+check_exit_status setup-minio.sh \
 	"Encountered an error setting up Minio"
-
-# Setup nlp pipeline buckets and transfer data
-prompt_info "Deploy nlp pipeline buckets, data, function"
-check_exit_status deploy-nlp.sh \
-	"Encountered an error deploying nlp pipeline"

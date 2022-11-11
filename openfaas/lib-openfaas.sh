@@ -30,7 +30,7 @@ execute_fn() {
 	local fn_name="$1"
 	local payload="$2"
 	local fn_discription="$3"
-	local datetime=$(date +"%Y-%m-%d_%H:%M:%S")
+	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
 
 	if curl -H "Content-Type: application/json" -X POST -d "$payload" http://localhost:8080/function/$fn_name | \
 		tee "$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"; then

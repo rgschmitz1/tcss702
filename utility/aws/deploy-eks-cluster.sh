@@ -13,9 +13,6 @@ SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 #NETWORK_CNI=calico
 K8S_VERSION=1.23
 
-# The cluster will be deleted if this timeout is exceeded during validation
-#TIMEOUT=20m
-
 
 # Display script usage/flags for user
 usage() {
@@ -142,7 +139,7 @@ create_custer() {
 		--ssh-access=true \
 		--ssh-public-key=$SSH_PUBLIC_KEY \
 		--auto-kubeconfig \
-		--spot
+		--spot | tee $LOG
 	ret=$?
 	local end=$(date +%s)
 	_RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
@@ -210,10 +207,15 @@ while [ -n "$1" ]; do
 	esac
 done
 
+# Create log for EKS deployment
+log_dir=logs/eks
+[ -d "$log_dir" ] && mkdir -p $log_dir
+LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_eks.log
+
 # Create a k8s cluster on AWS EKS
 if create_custer; then
-	printf "\nSuccessfully deployed cluster in $_RUNTIME\n"
-	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\""
+	printf "\nSuccessfully deployed cluster in $_RUNTIME\n" | tee -a $LOG
+	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 else
 	delete_cluster
 	printf "\nERROR: Failed to deploy cluster\n"
