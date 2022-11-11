@@ -1,6 +1,15 @@
 #!/bin/sh
 set -o errexit
 
+cd $(dirname $0)
+
+# install docker
+./install-docker.sh
+# install kind
+./install-kind.sh
+# install kubectl
+./install-kubectl.sh
+
 # create registry container unless it already exists
 reg_name='kind-registry'
 reg_port='5000'

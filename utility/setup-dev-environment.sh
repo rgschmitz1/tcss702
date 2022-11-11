@@ -22,12 +22,12 @@ check_exit_status setup-kind-with-registry.sh \
 
 # Install openfaas with arkade, configure for long running functions
 prompt_info "Installing OpenFaaS into Kubernetes cluster"
-check_exit_status setup-openfaas.sh \
+check_exit_status deploy-openfaas.sh \
 	"Encountered an error setting up OpenFaaS"
 
 # Install minio
 prompt_info "Setting up Minio"
-check_exit_status setup-minio.sh \
+check_exit_status deploy-minio.sh \
 	"Encountered an error setting up Minio"
 
 # Setup nlp pipeline buckets and transfer data
