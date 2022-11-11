@@ -212,7 +212,7 @@ done
 
 # Create log for EKS deployment
 log_dir=logs/eks
-[ -d "$log_dir" ] && mkdir -p $log_dir
+[ -d "$log_dir" ] || mkdir -p $log_dir
 LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_eks.log
 
 # Create a k8s cluster on AWS EKS

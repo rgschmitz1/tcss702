@@ -265,7 +265,7 @@ fi
 
 # Create log for kops deployment
 log_dir=logs/kops
-[ -d "$log_dir" ] && mkdir -p $log_dir
+[ -d "$log_dir" ] || mkdir -p $log_dir
 LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops.log
 
 # Wait until the cluster is up and ready to use
