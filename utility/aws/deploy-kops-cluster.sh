@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o pipefail
+
 # AWS user profile name
 PROFILE=kops
 
@@ -178,13 +180,8 @@ create_cluster() {
 		kops create sshpublickey $NAME -i $SSH_PUBLIC_KEY
 	fi
 	# Deploy cluster
-	local ret
-	local start=$(date +%s)
 	kops update cluster --name $NAME --yes --admin=8760h | tee $LOG
-	ret=$?
-	local end=$(date +%s)
-	_RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
-	return $ret
+	return $?
 }
 
 
@@ -269,8 +266,11 @@ log_dir=logs/kops
 LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops.log
 
 # Wait until the cluster is up and ready to use
-if create_cluster && kops validate cluster --wait $TIMEOUT; then
-	printf "\nSuccessfully deployed cluster in $_RUNTIME\n" | tee -a $LOG
+start=$(date +%s)
+if create_cluster && kops validate cluster --wait $TIMEOUT | tee -a $LOG; then
+	end=$(date +%s)
+	runtime=$(date -d "@$((end-start))" "+%M minutes, %S seconds")
+	printf "\nSuccessfully deployed cluster in $runtime\n" | tee -a $LOG
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 else
 	delete_cluster

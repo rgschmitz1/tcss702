@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -o pipefail
+
 # AWS user profile name
 PROFILE=eks
 
@@ -147,7 +149,7 @@ create_custer() {
 		--spot | tee $LOG
 	ret=$?
 	local end=$(date +%s)
-	_RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
+	RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
 	return $ret
 }
 
@@ -217,7 +219,7 @@ LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_eks.log
 
 # Create a k8s cluster on AWS EKS
 if create_custer; then
-	printf "\nSuccessfully deployed cluster in $_RUNTIME\n" | tee -a $LOG
+	printf "\nSuccessfully deployed cluster in $RUNTIME\n" | tee -a $LOG
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 else
 	delete_cluster
