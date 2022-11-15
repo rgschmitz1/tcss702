@@ -2,11 +2,12 @@
 
 cd $(dirname $0)
 
+../utility/install-docker.sh
 ../utility/pass-minio-secrets.sh || exit $?
 
 # Make bwa-mem bucket
 bucket=minio/bwa-mem
-mc ls $bucket || mc mb $bucket
+mc ls $bucket 2> /dev/null || mc mb $bucket
 
 # Move sample data into bwa-mem input bucket
 for f in normal.tar.zst tumor.tar.zst; do

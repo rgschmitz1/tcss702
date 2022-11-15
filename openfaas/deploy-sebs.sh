@@ -2,6 +2,7 @@
 
 cd $(dirname $0)
 
+../utility/install-docker.sh
 ../utility/pass-minio-secrets.sh || exit $?
 
 # Make SeBS bucket
