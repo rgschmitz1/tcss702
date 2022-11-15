@@ -25,10 +25,8 @@ if ! which mc > /dev/null; then
 fi
 
 # Install jq
-if ! which jq > /dev/null; then
-	sudo apt update && \
-	sudo apt install -y jq
-fi
+./install-jq.sh
 
 # Install kubectl
+export KUBECTL_VERSION='v1.23.9'
 ./install-kubectl.sh

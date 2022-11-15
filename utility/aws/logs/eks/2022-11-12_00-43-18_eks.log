@@ -1,0 +1,54 @@
+2022-11-12 00:43:19 [ℹ]  eksctl version 0.117.0
+2022-11-12 00:43:19 [ℹ]  using region us-east-2
+2022-11-12 00:43:20 [ℹ]  subnets for us-east-2b - public:192.168.0.0/19 private:192.168.64.0/19
+2022-11-12 00:43:20 [ℹ]  subnets for us-east-2c - public:192.168.32.0/19 private:192.168.96.0/19
+2022-11-12 00:43:20 [ℹ]  nodegroup "ng-62741f44" will use "" [AmazonLinux2/1.23]
+2022-11-12 00:43:20 [ℹ]  using SSH public key "/home/bschmitz/.ssh/id_rsa.pub" as "eksctl-tcss702-eks-nodegroup-ng-62741f44-8d:b5:ab:ea:83:79:23:ae:93:f9:94:1c:88:4b:08:2f" 
+2022-11-12 00:43:20 [ℹ]  using Kubernetes version 1.23
+2022-11-12 00:43:20 [ℹ]  creating EKS cluster "tcss702-eks" in "us-east-2" region with managed nodes
+2022-11-12 00:43:20 [ℹ]  will create 2 separate CloudFormation stacks for cluster itself and the initial managed nodegroup
+2022-11-12 00:43:20 [ℹ]  if you encounter any issues, check CloudFormation console or try 'eksctl utils describe-stacks --region=us-east-2 --cluster=tcss702-eks'
+2022-11-12 00:43:20 [ℹ]  Kubernetes API endpoint access will use default of {publicAccess=true, privateAccess=false} for cluster "tcss702-eks" in "us-east-2"
+2022-11-12 00:43:20 [ℹ]  CloudWatch logging will not be enabled for cluster "tcss702-eks" in "us-east-2"
+2022-11-12 00:43:20 [ℹ]  you can enable it with 'eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=us-east-2 --cluster=tcss702-eks'
+2022-11-12 00:43:20 [ℹ]  
+2 sequential tasks: { create cluster control plane "tcss702-eks", 
+    2 sequential sub-tasks: { 
+        wait for control plane to become ready,
+        create managed nodegroup "ng-62741f44",
+    } 
+}
+2022-11-12 00:43:20 [ℹ]  building cluster stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:43:21 [ℹ]  deploying stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:43:51 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:44:22 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:45:24 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:46:25 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:47:30 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:48:32 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:49:33 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:50:35 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:51:38 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:52:39 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:53:40 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:54:42 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2022-11-12 00:56:53 [ℹ]  building managed nodegroup stack "eksctl-tcss702-eks-nodegroup-ng-62741f44"
+2022-11-12 00:56:54 [ℹ]  deploying stack "eksctl-tcss702-eks-nodegroup-ng-62741f44"
+2022-11-12 00:56:54 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-62741f44"
+2022-11-12 00:57:25 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-62741f44"
+2022-11-12 00:58:06 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-62741f44"
+2022-11-12 00:58:56 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-62741f44"
+2022-11-12 01:00:30 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-62741f44"
+2022-11-12 01:00:30 [ℹ]  waiting for the control plane to become ready
+2022-11-12 01:00:31 [✔]  saved kubeconfig as "/home/bschmitz/.kube/eksctl/clusters/tcss702-eks"
+2022-11-12 01:00:31 [ℹ]  no tasks
+2022-11-12 01:00:31 [✔]  all EKS cluster resources for "tcss702-eks" have been created
+2022-11-12 01:00:32 [ℹ]  nodegroup "ng-62741f44" has 1 node(s)
+2022-11-12 01:00:32 [ℹ]  node "ip-192-168-0-13.us-east-2.compute.internal" is ready
+2022-11-12 01:00:32 [ℹ]  waiting for at least 1 node(s) to become ready in "ng-62741f44"
+2022-11-12 01:00:33 [ℹ]  nodegroup "ng-62741f44" has 1 node(s)
+2022-11-12 01:00:33 [ℹ]  node "ip-192-168-0-13.us-east-2.compute.internal" is ready
+2022-11-12 01:00:36 [ℹ]  kubectl command should work with "/home/bschmitz/.kube/eksctl/clusters/tcss702-eks", try 'kubectl --kubeconfig=/home/bschmitz/.kube/eksctl/clusters/tcss702-eks get nodes'
+2022-11-12 01:00:36 [✔]  EKS cluster "tcss702-eks" in "us-east-2" region is ready
+
+Successfully deployed cluster in 17 minutes, 18 seconds

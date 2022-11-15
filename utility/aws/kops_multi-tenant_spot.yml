@@ -1,7 +1,7 @@
 apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
-  creationTimestamp: null
+  creationTimestamp: "2022-11-15T06:19:58Z"
   name: tcss702.rgschmitz.com
 spec:
   api:
@@ -59,19 +59,20 @@ spec:
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  creationTimestamp: null
+  creationTimestamp: "2022-11-15T06:19:59Z"
   labels:
     kops.k8s.io/cluster: tcss702.rgschmitz.com
   name: master-us-east-2c
 spec:
-  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20220924
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20221018
   instanceMetadata:
     httpPutResponseHopLimit: 3
     httpTokens: required
   machineType: m5.large
-  maxPrice: "0.04"
   maxSize: 1
   minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-us-east-2c
   role: Master
   subnets:
   - us-east-2c
@@ -81,19 +82,26 @@ spec:
 apiVersion: kops.k8s.io/v1alpha2
 kind: InstanceGroup
 metadata:
-  creationTimestamp: null
+  creationTimestamp: "2022-11-15T06:23:02Z"
   labels:
     kops.k8s.io/cluster: tcss702.rgschmitz.com
-  name: nodes-us-east-2c
+  name: spot-group-base-8vcpus-16gb
 spec:
-  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20220924
-  instanceMetadata:
-    httpPutResponseHopLimit: 1
-    httpTokens: required
-  machineType: c5n.2xlarge
-  maxPrice: "0.20"
+  cloudLabels:
+    k8s.io/cluster-autoscaler/enabled: "1"
+    k8s.io/cluster-autoscaler/tcss702.rgschmitz.com: "1"
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20221018
+  machineType: c5.2xlarge
   maxSize: 1
   minSize: 1
+  mixedInstancesPolicy:
+    instances:
+    - c5.2xlarge
+    onDemandAboveBase: 0
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    kops.k8s.io/instancegroup: spot-group-base-8vcpus-16gb
   role: Node
   subnets:
   - us-east-2c

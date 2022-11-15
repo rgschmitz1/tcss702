@@ -13,5 +13,5 @@ prompt_info() {
 }
 
 prompt_error() {
-	prompt "$RED" "$1"
+	prompt "$RED" "ERROR: $1"
 }

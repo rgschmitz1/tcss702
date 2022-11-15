@@ -12,11 +12,13 @@ REGION=us-east-2
 ZONES=us-east-2c
 MASTER_SIZE=m5.large
 MASTER_COUNT=1
-NODE_SIZE=c5n.2xlarge
+NODE_SIZE=c5.2xlarge
 NODE_COUNT=1
 SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 NETWORK_CNI=calico
 K8S_VERSION=1.23.9
+export KUBECTL_VERSION='v1.23.9'
+KOPS_VERSION='v1.23.4'
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
 # The cluster will be deleted if this timeout is exceeded during validation
@@ -40,21 +42,20 @@ usage() {
 	  -e|--edit, edit cluster configuration before deployment
 	  -f|--filename <cluster-spec.yml>, pass a custom cluster spec
 	  -h|--help, print this message
+	  -s|--suffix, appended suffix on log file (e.g. <datetime>_kops_<suffix>.log)
 	_USAGE
 }
 
 
 # Check for and install dependencies
 install_dependencies() {
-	if ! which jq > /dev/null; then
-		sudo apt update
-		sudo apt install -y jq || return $?
-	fi
-	if ! which kops > /dev/null; then
-		curl -LO https://github.com/kubernetes/kops/releases/download/v1.25.2/kops-linux-amd64 && \
+	if ! which kops > /dev/null || \
+		[ "v$(kops version | awk '{print $2}')" != "$KOPS_VERSION" ]; then
+		curl -LO https://github.com/kubernetes/kops/releases/download/$KOPS_VERSION/kops-linux-amd64 && \
 		sudo install -o root -g root -m 0755 kops-linux-amd64 /usr/local/bin/kops && \
 		rm kops-linux-amd64 || return 1
 	fi
+	../install-jq.sh
 	./install-awscli.sh
 	return $?
 }
@@ -196,13 +197,13 @@ delete_cluster() {
 
 # Check for script dependencies
 if ! install_dependencies; then
-	prompt_error "ERROR: failed to install script dependencies"
+	prompt_error "failed to install script dependencies"
 	exit 1
 fi
 
 # Verify kops user has been created
 if ! (grep -q $PROFILE $HOME/.aws/credentials || create_kops_iam_user); then
-	prompt_error "ERROR: failed to generate $PROFILE user"
+	prompt_error "failed to generate $PROFILE user"
 	exit 1
 else
 	# awscli does not export these variables for kops to use
@@ -218,7 +219,7 @@ while [ -n "$1" ]; do
 			if delete_cluster; then
 				exit 0
 			else
-				prompt_error "ERROR: Encountered an issue deleting cluster"
+				prompt_error "encountered an issue deleting cluster"
 				exit 1
 			fi
 		;;
@@ -228,7 +229,7 @@ while [ -n "$1" ]; do
 		;;
 		-f|--filename)
 			if [[ -z "$2" || ! -f "$2" ]]; then
-				prompt_error "ERROR: a cluster specification file must be passed with this option"
+				prompt_error "a cluster specification file must be passed with this option"
 				usage
 				exit 1
 			fi
@@ -240,8 +241,13 @@ while [ -n "$1" ]; do
 			usage
 			exit
 		;;
+		-s|--suffix)
+			SUFFIX="_$2"
+			shift
+			shift
+		;;
 		*)
-			prompt_error "ERROR: invalid argument!"
+			prompt_error "invalid argument!"
 			usage
 			exit 1
 		;;
@@ -250,20 +256,20 @@ done
 
 # Verify kops state store has been created
 if ! (aws s3 ls | grep -q $(basename $KOPS_STATE_STORE) || create_kops_state_store); then
-	prompt_error "ERROR: failed to create kops state store in S3"
+	prompt_error "failed to create kops state store in S3"
 	exit 1
 fi
 
 # Route53 DNS needs to be deployed to use kops
 if ! (aws route53 list-hosted-zones | grep -q $NAME || create_route53_dns); then
-	prompt_error "ERROR: failed to create Route53"
+	prompt_error "failed to create Route53"
 	exit 1
 fi
 
 # Create log for kops deployment
 log_dir=logs/kops
 [ -d "$log_dir" ] || mkdir -p $log_dir
-LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops.log
+LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops${SUFFIX}.log
 
 # Wait until the cluster is up and ready to use
 start=$(date +%s)
@@ -274,6 +280,6 @@ if create_cluster && kops validate cluster --wait $TIMEOUT | tee -a $LOG; then
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 else
 	delete_cluster
-	prompt_error "ERROR: Failed to deploy cluster"
+	prompt_error "Failed to deploy cluster"
 	exit 1
 fi

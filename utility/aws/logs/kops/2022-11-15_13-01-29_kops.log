@@ -1,0 +1,823 @@
+
+*********************************************************************************
+
+A new kops version is available: 1.25.2
+Upgrading is recommended
+More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgrade_kops.md#1.25.2
+
+*********************************************************************************
+
+
+*********************************************************************************
+
+A new kubernetes version is available: 1.23.14
+Upgrading is recommended (try kops upgrade cluster)
+
+More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgrade_k8s.md#1.23.14
+
+*********************************************************************************
+
+kOps has set your kubectl context to tcss702.rgschmitz.com
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to the master: ssh -i ~/.ssh/id_rsa ubuntu@api.tcss702.rgschmitz.com
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+Validating cluster tcss702.rgschmitz.com
+
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME		MESSAGE
+dns	apiserver	Validation Failed
+
+The dns-controller Kubernetes deployment has not updated the Kubernetes cluster's API DNS entry to the correct IP address.  The API DNS IP address is the placeholder address that kops creates: 203.0.113.123.  Please wait about 5-10 minutes for a master to start, dns-controller to launch, and DNS to propagate.  The protokube container and dns-controller deployment logs may contain more diagnostic information.  Etcd and the API DNS entries must be updated for a kops Kubernetes cluster to start.
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-0d6dbc9669fb0ebe2				machine "i-0d6dbc9669fb0ebe2" has not yet joined cluster
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+ip-172-20-44-186.us-east-2.compute.internal	node	False
+
+VALIDATION ERRORS
+KIND	NAME									MESSAGE
+Node	ip-172-20-44-186.us-east-2.compute.internal				node "ip-172-20-44-186.us-east-2.compute.internal" of role "node" is not ready
+Pod	kube-system/calico-node-v4sh9						system-node-critical pod "calico-node-v4sh9" is pending
+Pod	kube-system/coredns-7884856795-v89hn					system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5				system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+Pod	kube-system/ebs-csi-node-8nnsg						system-node-critical pod "ebs-csi-node-8nnsg" is pending
+Pod	kube-system/kube-proxy-ip-172-20-44-186.us-east-2.compute.internal	system-node-critical pod "kube-proxy-ip-172-20-44-186.us-east-2.compute.internal" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+ip-172-20-44-186.us-east-2.compute.internal	node	False
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Node	ip-172-20-44-186.us-east-2.compute.internal	node "ip-172-20-44-186.us-east-2.compute.internal" of role "node" is not ready
+Pod	kube-system/calico-node-v4sh9			system-node-critical pod "calico-node-v4sh9" is pending
+Pod	kube-system/coredns-7884856795-v89hn		system-cluster-critical pod "coredns-7884856795-v89hn" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+Pod	kube-system/ebs-csi-node-8nnsg			system-node-critical pod "ebs-csi-node-8nnsg" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+ip-172-20-44-186.us-east-2.compute.internal	node	True
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Pod	kube-system/coredns-autoscaler-57dd87df6c-bmff5	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-bmff5" is pending
+Pod	kube-system/ebs-csi-node-8nnsg			system-node-critical pod "ebs-csi-node-8nnsg" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	1	1	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-38-178.us-east-2.compute.internal	master	True
+ip-172-20-44-186.us-east-2.compute.internal	node	True
+
+Your cluster tcss702.rgschmitz.com is ready
+
+Successfully deployed cluster in 13 minutes, 26 seconds
+Deployed from cluster spec, "kops_multi-tenant_spot.yml"

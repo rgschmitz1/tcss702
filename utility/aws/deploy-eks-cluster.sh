@@ -9,11 +9,13 @@ PROFILE=eks
 NAME=tcss702-eks
 REGION=us-east-2
 ZONES=us-east-2b,us-east-2c
-NODE_SIZE=c5n.2xlarge
+NODE_SIZE=c5.2xlarge
 NODE_COUNT=1
 SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 #NETWORK_CNI=calico
 K8S_VERSION=1.23
+# Kubernetes and kubectl version must be within one minor version of each other
+export KUBECTL_VERSION='v1.23.9'
 
 cd $(dirname $0)
 
@@ -39,15 +41,13 @@ usage() {
 
 # Check for and install dependencies
 install_dependencies() {
-	if ! which jq > /dev/null; then
-		sudo apt update
-		sudo apt install -y jq || return $?
-	fi
 	if ! which eksctl > /dev/null; then
 		curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
 		sudo mv /tmp/eksctl /usr/local/bin
 		eksctl version 2> /dev/null || return $?
 	fi
+	../install-jq.sh
+	../install-kubectl.sh
 	./install-awscli.sh
 	return $?
 }
@@ -163,13 +163,13 @@ delete_cluster() {
 
 # Check for script dependencies
 if ! install_dependencies; then
-	prompt_error "ERROR: failed to install script dependencies"
+	prompt_error "failed to install script dependencies"
 	exit 1
 fi
 
 # Verify eks user has been created
 if ! (grep -q $PROFILE $HOME/.aws/credentials || create_eks_iam_user); then
-	prompt_error "ERROR: failed to generate $PROFILE user"
+	prompt_error "failed to generate $PROFILE user"
 	exit 1
 else
 	export AWS_PROFILE=$PROFILE
@@ -182,7 +182,7 @@ while [ -n "$1" ]; do
 			if delete_cluster; then
 				exit 0
 			else
-				prompt_error "ERROR: Encountered an issue deleting cluster"
+				prompt_error "Encountered an issue deleting cluster"
 				exit 1
 			fi
 		;;
@@ -192,7 +192,7 @@ while [ -n "$1" ]; do
 		;;
 		-f|--filename)
 			if [[ -z "$2" || ! -f "$2" ]]; then
-				prompt_error "ERROR: a cluster specification file must be passed with this option"
+				prompt_error "a cluster specification file must be passed with this option"
 				usage
 				exit 1
 			fi
@@ -205,7 +205,7 @@ while [ -n "$1" ]; do
 			exit
 		;;
 		*)
-			prompt_error "ERROR: invalid argument!"
+			prompt_error "invalid argument!"
 			usage
 			exit 1
 		;;
@@ -223,6 +223,6 @@ if create_custer; then
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 else
 	delete_cluster
-	prompt_error "ERROR: Failed to deploy cluster"
+	prompt_error "failed to deploy cluster"
 	exit 1
 fi
