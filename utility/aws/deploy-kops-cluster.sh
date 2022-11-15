@@ -18,7 +18,7 @@ SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 NETWORK_CNI=calico
 K8S_VERSION=1.23.9
 export KUBECTL_VERSION='v1.23.9'
-KOPS_VERSION='v1.23.4'
+export KOPS_VERSION='v1.23.4'
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
 # The cluster will be deleted if this timeout is exceeded during validation
@@ -49,13 +49,9 @@ usage() {
 
 # Check for and install dependencies
 install_dependencies() {
-	if ! which kops > /dev/null || \
-		[ "v$(kops version | awk '{print $2}')" != "$KOPS_VERSION" ]; then
-		curl -LO https://github.com/kubernetes/kops/releases/download/$KOPS_VERSION/kops-linux-amd64 && \
-		sudo install -o root -g root -m 0755 kops-linux-amd64 /usr/local/bin/kops && \
-		rm kops-linux-amd64 || return 1
-	fi
-	../install-jq.sh
+	../install-kubectl.sh || return $?
+	../install-kops.sh || return $?
+	../install-jq.sh || return $?
 	./install-awscli.sh
 	return $?
 }

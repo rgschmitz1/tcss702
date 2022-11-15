@@ -41,13 +41,9 @@ usage() {
 
 # Check for and install dependencies
 install_dependencies() {
-	if ! which eksctl > /dev/null; then
-		curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-		sudo mv /tmp/eksctl /usr/local/bin
-		eksctl version 2> /dev/null || return $?
-	fi
-	../install-jq.sh
-	../install-kubectl.sh
+	../install-kubectl.sh || return $?
+	../install-eksctl.sh || return $?
+	../install-jq.sh || return $?
 	./install-awscli.sh
 	return $?
 }
