@@ -1,12 +1,18 @@
 # Install openfaas with arkade, configure for long running functions
 TIMEOUT=10m
-arkade install openfaas \
-    --set gateway.upstreamTimeout=$TIMEOUT \
-    --set gateway.writeTimeout=$TIMEOUT \
-    --set gateway.readTimeout=$TIMEOUT \
-    --set faasnetes.writeTimeout=$TIMEOUT \
-    --set faasnetes.readTimeout=$TIMEOUT \
-    --set queueWorker.ackWait=$TIMEOUT
+cmd="arkade install openfaas
+    --set gateway.upstreamTimeout=$TIMEOUT
+    --set gateway.writeTimeout=$TIMEOUT
+    --set gateway.readTimeout=$TIMEOUT
+    --set faasnetes.writeTimeout=$TIMEOUT
+    --set faasnetes.readTimeout=$TIMEOUT
+    --set queueWorker.ackWait=$TIMEOUT"
+# Check if external load balancer is used
+if [ -n "$1" ] && [ "$1" == "-l" ]; then
+	cmd+=" --set serviceType=LoadBalancer
+		--set operator.create=true"
+fi
+eval $cmd
 
 # Forward the gateway to your machine
 kubectl rollout status -n openfaas deploy/gateway

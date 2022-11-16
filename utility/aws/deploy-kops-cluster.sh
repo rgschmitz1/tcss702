@@ -6,7 +6,7 @@ set -o pipefail
 PROFILE=kops
 
 # kops configuration variables
-NAME=tcss702.rgschmitz.com
+NAME=tcss702.k8s.local
 CLOUD=aws
 REGION=us-east-2
 ZONES=us-east-2c
@@ -256,11 +256,11 @@ if ! (aws s3 ls | grep -q $(basename $KOPS_STATE_STORE) || create_kops_state_sto
 	exit 1
 fi
 
-# Route53 DNS needs to be deployed to use kops
-if ! (aws route53 list-hosted-zones | grep -q $NAME || create_route53_dns); then
-	prompt_error "failed to create Route53"
-	exit 1
-fi
+# Route53 DNS needs to be deployed to use kops unless using gossip based DNS
+#if ! (aws route53 list-hosted-zones | grep -q $NAME || create_route53_dns); then
+#	prompt_error "failed to create Route53"
+#	exit 1
+#fi
 
 # Create log for kops deployment
 log_dir=logs/kops
