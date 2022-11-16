@@ -275,7 +275,6 @@ if create_cluster && kops validate cluster --wait $TIMEOUT | tee -a $LOG; then
 	printf "\nSuccessfully deployed cluster in $runtime\n" | tee -a $LOG
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 else
-	delete_cluster
 	prompt_error "Failed to deploy cluster"
 	exit 1
 fi
