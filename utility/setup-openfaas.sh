@@ -1,5 +1,5 @@
 # Install openfaas with arkade, configure for long running functions
-TIMEOUT=15m
+TIMEOUT=10m
 arkade install openfaas \
     --set gateway.upstreamTimeout=$TIMEOUT \
     --set gateway.writeTimeout=$TIMEOUT \
@@ -7,9 +7,6 @@ arkade install openfaas \
     --set faasnetes.writeTimeout=$TIMEOUT \
     --set faasnetes.readTimeout=$TIMEOUT \
     --set queueWorker.ackWait=$TIMEOUT
-
-# Get local IP
-IPADDR=$(ip -br address show enp2s0 | grep -Eo '([0-9]+\.){3}[0-9]+')
 
 # Forward the gateway to your machine
 kubectl rollout status -n openfaas deploy/gateway
