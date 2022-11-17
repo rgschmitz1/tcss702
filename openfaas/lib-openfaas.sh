@@ -17,6 +17,7 @@ fi
 ITERATION=$1
 CLUSTER_TYPE="$2"
 FUNCTION_NAME="$3"
+[ -z "$OPENFAAS_URL" ] && GATEWAY=localhost:8080 || GATEWAY=$OPENFAAS_URL
 
 # Create a directory to store logs
 LOG_DIR="logs/$CLUSTER_TYPE/$FUNCTION_NAME"
@@ -32,7 +33,7 @@ execute_fn() {
 	local fn_discription="$3"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
 
-	if curl -H "Content-Type: application/json" -X POST -d "$payload" http://localhost:8080/function/$fn_name | \
+	if curl -H "Content-Type: application/json" -X POST -d "$payload" http://$GATEWAY/function/$fn_name | \
 		tee "$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"; then
 		sleep 2
 	else
