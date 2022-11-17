@@ -2,6 +2,7 @@ from minio import Minio
 import json
 import os
 import subprocess
+from .SAAF import Inspector
 from .Inspector import Inspector
 
 # Create Minio client

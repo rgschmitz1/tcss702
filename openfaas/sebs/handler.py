@@ -1,6 +1,7 @@
 from minio import Minio
 import json
 import os
+#from .SAAF import Inspector
 from .Inspector import Inspector
 from .sebs import SeBS
 
@@ -24,11 +25,8 @@ def handle(event, context):
     # Parse input json data
     body = json.loads(event.body)
 
-    # Get minio client object to download/upload data
-    mc = minio_client()
-
     # Initalize SeBS object
-    sebs = SeBS(mc)
+    sebs = SeBS()
 
     # Use dictionary to switch between functions
     fn = {
@@ -42,11 +40,15 @@ def handle(event, context):
     if fn_name == "dna_visualization":
         bucket = body['bucket']
         key = body['key']
-        fn_ret = fn[fn_name](key, bucket, bucket)
+        # Get minio client object to download/upload data
+        mc = minio_client()
+        fn[fn_name](mc, key, bucket, bucket)
+        #fn_ret = fn[fn_name](mc, key, bucket, bucket)
     else:
         size = body['size']
-        fn_ret = fn[fn_name](size)
-    print(fn_ret, flush=True)
+        fn[fn_name](size)
+        #fn_ret = fn[fn_name](size)
+    #print(fn_ret, flush=True)
 
     # Collect inspector deltas
     inspector.inspectAllDeltas()
