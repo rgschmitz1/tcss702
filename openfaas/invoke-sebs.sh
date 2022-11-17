@@ -6,6 +6,7 @@ cd $(dirname $0)
 . lib-openfaas.sh $1 "$2" 'sebs' || exit 1
 
 for ((i=0; i<$ITERATION; i++)); do
+	prompt_info "Iteration $i\n--"
 	prompt_info "SeBS function, dna_visualization"
 	execute_fn 'sebs' '{"fn":"dna_visualization", "key":"bacillus_subtilis.fasta", "bucket":"sebs"}' "dna_visualization_$i"
 	prompt_info "SeBS function, graph_bfs"

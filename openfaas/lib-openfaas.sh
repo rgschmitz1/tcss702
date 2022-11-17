@@ -33,7 +33,7 @@ execute_fn() {
 	local fn_discription="$3"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
 
-	if curl -H "Content-Type: application/json" -X POST -d "$payload" http://$GATEWAY/function/$fn_name | \
+	if curl -s -H "Content-Type: application/json" -X POST -d "$payload" http://$GATEWAY/function/$fn_name | \
 		tee "$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"; then
 		sleep 2
 	else

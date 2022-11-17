@@ -6,6 +6,7 @@ cd $(dirname $0)
 . lib-openfaas.sh $1 "$2" 'bwa-mem' || exit 1
 
 for ((i=0; i<$ITERATION; i++)); do
+	prompt_info "Iteration $i\n--"
 	prompt_info "BWA-MEM function, align normal sample"
 	execute_fn 'bwa-mem' '{"inputfile":"normal.tar.zst", "bucket":"bwa-mem"}' "normal_$i"
 	prompt_info "BWA-MEM function, align tumor sample"
