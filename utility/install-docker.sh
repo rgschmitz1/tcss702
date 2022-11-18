@@ -1,5 +1,7 @@
 #!/bin/bash
 
+which docker > /dev/null && exit 0
+
 sudo apt-get update && sudo apt-get install -y \
 	apt-transport-https \
 	ca-certificates \

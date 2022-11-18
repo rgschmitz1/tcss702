@@ -3,7 +3,6 @@ import json
 import os
 import subprocess
 from .SAAF import Inspector
-from .Inspector import Inspector
 
 # Create Minio client
 def minio_client():
@@ -59,6 +58,9 @@ def handle(event, context):
 
     # Collect inspector deltas
     inspector.inspectAllDeltas()
+
+    # Include functionName
+    inspector.addAttribute("functionName", 'bwa-mem')
 
     iret = inspector.finish()
     ret = {

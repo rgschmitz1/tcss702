@@ -1,8 +1,7 @@
 from minio import Minio
 import json
 import os
-#from .SAAF import Inspector
-from .Inspector import Inspector
+from .SAAF import Inspector
 from .topic_model import topic_model
 
 #def handle(event):
@@ -36,8 +35,10 @@ def handle(event, context):
     fn[body['fn']]()
 
     inspector.inspectAllDeltas()
+
     # Include functionName
-    inspector.addAttribute("functionName", fn[body['fn']].__name__)
+    fn_name = fn[body['fn']].__name__
+    inspector.addAttribute("functionName", f'nlp-{fn_name}')
 
     iret = inspector.finish()
     ret = {
