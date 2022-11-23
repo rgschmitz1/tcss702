@@ -2,6 +2,8 @@
 
 cd $(dirname $0)
 
+../utility/setup-openfaas.sh
+../utility/setup-minio.sh
 ../utility/install-docker.sh
 ../utility/pass-minio-secrets.sh || exit $?
 

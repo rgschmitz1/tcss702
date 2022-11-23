@@ -23,10 +23,3 @@ if ! which mc > /dev/null; then
 	sudo install -o root -g root -m 0755 mc /usr/local/bin/mc
 	rm mc
 fi
-
-# Install jq
-./install-jq.sh
-
-# Install kubectl
-export KUBECTL_VERSION='v1.23.9'
-./install-kubectl.sh
