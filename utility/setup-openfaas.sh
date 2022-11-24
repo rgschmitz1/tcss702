@@ -6,6 +6,9 @@ cd $(dirname $0)
 ./install-arkade_helm_faas-cli_mc.sh
 ./install-kubectl.sh
 
+TIMEOUT=10m
+REPLICAS=2
+
 # The AWS Elastic Load Balancer defaults to a 1 minute timeout, increase to 10 minutes
 set_elb_idle_timeout() {
 	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080 \
@@ -19,32 +22,27 @@ set_elb_idle_timeout() {
 		--load-balancer-attributes "{\"ConnectionSettings\":{\"IdleTimeout\":600}}"
 }
 
-TIMEOUT=10m
-REPLICAS=2
+# Check if openfaas is installed in cluster already
+kubectl rollout status --timeout=0s -n openfaas deploy/gateway && exit 0
 
-if ! kubectl rollout status --timeout=0s -n openfaas deploy/gateway; then
-	# Install openfaas with arkade, configure for long running functions
-	cmd="arkade install openfaas
-		--set gateway.upstreamTimeout=$TIMEOUT
-		--set gateway.writeTimeout=$TIMEOUT
-		--set gateway.readTimeout=$TIMEOUT
-		--set faasnetes.writeTimeout=$TIMEOUT
-		--set faasnetes.readTimeout=$TIMEOUT
-		--set queueWorker.ackWait=$TIMEOUT
-		--set gateway.replicas=$REPLICAS
-		--set queueWorker.replicas=$REPLICAS"
-	# Check if external load balancer is used
-	if [ -n "$1" ] && [ "$1" = "-l" ]; then
-		cmd+=" --set serviceType=LoadBalancer
-			--set operator.create=true"
-	fi
-	eval $cmd
+# Install openfaas with arkade, configure for long running functions
+cmd="arkade install openfaas
+	--set gateway.upstreamTimeout=$TIMEOUT
+	--set gateway.writeTimeout=$TIMEOUT
+	--set gateway.readTimeout=$TIMEOUT
+	--set faasnetes.writeTimeout=$TIMEOUT
+	--set faasnetes.readTimeout=$TIMEOUT
+	--set queueWorker.ackWait=$TIMEOUT
+	--set gateway.replicas=$REPLICAS
+	--set queueWorker.replicas=$REPLICAS"
+# Check if external load balancer is used
+[ -z "$1" ] && cmd+=" --set serviceType=LoadBalancer --set operator.create=true"
+eval $cmd
 
-	# check that openfaas is deployed
-	kubectl rollout status -n openfaas deploy/gateway
-fi
+# check that openfaas is deployed
+kubectl rollout status -n openfaas deploy/gateway
 
-if [ -n "$1" ] && [ "$1" = "-l" ]; then
+if [ -z "$1" ]; then
 	set_elb_idle_timeout
 else
 	# Forward the gateway to your machine
