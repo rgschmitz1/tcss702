@@ -72,14 +72,14 @@ spec:
   instanceMetadata:
     httpPutResponseHopLimit: 3
     httpTokens: required
-  machineType: t3.medium
-  maxPrice: "0.04"
+  machineType: m5.large
+  maxPrice: "0.10"
   maxSize: 2
   minSize: 2
   nodeLabels:
     kops.k8s.io/instancegroup: master-us-east-2c
   role: Master
-  rootVolumeSize: 15
+  rootVolumeSize: 16
   rootVolumeType: gp3
   subnets:
   - us-east-2c
