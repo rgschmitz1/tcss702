@@ -19,6 +19,7 @@ spec:
     - encryptedVolume: true
       instanceGroup: master-us-east-2c
       name: c
+      volumeSize: 8
     memoryRequest: 100Mi
     name: main
   - cpuRequest: 100m
@@ -26,6 +27,7 @@ spec:
     - encryptedVolume: true
       instanceGroup: master-us-east-2c
       name: c
+      volumeSize: 8
     memoryRequest: 100Mi
     name: events
   iam:
@@ -70,13 +72,15 @@ spec:
   instanceMetadata:
     httpPutResponseHopLimit: 3
     httpTokens: required
-  machineType: m5.large
-  maxPrice: "0.10"
-  maxSize: 1
-  minSize: 1
+  machineType: t3.medium
+  maxPrice: "0.04"
+  maxSize: 2
+  minSize: 2
   nodeLabels:
     kops.k8s.io/instancegroup: master-us-east-2c
   role: Master
+  rootVolumeSize: 15
+  rootVolumeType: gp3
   subnets:
   - us-east-2c
 
@@ -106,5 +110,7 @@ spec:
   nodeLabels:
     kops.k8s.io/instancegroup: spot-group-base-8vcpus-16gb
   role: Node
+  rootVolumeSize: 20
+  rootVolumeType: gp3
   subnets:
   - us-east-2c
