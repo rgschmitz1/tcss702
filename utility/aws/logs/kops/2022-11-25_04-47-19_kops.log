@@ -1,0 +1,359 @@
+
+*********************************************************************************
+
+A new kops version is available: 1.25.2
+Upgrading is recommended
+More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgrade_kops.md#1.25.2
+
+*********************************************************************************
+
+
+*********************************************************************************
+
+A new kubernetes version is available: 1.23.14
+Upgrading is recommended (try kops upgrade cluster)
+
+More information: https://github.com/kubernetes/kops/blob/master/permalinks/upgrade_k8s.md#1.23.14
+
+*********************************************************************************
+
+kOps has set your kubectl context to tcss702.k8s.local
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to the master: ssh -i ~/.ssh/id_rsa ubuntu@api.tcss702.k8s.local
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+Validating cluster tcss702.k8s.local
+
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-51-132.us-east-2.compute.internal	master	False
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-01ea8064cbe79289f				machine "i-01ea8064cbe79289f" has not yet joined cluster
+Machine	i-05b6af3c65211f408				machine "i-05b6af3c65211f408" has not yet joined cluster
+Machine	i-07e5ed74111dc11c9				machine "i-07e5ed74111dc11c9" has not yet joined cluster
+Machine	i-0be49ab578f239b66				machine "i-0be49ab578f239b66" has not yet joined cluster
+Machine	i-0ca990368043318d9				machine "i-0ca990368043318d9" has not yet joined cluster
+Machine	i-0ebd420218676f27b				machine "i-0ebd420218676f27b" has not yet joined cluster
+Machine	i-0f2d51f18523b41bb				machine "i-0f2d51f18523b41bb" has not yet joined cluster
+Machine	i-0f6074351081675cb				machine "i-0f6074351081675cb" has not yet joined cluster
+Node	ip-172-20-51-132.us-east-2.compute.internal	node "ip-172-20-51-132.us-east-2.compute.internal" of role "master" is not ready
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-51-132.us-east-2.compute.internal	master	False
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-01ea8064cbe79289f				machine "i-01ea8064cbe79289f" has not yet joined cluster
+Machine	i-05b6af3c65211f408				machine "i-05b6af3c65211f408" has not yet joined cluster
+Machine	i-07e5ed74111dc11c9				machine "i-07e5ed74111dc11c9" has not yet joined cluster
+Machine	i-0be49ab578f239b66				machine "i-0be49ab578f239b66" has not yet joined cluster
+Machine	i-0ca990368043318d9				machine "i-0ca990368043318d9" has not yet joined cluster
+Machine	i-0ebd420218676f27b				machine "i-0ebd420218676f27b" has not yet joined cluster
+Machine	i-0f2d51f18523b41bb				machine "i-0f2d51f18523b41bb" has not yet joined cluster
+Machine	i-0f6074351081675cb				machine "i-0f6074351081675cb" has not yet joined cluster
+Node	ip-172-20-51-132.us-east-2.compute.internal	node "ip-172-20-51-132.us-east-2.compute.internal" of role "master" is not ready
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-51-132.us-east-2.compute.internal	master	False
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Machine	i-01ea8064cbe79289f				machine "i-01ea8064cbe79289f" has not yet joined cluster
+Machine	i-05b6af3c65211f408				machine "i-05b6af3c65211f408" has not yet joined cluster
+Machine	i-07e5ed74111dc11c9				machine "i-07e5ed74111dc11c9" has not yet joined cluster
+Machine	i-0be49ab578f239b66				machine "i-0be49ab578f239b66" has not yet joined cluster
+Machine	i-0ca990368043318d9				machine "i-0ca990368043318d9" has not yet joined cluster
+Machine	i-0ebd420218676f27b				machine "i-0ebd420218676f27b" has not yet joined cluster
+Machine	i-0f2d51f18523b41bb				machine "i-0f2d51f18523b41bb" has not yet joined cluster
+Machine	i-0f6074351081675cb				machine "i-0f6074351081675cb" has not yet joined cluster
+Node	ip-172-20-51-132.us-east-2.compute.internal	node "ip-172-20-51-132.us-east-2.compute.internal" of role "master" is not ready
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-51-132.us-east-2.compute.internal	master	False
+
+VALIDATION ERRORS
+KIND	NAME							MESSAGE
+Machine	i-01ea8064cbe79289f					machine "i-01ea8064cbe79289f" has not yet joined cluster
+Machine	i-05b6af3c65211f408					machine "i-05b6af3c65211f408" has not yet joined cluster
+Machine	i-07e5ed74111dc11c9					machine "i-07e5ed74111dc11c9" has not yet joined cluster
+Machine	i-0be49ab578f239b66					machine "i-0be49ab578f239b66" has not yet joined cluster
+Machine	i-0ca990368043318d9					machine "i-0ca990368043318d9" has not yet joined cluster
+Machine	i-0ebd420218676f27b					machine "i-0ebd420218676f27b" has not yet joined cluster
+Machine	i-0f2d51f18523b41bb					machine "i-0f2d51f18523b41bb" has not yet joined cluster
+Machine	i-0f6074351081675cb					machine "i-0f6074351081675cb" has not yet joined cluster
+Node	ip-172-20-51-132.us-east-2.compute.internal		node "ip-172-20-51-132.us-east-2.compute.internal" of role "master" is not ready
+Pod	kube-system/calico-kube-controllers-58449699bc-2snpx	system-cluster-critical pod "calico-kube-controllers-58449699bc-2snpx" is pending
+Pod	kube-system/calico-node-fsrdd				system-node-critical pod "calico-node-fsrdd" is pending
+Pod	kube-system/coredns-8555c7d6d6-lkcxt			system-cluster-critical pod "coredns-8555c7d6d6-lkcxt" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-s6ws9		system-cluster-critical pod "coredns-autoscaler-57dd87df6c-s6ws9" is pending
+Pod	kube-system/dns-controller-77c787b6bc-pptvb		system-cluster-critical pod "dns-controller-77c787b6bc-pptvb" is pending
+Pod	kube-system/ebs-csi-controller-86784976dc-nqzr6		system-cluster-critical pod "ebs-csi-controller-86784976dc-nqzr6" is pending
+Pod	kube-system/ebs-csi-node-wn96m				system-node-critical pod "ebs-csi-node-wn96m" is pending
+Pod	kube-system/kops-controller-fmfrx			system-cluster-critical pod "kops-controller-fmfrx" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-51-132.us-east-2.compute.internal	master	False
+
+VALIDATION ERRORS
+KIND	NAME										MESSAGE
+Machine	i-01ea8064cbe79289f								machine "i-01ea8064cbe79289f" has not yet joined cluster
+Machine	i-05b6af3c65211f408								machine "i-05b6af3c65211f408" has not yet joined cluster
+Machine	i-07e5ed74111dc11c9								machine "i-07e5ed74111dc11c9" has not yet joined cluster
+Machine	i-0be49ab578f239b66								machine "i-0be49ab578f239b66" has not yet joined cluster
+Machine	i-0ca990368043318d9								machine "i-0ca990368043318d9" has not yet joined cluster
+Machine	i-0ebd420218676f27b								machine "i-0ebd420218676f27b" has not yet joined cluster
+Machine	i-0f2d51f18523b41bb								machine "i-0f2d51f18523b41bb" has not yet joined cluster
+Machine	i-0f6074351081675cb								machine "i-0f6074351081675cb" has not yet joined cluster
+Node	ip-172-20-51-132.us-east-2.compute.internal					node "ip-172-20-51-132.us-east-2.compute.internal" of role "master" is not ready
+Pod	kube-system/calico-kube-controllers-58449699bc-2snpx				system-cluster-critical pod "calico-kube-controllers-58449699bc-2snpx" is pending
+Pod	kube-system/calico-node-fsrdd							system-node-critical pod "calico-node-fsrdd" is pending
+Pod	kube-system/coredns-8555c7d6d6-lkcxt						system-cluster-critical pod "coredns-8555c7d6d6-lkcxt" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-s6ws9					system-cluster-critical pod "coredns-autoscaler-57dd87df6c-s6ws9" is pending
+Pod	kube-system/ebs-csi-controller-86784976dc-nqzr6					system-cluster-critical pod "ebs-csi-controller-86784976dc-nqzr6" is pending
+Pod	kube-system/ebs-csi-node-wn96m							system-node-critical pod "ebs-csi-node-wn96m" is pending
+Pod	kube-system/etcd-manager-events-ip-172-20-51-132.us-east-2.compute.internal	system-cluster-critical pod "etcd-manager-events-ip-172-20-51-132.us-east-2.compute.internal" is pending
+Pod	kube-system/etcd-manager-main-ip-172-20-51-132.us-east-2.compute.internal	system-cluster-critical pod "etcd-manager-main-ip-172-20-51-132.us-east-2.compute.internal" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-51-132.us-east-2.compute.internal	master	False
+
+VALIDATION ERRORS
+KIND	NAME									MESSAGE
+Machine	i-01ea8064cbe79289f							machine "i-01ea8064cbe79289f" has not yet joined cluster
+Machine	i-05b6af3c65211f408							machine "i-05b6af3c65211f408" has not yet joined cluster
+Machine	i-07e5ed74111dc11c9							machine "i-07e5ed74111dc11c9" has not yet joined cluster
+Machine	i-0be49ab578f239b66							machine "i-0be49ab578f239b66" has not yet joined cluster
+Machine	i-0ca990368043318d9							machine "i-0ca990368043318d9" has not yet joined cluster
+Machine	i-0ebd420218676f27b							machine "i-0ebd420218676f27b" has not yet joined cluster
+Machine	i-0f2d51f18523b41bb							machine "i-0f2d51f18523b41bb" has not yet joined cluster
+Machine	i-0f6074351081675cb							machine "i-0f6074351081675cb" has not yet joined cluster
+Node	ip-172-20-51-132.us-east-2.compute.internal				node "ip-172-20-51-132.us-east-2.compute.internal" of role "master" is not ready
+Pod	kube-system/calico-kube-controllers-58449699bc-2snpx			system-cluster-critical pod "calico-kube-controllers-58449699bc-2snpx" is pending
+Pod	kube-system/calico-node-fsrdd						system-node-critical pod "calico-node-fsrdd" is not ready (calico-node)
+Pod	kube-system/coredns-8555c7d6d6-lkcxt					system-cluster-critical pod "coredns-8555c7d6d6-lkcxt" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-s6ws9				system-cluster-critical pod "coredns-autoscaler-57dd87df6c-s6ws9" is pending
+Pod	kube-system/ebs-csi-controller-86784976dc-nqzr6				system-cluster-critical pod "ebs-csi-controller-86784976dc-nqzr6" is pending
+Pod	kube-system/ebs-csi-node-wn96m						system-node-critical pod "ebs-csi-node-wn96m" is pending
+Pod	kube-system/kube-proxy-ip-172-20-51-132.us-east-2.compute.internal	system-node-critical pod "kube-proxy-ip-172-20-51-132.us-east-2.compute.internal" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-35-239.us-east-2.compute.internal	node	False
+ip-172-20-41-13.us-east-2.compute.internal	node	False
+ip-172-20-50-16.us-east-2.compute.internal	node	False
+ip-172-20-51-132.us-east-2.compute.internal	master	True
+ip-172-20-51-90.us-east-2.compute.internal	node	False
+ip-172-20-52-46.us-east-2.compute.internal	node	False
+ip-172-20-56-3.us-east-2.compute.internal	node	False
+ip-172-20-57-164.us-east-2.compute.internal	node	False
+ip-172-20-62-18.us-east-2.compute.internal	node	False
+
+VALIDATION ERRORS
+KIND	NAME									MESSAGE
+Node	ip-172-20-35-239.us-east-2.compute.internal				node "ip-172-20-35-239.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-41-13.us-east-2.compute.internal				node "ip-172-20-41-13.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-50-16.us-east-2.compute.internal				node "ip-172-20-50-16.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-51-132.us-east-2.compute.internal				master "ip-172-20-51-132.us-east-2.compute.internal" is missing kube-scheduler pod
+Node	ip-172-20-51-90.us-east-2.compute.internal				node "ip-172-20-51-90.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-52-46.us-east-2.compute.internal				node "ip-172-20-52-46.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-56-3.us-east-2.compute.internal				node "ip-172-20-56-3.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-57-164.us-east-2.compute.internal				node "ip-172-20-57-164.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-62-18.us-east-2.compute.internal				node "ip-172-20-62-18.us-east-2.compute.internal" of role "node" is not ready
+Pod	kube-system/calico-node-42s7b						system-node-critical pod "calico-node-42s7b" is pending
+Pod	kube-system/calico-node-c988k						system-node-critical pod "calico-node-c988k" is pending
+Pod	kube-system/calico-node-d9kk4						system-node-critical pod "calico-node-d9kk4" is pending
+Pod	kube-system/calico-node-dl6h7						system-node-critical pod "calico-node-dl6h7" is pending
+Pod	kube-system/calico-node-p5nt5						system-node-critical pod "calico-node-p5nt5" is pending
+Pod	kube-system/calico-node-tffq6						system-node-critical pod "calico-node-tffq6" is pending
+Pod	kube-system/calico-node-v56r2						system-node-critical pod "calico-node-v56r2" is pending
+Pod	kube-system/calico-node-v7d4z						system-node-critical pod "calico-node-v7d4z" is pending
+Pod	kube-system/coredns-8555c7d6d6-lkcxt					system-cluster-critical pod "coredns-8555c7d6d6-lkcxt" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-s6ws9				system-cluster-critical pod "coredns-autoscaler-57dd87df6c-s6ws9" is pending
+Pod	kube-system/ebs-csi-controller-86784976dc-nqzr6				system-cluster-critical pod "ebs-csi-controller-86784976dc-nqzr6" is pending
+Pod	kube-system/ebs-csi-node-fxqwp						system-node-critical pod "ebs-csi-node-fxqwp" is pending
+Pod	kube-system/ebs-csi-node-krbj5						system-node-critical pod "ebs-csi-node-krbj5" is pending
+Pod	kube-system/ebs-csi-node-lknv8						system-node-critical pod "ebs-csi-node-lknv8" is pending
+Pod	kube-system/ebs-csi-node-mtq85						system-node-critical pod "ebs-csi-node-mtq85" is pending
+Pod	kube-system/ebs-csi-node-vgsl2						system-node-critical pod "ebs-csi-node-vgsl2" is pending
+Pod	kube-system/ebs-csi-node-vp57g						system-node-critical pod "ebs-csi-node-vp57g" is pending
+Pod	kube-system/ebs-csi-node-wj5wp						system-node-critical pod "ebs-csi-node-wj5wp" is pending
+Pod	kube-system/ebs-csi-node-wn96m						system-node-critical pod "ebs-csi-node-wn96m" is pending
+Pod	kube-system/ebs-csi-node-zdrrj						system-node-critical pod "ebs-csi-node-zdrrj" is pending
+Pod	kube-system/kube-proxy-ip-172-20-35-239.us-east-2.compute.internal	system-node-critical pod "kube-proxy-ip-172-20-35-239.us-east-2.compute.internal" is pending
+Pod	kube-system/kube-proxy-ip-172-20-41-13.us-east-2.compute.internal	system-node-critical pod "kube-proxy-ip-172-20-41-13.us-east-2.compute.internal" is pending
+Pod	kube-system/kube-proxy-ip-172-20-56-3.us-east-2.compute.internal	system-node-critical pod "kube-proxy-ip-172-20-56-3.us-east-2.compute.internal" is pending
+Pod	kube-system/kube-scheduler-ip-172-20-51-132.us-east-2.compute.internal	system-cluster-critical pod "kube-scheduler-ip-172-20-51-132.us-east-2.compute.internal" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-35-239.us-east-2.compute.internal	node	False
+ip-172-20-41-13.us-east-2.compute.internal	node	False
+ip-172-20-50-16.us-east-2.compute.internal	node	False
+ip-172-20-51-132.us-east-2.compute.internal	master	True
+ip-172-20-51-90.us-east-2.compute.internal	node	False
+ip-172-20-52-46.us-east-2.compute.internal	node	False
+ip-172-20-56-3.us-east-2.compute.internal	node	False
+ip-172-20-57-164.us-east-2.compute.internal	node	False
+ip-172-20-62-18.us-east-2.compute.internal	node	False
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Node	ip-172-20-35-239.us-east-2.compute.internal	node "ip-172-20-35-239.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-41-13.us-east-2.compute.internal	node "ip-172-20-41-13.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-50-16.us-east-2.compute.internal	node "ip-172-20-50-16.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-51-90.us-east-2.compute.internal	node "ip-172-20-51-90.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-52-46.us-east-2.compute.internal	node "ip-172-20-52-46.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-56-3.us-east-2.compute.internal	node "ip-172-20-56-3.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-57-164.us-east-2.compute.internal	node "ip-172-20-57-164.us-east-2.compute.internal" of role "node" is not ready
+Node	ip-172-20-62-18.us-east-2.compute.internal	node "ip-172-20-62-18.us-east-2.compute.internal" of role "node" is not ready
+Pod	kube-system/calico-node-42s7b			system-node-critical pod "calico-node-42s7b" is pending
+Pod	kube-system/calico-node-c988k			system-node-critical pod "calico-node-c988k" is pending
+Pod	kube-system/calico-node-d9kk4			system-node-critical pod "calico-node-d9kk4" is not ready (calico-node)
+Pod	kube-system/calico-node-dl6h7			system-node-critical pod "calico-node-dl6h7" is pending
+Pod	kube-system/calico-node-p5nt5			system-node-critical pod "calico-node-p5nt5" is pending
+Pod	kube-system/calico-node-tffq6			system-node-critical pod "calico-node-tffq6" is not ready (calico-node)
+Pod	kube-system/calico-node-v56r2			system-node-critical pod "calico-node-v56r2" is not ready (calico-node)
+Pod	kube-system/calico-node-v7d4z			system-node-critical pod "calico-node-v7d4z" is not ready (calico-node)
+Pod	kube-system/coredns-8555c7d6d6-lkcxt		system-cluster-critical pod "coredns-8555c7d6d6-lkcxt" is pending
+Pod	kube-system/coredns-autoscaler-57dd87df6c-s6ws9	system-cluster-critical pod "coredns-autoscaler-57dd87df6c-s6ws9" is pending
+Pod	kube-system/ebs-csi-controller-86784976dc-nqzr6	system-cluster-critical pod "ebs-csi-controller-86784976dc-nqzr6" is pending
+Pod	kube-system/ebs-csi-node-fxqwp			system-node-critical pod "ebs-csi-node-fxqwp" is pending
+Pod	kube-system/ebs-csi-node-krbj5			system-node-critical pod "ebs-csi-node-krbj5" is pending
+Pod	kube-system/ebs-csi-node-lknv8			system-node-critical pod "ebs-csi-node-lknv8" is pending
+Pod	kube-system/ebs-csi-node-mtq85			system-node-critical pod "ebs-csi-node-mtq85" is pending
+Pod	kube-system/ebs-csi-node-vgsl2			system-node-critical pod "ebs-csi-node-vgsl2" is pending
+Pod	kube-system/ebs-csi-node-vp57g			system-node-critical pod "ebs-csi-node-vp57g" is pending
+Pod	kube-system/ebs-csi-node-wj5wp			system-node-critical pod "ebs-csi-node-wj5wp" is pending
+Pod	kube-system/ebs-csi-node-wn96m			system-node-critical pod "ebs-csi-node-wn96m" is pending
+Pod	kube-system/ebs-csi-node-zdrrj			system-node-critical pod "ebs-csi-node-zdrrj" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-35-239.us-east-2.compute.internal	node	True
+ip-172-20-41-13.us-east-2.compute.internal	node	True
+ip-172-20-50-16.us-east-2.compute.internal	node	True
+ip-172-20-51-132.us-east-2.compute.internal	master	True
+ip-172-20-51-90.us-east-2.compute.internal	node	True
+ip-172-20-52-46.us-east-2.compute.internal	node	True
+ip-172-20-56-3.us-east-2.compute.internal	node	True
+ip-172-20-57-164.us-east-2.compute.internal	node	True
+ip-172-20-62-18.us-east-2.compute.internal	node	True
+
+VALIDATION ERRORS
+KIND	NAME				MESSAGE
+Pod	kube-system/calico-node-d9kk4	system-node-critical pod "calico-node-d9kk4" is not ready (calico-node)
+Pod	kube-system/calico-node-dl6h7	system-node-critical pod "calico-node-dl6h7" is not ready (calico-node)
+Pod	kube-system/calico-node-tffq6	system-node-critical pod "calico-node-tffq6" is not ready (calico-node)
+Pod	kube-system/ebs-csi-node-krbj5	system-node-critical pod "ebs-csi-node-krbj5" is pending
+Pod	kube-system/ebs-csi-node-mtq85	system-node-critical pod "ebs-csi-node-mtq85" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-35-239.us-east-2.compute.internal	node	True
+ip-172-20-41-13.us-east-2.compute.internal	node	True
+ip-172-20-50-16.us-east-2.compute.internal	node	True
+ip-172-20-51-132.us-east-2.compute.internal	master	True
+ip-172-20-51-90.us-east-2.compute.internal	node	True
+ip-172-20-52-46.us-east-2.compute.internal	node	True
+ip-172-20-56-3.us-east-2.compute.internal	node	True
+ip-172-20-57-164.us-east-2.compute.internal	node	True
+ip-172-20-62-18.us-east-2.compute.internal	node	True
+
+VALIDATION ERRORS
+KIND	NAME				MESSAGE
+Pod	kube-system/ebs-csi-node-mtq85	system-node-critical pod "ebs-csi-node-mtq85" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2c		Master	m5.large	1	1	us-east-2c
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2c
+
+NODE STATUS
+NAME						ROLE	READY
+ip-172-20-35-239.us-east-2.compute.internal	node	True
+ip-172-20-41-13.us-east-2.compute.internal	node	True
+ip-172-20-50-16.us-east-2.compute.internal	node	True
+ip-172-20-51-132.us-east-2.compute.internal	master	True
+ip-172-20-51-90.us-east-2.compute.internal	node	True
+ip-172-20-52-46.us-east-2.compute.internal	node	True
+ip-172-20-56-3.us-east-2.compute.internal	node	True
+ip-172-20-57-164.us-east-2.compute.internal	node	True
+ip-172-20-62-18.us-east-2.compute.internal	node	True
+
+Your cluster tcss702.k8s.local is ready
+
+Successfully deployed cluster in 04 minutes, 24 seconds
+Deployed from cluster spec, "kops_multi-tenant_spot_elb.yml"
