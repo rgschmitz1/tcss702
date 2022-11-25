@@ -2,6 +2,12 @@
 
 set -o pipefail
 
+export_gateway_url() {
+	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080 \
+	&& echo "OpenFaaS gateway: $OPENFAAS_URL" || echo "OpenFaaS gateway not found"
+	[ "$OPENFAAS_URL" = ":8080" ] && export OPENFAAS_URL="localhost:8080"
+}
+
 # Build, push, and deploy OpenFaaS function
 deploy_fn() {
 	../utility/setup-openfaas.sh
@@ -12,9 +18,7 @@ deploy_fn() {
 	# Add colorized console prompts
 	. ../utility/color-prompt.sh
 
-	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080 \
-	&& echo "Your gateway URL is: $OPENFAAS_URL"
-	[ "$OPENFAAS_URL" = ":8080" ] && unset OPENFAAS_URL
+	export_gateway_url
 
 	# login faas-cli
 	kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | \
@@ -56,14 +60,7 @@ invoke_setup() {
 	FUNCTION_NAME="$3"
 
 	# Check for OpenFaaS endpoint associated with load balancer URL
-	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080 \
-	&& echo "Your gateway URL is: $OPENFAAS_URL"
-	if [ "$OPENFAAS_URL" = ":8080" ]; then
-		unset OPENFAAS_URL
-		GATEWAY=localhost:8080
-	else
-		GATEWAY=$OPENFAAS_URL
-	fi
+	export_gateway_url
 
 	# Create a directory to store logs
 	LOG_DIR="logs/$CLUSTER_TYPE/$FUNCTION_NAME"
@@ -81,7 +78,7 @@ execute_fn() {
 	local fn_discription="$3"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
 
-	if curl -s -H "Content-Type: application/json" -X POST -d "$payload" http://$GATEWAY/function/$fn_name | \
+	if curl -s -H "Content-Type: application/json" -X POST -d "$payload" http://$OPENFAAS_URL/function/$fn_name | \
 		tee "$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"; then
 		sleep 2
 	else
