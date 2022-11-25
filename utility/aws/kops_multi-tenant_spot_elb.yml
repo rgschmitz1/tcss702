@@ -74,8 +74,8 @@ spec:
     httpTokens: required
   machineType: m5.large
   maxPrice: "0.10"
-  maxSize: 2
-  minSize: 2
+  maxSize: 1
+  minSize: 1
   nodeLabels:
     kops.k8s.io/instancegroup: master-us-east-2c
   role: Master

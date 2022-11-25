@@ -2,10 +2,10 @@
 
 cd $(dirname $0)
 
-../utility/setup-openfaas.sh
-../utility/setup-minio.sh
-../utility/install-docker.sh
-../utility/pass-minio-secrets.sh || exit $?
+. ./lib-openfaas.sh
+
+# Deploy function
+deploy_fn nlp.yml || exit 1
 
 # Verify Zstandard is installed
 if ! which zstd > /dev/null; then
@@ -23,13 +23,9 @@ if [ -z "$(mc ls $bucket)" ]; then
 	temp=$(mktemp -d)
 	tar -xvf $PWD/../data/news_data.tar.zst -C $temp
 	if ! mc cp $temp/* $bucket; then
-		printf "\nERROR: failed to copy nlp object(s) to $bucket\n"
+		prompt_error "failed to copy nlp object(s) to $bucket"
 		rm -fr $temp
 		exit 1
 	fi
 	rm -fr $temp
 fi
-
-# Build, push, and deploy nlp function
-faas-cli up -f nlp.yml
-exit $?

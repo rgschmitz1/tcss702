@@ -3,7 +3,9 @@
 cd $(dirname $0)
 
 # Add library to invoke functions
-. lib-openfaas.sh $1 "$2" 'sebs' || exit 1
+. lib-openfaas.sh
+
+invoke_setup $1 "$2" 'sebs' || exit 1
 
 for ((i=0; i<$ITERATION; i++)); do
 	prompt_info "Iteration $i\n--"

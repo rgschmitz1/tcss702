@@ -2,10 +2,10 @@
 
 cd $(dirname $0)
 
-../utility/setup-openfaas.sh
-../utility/setup-minio.sh
-../utility/install-docker.sh
-../utility/pass-minio-secrets.sh || exit $?
+. ./lib-openfaas.sh
+
+# Deploy function
+deploy_fn bwa-mem.yml || exit 1
 
 # Make bwa-mem bucket
 bucket=minio/bwa-mem
@@ -19,11 +19,7 @@ for f in normal.tar.zst tumor.tar.zst; do
 			schmitzr1984/tcss702-bwa-mem-reference cp /$f /data || exit 1
 	fi
 	if ! mc cp ../data/$f $bucket; then
-		printf "\nERROR: failed to copy $f to $bucket\n"
+		prompt_error "failed to copy $f to $bucket"
 		exit 1
 	fi
 done
-
-# Build, push, and deploy bwa-mem function
-faas-cli up -f bwa-mem.yml
-exit $?
