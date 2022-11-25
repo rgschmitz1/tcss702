@@ -2,6 +2,9 @@
 
 set -o pipefail
 
+# Add colorized console prompts
+. $(dirname $0)/../utility/color-prompt.sh
+
 export_gateway_url() {
 	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080 \
 	&& echo "OpenFaaS gateway: $OPENFAAS_URL" || echo "OpenFaaS gateway not found"
@@ -14,9 +17,6 @@ deploy_fn() {
 	../utility/setup-minio.sh
 	../utility/install-docker.sh
 	../utility/pass-minio-secrets.sh || return $?
-
-	# Add colorized console prompts
-	. ../utility/color-prompt.sh
 
 	export_gateway_url
 
@@ -65,9 +65,6 @@ invoke_setup() {
 	# Create a directory to store logs
 	LOG_DIR="logs/$CLUSTER_TYPE/$FUNCTION_NAME"
 	[ -d "$LOG_DIR" ] || mkdir -p "$LOG_DIR"
-
-	# Add colorized console prompts
-	. $(dirname $0)/../utility/color-prompt.sh
 	return $?
 }
 
