@@ -37,11 +37,12 @@ def handle(event, context):
 
     fn_name = body['fn']
     if fn_name == "dna_visualization":
-        bucket = body['bucket']
-        key = body['key']
         # Get minio client object to download/upload data
         mc = minio_client()
-        fn[fn_name](mc, key, bucket, bucket)
+        key = body['key']
+        bucket = body['bucket']
+        postfix = body['postfix'] if 'postfix' in body else ''
+        fn[fn_name](mc, key, bucket, bucket, postfix)
     else:
         size = body['size']
         fn[fn_name](size)

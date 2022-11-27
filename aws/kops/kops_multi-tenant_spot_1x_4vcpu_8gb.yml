@@ -1,0 +1,116 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: null
+  name: tcss702.k8s.local
+spec:
+  api:
+    loadBalancer:
+      class: Classic
+      type: Public
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://tcss702-rgschmitz-com-state-store/tcss702.k8s.local
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: master-us-east-2c
+      name: c
+      volumeSize: 8
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: master-us-east-2c
+      name: c
+      volumeSize: 8
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  - ::/0
+  kubernetesVersion: 1.23.9
+  masterPublicName: api.tcss702.k8s.local
+  networkCIDR: 172.20.0.0/16
+  networking:
+    calico: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  - ::/0
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: us-east-2c
+    type: Public
+    zone: us-east-2c
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: tcss702.k8s.local
+  name: master-us-east-2c
+spec:
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20221018
+  instanceMetadata:
+    httpPutResponseHopLimit: 3
+    httpTokens: required
+  machineType: m5.large
+  maxPrice: "0.10"
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-us-east-2c
+  role: Master
+  rootVolumeSize: 16
+  rootVolumeType: gp3
+  subnets:
+  - us-east-2c
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: tcss702.k8s.local
+  name: spot-group-base-4vcpus-8gb
+spec:
+  cloudLabels:
+    k8s.io/cluster-autoscaler/enabled: "1"
+    k8s.io/cluster-autoscaler/tcss702.k8s.local: "1"
+  image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20221018
+  machineType: c5.xlarge
+  maxSize: 1
+  minSize: 1
+  mixedInstancesPolicy:
+    instances:
+    - c5.xlarge
+    onDemandAboveBase: 0
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    kops.k8s.io/instancegroup: spot-group-base-4vcpus-8gb
+  role: Node
+  rootVolumeSize: 16
+  rootVolumeType: gp3
+  subnets:
+  - us-east-2c

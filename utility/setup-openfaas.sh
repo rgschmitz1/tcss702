@@ -6,20 +6,33 @@ cd $(dirname $0)
 ./install-arkade_helm_faas-cli_mc.sh
 ./install-kubectl.sh
 
+# Timeout in minutes
 TIMEOUT=10m
 REPLICAS=2
 
-# The AWS Elastic Load Balancer defaults to a 1 minute timeout, increase to 10 minutes
+# The AWS Elastic Load Balancer defaults to a 1 minute timeout, increase timeout
 set_elb_idle_timeout() {
-	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080 \
-	&& echo "Your gateway URL is: $OPENFAAS_URL"
+	# convert timeout to seconds
+	local timeout=$((${TIMEOUT%?}*60))
+	local i
+	echo "Wait while OpenFaaS gateway is configured"
+	for ((i=0; i<180; i++)); do
+		export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080
+		if [ "$OPENFAAS_URL" = ":8080" ]; then
+			sleep 1
+			continue
+		fi
+		echo "Your gateway URL is: $OPENFAAS_URL"
+		break
+	done
 	if [ "$OPENFAAS_URL" = ":8080" ]; then
 		echo "Failed to detect external gateway endpoint, try again!"
 		exit 1
 	fi
+	local json="{\"ConnectionSettings\":{\"IdleTimeout\":$timeout}}"
 	aws elb modify-load-balancer-attributes \
-		--load-balancer-name $(echo $OPENFAAS_URL|sed 's/-.*//') \
-		--load-balancer-attributes "{\"ConnectionSettings\":{\"IdleTimeout\":600}}"
+		--load-balancer-name $(echo $OPENFAAS_URL | sed 's/-.*//') \
+		--load-balancer-attributes "$json"
 }
 
 # Check if openfaas is installed in cluster already
@@ -42,6 +55,7 @@ eval $cmd
 # check that openfaas is deployed
 kubectl rollout status -n openfaas deploy/gateway
 
+# Configure external load balancer timeout
 if [ -z "$1" ]; then
 	set_elb_idle_timeout
 else

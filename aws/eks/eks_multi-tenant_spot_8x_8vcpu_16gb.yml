@@ -36,8 +36,8 @@ managedNodeGroups:
   labels:
     alpha.eksctl.io/cluster-name: tcss702-eks
     alpha.eksctl.io/nodegroup-name: ng-5b846ccd
-  maxSize: 1
-  minSize: 1
+  maxSize: 8
+  minSize: 8
   name: ng-5b846ccd
   privateNetworking: false
   releaseVersion: ""
@@ -47,12 +47,12 @@ managedNodeGroups:
   spot: true
   ssh:
     allow: true
-    publicKeyPath: /home/bschmitz/.ssh/id_rsa.pub
+    publicKeyPath: /home/rgs1/.ssh/id_rsa.pub
   tags:
     alpha.eksctl.io/nodegroup-name: ng-5b846ccd
     alpha.eksctl.io/nodegroup-type: managed
   volumeIOPS: 3000
-  volumeSize: 80
+  volumeSize: 16
   volumeThroughput: 125
   volumeType: gp3
 metadata:

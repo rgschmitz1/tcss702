@@ -27,7 +27,7 @@ TIMEOUT=20m
 cd $(dirname $0)
 
 # Add colorized console prompt
-. ../color-prompt.sh || exit 1
+. ../utility/color-prompt.sh || exit 1
 
 
 # Display script usage/flags for user
@@ -49,10 +49,10 @@ usage() {
 
 # Check for and install dependencies
 install_dependencies() {
-	../install-kubectl.sh || return $?
-	../install-kops.sh || return $?
-	../install-jq.sh || return $?
-	./install-awscli.sh
+	../utility/install-kubectl.sh || return $?
+	../utility/install-kops.sh || return $?
+	../utility/install-jq.sh || return $?
+	../utility/install-awscli.sh
 	return $?
 }
 

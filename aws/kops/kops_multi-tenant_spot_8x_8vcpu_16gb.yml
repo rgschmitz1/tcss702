@@ -110,7 +110,7 @@ spec:
   nodeLabels:
     kops.k8s.io/instancegroup: spot-group-base-8vcpus-16gb
   role: Node
-  rootVolumeSize: 20
+  rootVolumeSize: 16
   rootVolumeType: gp3
   subnets:
   - us-east-2c

@@ -3,18 +3,15 @@
 import datetime
 
 class SeBS():
-    def dna_visualization(self, mc, key, in_bucket, out_bucket):
+    def dna_visualization(self, mc, key, in_bucket, out_bucket, postfix):
         import io, json
         # using https://squiggle.readthedocs.io/en/latest/
         from squiggle import transform
 
         # Download sample from bucket
-        download_path = f'/tmp/{key}'
         download_begin = datetime.datetime.now()
-        mc.fget_object(in_bucket, key, download_path)
+        data = mc.get_object(in_bucket, key).read()
         download_end = datetime.datetime.now()
-        with open(download_path, "r") as f:
-            data = f.read()
 
         # Transform sample
         process_begin = datetime.datetime.now()
@@ -25,7 +22,7 @@ class SeBS():
         upload_begin = datetime.datetime.now()
         buf = io.BytesIO(json.dumps(result).encode())
         buf.seek(0)
-        mc.put_object(out_bucket, f'transformed_{key}', buf, length=-1, part_size=10*1024*1024)
+        mc.put_object(out_bucket, f'transformed_{key}{postfix}', buf, length=-1, part_size=10*1024*1024)
         upload_end = datetime.datetime.now()
         buf.close()
 

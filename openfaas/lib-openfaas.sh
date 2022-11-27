@@ -6,16 +6,20 @@ set -o pipefail
 . $(dirname $0)/../utility/color-prompt.sh
 
 export_gateway_url() {
-	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080 \
-	&& echo "OpenFaaS gateway: $OPENFAAS_URL" || echo "OpenFaaS gateway not found"
-	[ "$OPENFAAS_URL" = ":8080" ] && export OPENFAAS_URL="localhost:8080"
+	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080
+	if [ "$OPENFAAS_URL" = ":8080" ]; then
+		export OPENFAAS_URL="localhost:8080"
+		echo "OpenFaaS load balancer gateway not found"
+	else
+		echo "OpenFaaS load balancer gateway: $OPENFAAS_URL"
+	fi
 }
 
 # Build, push, and deploy OpenFaaS function
 deploy_fn() {
-	../utility/setup-openfaas.sh
-	../utility/setup-minio.sh
-	../utility/install-docker.sh
+	../utility/setup-openfaas.sh || return $?
+	../utility/setup-minio.sh || return $?
+	../utility/install-docker.sh || return $?
 	../utility/pass-minio-secrets.sh || return $?
 
 	export_gateway_url
@@ -32,10 +36,8 @@ deploy_fn() {
 		read -n 1 -p "docker image is already present locally, enter 'y' to rebuild. " ANS
 		if [ "${ANS,}" = 'y' ]; then
 			faas-cli up -f $yaml --replace=true --update=false
-		elif [ "$(docker inspect -f "{{.RepoDigests}}" $(awk '/image:/ {print $NF}' $yaml))" = "[]" ]; then
-			faas-cli push -f $yaml && faas-cli deploy -f $yaml
 		else
-			faas-cli deploy -f $yaml --replace=true --update=false
+			faas-cli push -f $yaml && faas-cli deploy -f $yaml --replace=true --update=false
 		fi
 	fi
 	return $?

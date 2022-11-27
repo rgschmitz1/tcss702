@@ -20,7 +20,7 @@ export KUBECTL_VERSION='v1.23.9'
 cd $(dirname $0)
 
 # Add colorized console prompt
-. ../color-prompt.sh || exit 1
+. ../utility/color-prompt.sh || exit 1
 
 
 # Display script usage/flags for user
@@ -41,10 +41,10 @@ usage() {
 
 # Check for and install dependencies
 install_dependencies() {
-	../install-kubectl.sh || return $?
-	../install-eksctl.sh || return $?
-	../install-jq.sh || return $?
-	./install-awscli.sh
+	../utility/install-kubectl.sh || return $?
+	../utility/install-eksctl.sh || return $?
+	../utility/install-jq.sh || return $?
+	../utility/install-awscli.sh
 	return $?
 }
 
@@ -79,7 +79,7 @@ create_eks_iam_user() {
 		# Check if policy has already been created
 		if ! aws iam get-policy --policy-arn arn:aws:iam::$aws_id:policy/$p 2> /dev/null; then
 			# policy json
-			local json=$(sed "s/<account_id>/$aws_id/" $p.json)
+			local json=$(sed "s/<account_id>/$aws_id/" eks/$p.json)
 			aws iam create-policy \
 				--policy-name $p \
 				--policy-document "$json"
