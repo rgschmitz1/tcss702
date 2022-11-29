@@ -35,7 +35,7 @@ def handle(event, context):
     bwa = BWA()
 
     # Align input file using bwa
-    bwa.process(mc, inputfile, bucket)
+    ret = bwa.process(mc, inputfile, bucket)
 
     # Collect inspector deltas
     inspector.inspectAllDeltas()
@@ -46,11 +46,13 @@ def handle(event, context):
     iret = inspector.finish()
 
     # Removed aligned sample, we have no use for it after workload is complete
-    mc.remove_object(bucket, bwa.get_aligned_sample())
+    if ret['status'] == 0:
+        mc.remove_object(bucket, ret['body'])
 
-    # Construct json return from function
-    ret = {
-        "status": 200,
-        "body": iret
-    }
+        # Construct json return from function
+        ret = {
+            "status": 200,
+            "body": iret
+        }
+
     return ret

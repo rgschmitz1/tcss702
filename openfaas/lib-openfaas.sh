@@ -85,17 +85,15 @@ execute_fn() {
 	local payload="$2"
 	local fn_discription="$3"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
+	local log="$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"
 	if [ -n "$4" ]; then
-		local log="$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"
-		curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
-		http://$OPENFAAS_URL/function/$fn_name \
-		-o "$log" &
+		curl -s -f -H "Content-Type: application/json" -X POST -d "$payload" \
+		http://$OPENFAAS_URL/function/$fn_name -o "$log" &
 		PROCESSES+=($!)
 		LOGS+=("$log")
-	elif curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
-		http://$OPENFAAS_URL/function/$fn_name \
-		-o "$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"; then
-		cat "$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"
+	elif curl -s -f -H "Content-Type: application/json" -X POST -d "$payload" \
+		http://$OPENFAAS_URL/function/$fn_name -o "$log"; then
+		cat "$log"
 		sleep 2
 	else
 		prompt_error "Failed to execute $fn_name $fn_discription"
