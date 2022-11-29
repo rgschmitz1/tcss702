@@ -11,7 +11,7 @@ for ((i=0; i<$ITERATION; i++)); do
 	prompt_info "Iteration $i\n--"
 	for f in preprocess train query; do
 		prompt_info "Invoking NLP $f function"
-		execute_fn 'nlp' "{\"fn\":\"${f::1}\"}" "${f}_$i"
+		execute_fn 'nlp' "{\"fn\":\"${f}\"}" "${f}_$i"
 	done
 done
 

@@ -65,6 +65,10 @@ invoke_setup() {
 	ITERATION=$1
 	CLUSTER_TYPE="$2"
 	FUNCTION_NAME="$3"
+	if [[ -n "$4" && "$4" = '-c' ]]; then
+		CONCURRENT=true
+	fi
+
 
 	# Check for OpenFaaS endpoint associated with load balancer URL
 	export_gateway_url
@@ -81,12 +85,32 @@ execute_fn() {
 	local payload="$2"
 	local fn_discription="$3"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
-
-	if curl -s -H "Content-Type: application/json" -X POST -d "$payload" http://$OPENFAAS_URL/function/$fn_name | \
-		tee "$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"; then
+	if [ -n "$4" ]; then
+		local log="$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"
+		curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
+		http://$OPENFAAS_URL/function/$fn_name \
+		-o "$log" &
+		PROCESSES+=($!)
+		LOGS+=("$log")
+	elif curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
+		http://$OPENFAAS_URL/function/$fn_name \
+		-o "$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"; then
+		cat "$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"
 		sleep 2
 	else
 		prompt_error "Failed to execute $fn_name $fn_discription"
 		exit 1
 	fi
+}
+
+# Check concurrent functions
+check_concurrent_fn() {
+	local i
+	for ((i=0; i<${#PROCESSES[@]}; i++)); do
+		if wait ${PROCESSES[$i]}; then
+			printf "\nSuccessfully completed process ${PROCESSES[$i]}\nSee ${LOGS[$i]}\n"
+		else
+			prompt_error "Encountered an error with process ${PROCESSES[$i]}\nSee ${LOGS[$i]}"
+		fi
+	done
 }
