@@ -23,6 +23,7 @@ set_elb_idle_timeout() {
 			continue
 		fi
 		echo "Your gateway URL is: $OPENFAAS_URL"
+		sleep 3
 		break
 	done
 	if [ "$OPENFAAS_URL" = ":8080" ]; then
@@ -70,6 +71,6 @@ fi
 sleep 1
 
 # If basic auth is enabled, you can now log into your gateway:
-PASSWORD=$(kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode)
-printf $PASSWORD | faas-cli login --username admin --password-stdin
+kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | base64 --decode | \
+faas-cli login --username admin --password-stdin
 exit $?

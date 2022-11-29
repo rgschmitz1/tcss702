@@ -92,25 +92,25 @@ metadata:
   creationTimestamp: null
   labels:
     kops.k8s.io/cluster: tcss702.k8s.local
-  name: spot-group-base-72vcpus-144gb
+  name: spot-group-base-8vcpus-16gb
 spec:
   cloudLabels:
     k8s.io/cluster-autoscaler/enabled: "1"
     k8s.io/cluster-autoscaler/tcss702.k8s.local: "1"
   image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20221018
-  machineType: c5.18xlarge
+  machineType: c5.2xlarge
   maxSize: 1
   minSize: 1
   mixedInstancesPolicy:
     instances:
-    - c5.18xlarge
+    - c5.2xlarge
     onDemandAboveBase: 0
     onDemandBase: 0
     spotAllocationStrategy: capacity-optimized
   nodeLabels:
-    kops.k8s.io/instancegroup: spot-group-base-72vcpus-144gb
+    kops.k8s.io/instancegroup: spot-group-base-8vcpus-16gb
   role: Node
-  rootVolumeSize: 16
+  rootVolumeSize: 32
   rootVolumeType: gp3
   subnets:
   - us-east-2c

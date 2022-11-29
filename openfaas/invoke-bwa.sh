@@ -5,13 +5,13 @@ cd $(dirname $0)
 # Add library to invoke functions
 . lib-openfaas.sh
 
-invoke_setup $1 "$2" 'nlp' || exit 1
+invoke_setup $1 "$2" 'bwa' || exit 1
 
 for ((i=0; i<$ITERATION; i++)); do
 	prompt_info "Iteration $i\n--"
-	for f in preprocess train query; do
-		prompt_info "Invoking NLP $f function"
-		execute_fn 'nlp' "{\"fn\":\"${f::1}\"}" "${f}_$i"
+	for f in normal tumor; do
+		prompt_info "BWA function, align $f sample"
+		execute_fn 'bwa' "{\"inputfile\":\"$f.tar.zst\", \"bucket\":\"bwa\"}" "${f}_$i"
 	done
 done
 

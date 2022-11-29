@@ -30,14 +30,19 @@ deploy_fn() {
 	faas-cli login --username admin --password-stdin || return $?
 
 	local yaml="$1"
-	if [ -z "$(docker images -q $(awk '/image:/ {print $NF}' $yaml))" ]; then
+	local image=$(awk '/image:/ {print $NF}' $yaml)
+	if [ -z "$(docker images -q $image)" ]; then
 		faas-cli up -f $yaml
 	else
 		read -n 1 -p "docker image is already present locally, enter 'y' to rebuild. " ANS
+		echo
+		# faas-cli doesn't seem to update or replace existing functions correctly, we need to remove first
+		kubectl get service/${yaml%.*} -n openfaas-fn &> /dev/null && \
+		faas-cli remove -f $yaml
 		if [ "${ANS,}" = 'y' ]; then
-			faas-cli up -f $yaml --replace=true --update=false
+			faas-cli up -f $yaml
 		else
-			faas-cli push -f $yaml && faas-cli deploy -f $yaml --replace=true --update=false
+			faas-cli push -f $yaml && faas-cli deploy -f $yaml
 		fi
 	fi
 	return $?

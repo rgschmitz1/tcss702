@@ -4,13 +4,11 @@ cd $(dirname $0)
 
 . ./lib-openfaas.sh
 
-# Deploy function
-deploy_fn nlp.yml || exit 1
+# Install Zstandard
+../utility/install-zstd.sh || exit $?
 
-# Verify Zstandard is installed
-if ! which zstd > /dev/null; then
-	sudo apt update && sudo apt install -y zstd
-fi
+# Deploy function
+deploy_fn nlp.yml || exit $?
 
 # Make nlp buckets
 bucket=minio/topic-modeling-us-east-1

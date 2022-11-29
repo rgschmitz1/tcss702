@@ -1,5 +1,5 @@
-# bwa-mem data
-* all files are included in docker image, 'schmitzr1984/tcss702-bwa-mem-reference:latest'
+# bwa data
+* all files are included in docker image, 'schmitzr1984/tcss702-bwa-reference:latest'
 
 ### Samples from GATK tutorials
 https://console.cloud.google.com/storage/browser/gatk-tutorials/workshop_1903/3-somatic/bams

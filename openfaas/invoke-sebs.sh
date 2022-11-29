@@ -11,12 +11,10 @@ for ((i=0; i<$ITERATION; i++)); do
 	prompt_info "Iteration $i\n--"
 	prompt_info "SeBS function, dna_visualization"
 	execute_fn 'sebs' '{"fn":"dna_visualization", "key":"bacillus_subtilis.fasta", "bucket":"sebs"}' "dna_visualization_$i"
-	prompt_info "SeBS function, graph_bfs"
-	execute_fn 'sebs' '{"fn":"graph_bfs", "size":10000}' "graph_bfs_$i"
-	prompt_info "SeBS function, graph_mst"
-	execute_fn 'sebs' '{"fn":"graph_mst", "size":10000}' "graph_mst_$i"
-	prompt_info "SeBS function, graph_pagerank"
-	execute_fn 'sebs' '{"fn":"graph_pagerank", "size":10000}' "graph_pagerank_$i"
+	for f in graph_bfs graph_mst graph_pagerank; do
+		prompt_info "SeBS function, $f"
+		execute_fn 'sebs' "{\"fn\":\"$f\", \"size\":10000}" "${f}_$i"
+	done
 done
 
 printf "\nTotal iterations: $ITERATION, Total runtime: $SECONDS sec\n"

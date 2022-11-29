@@ -61,7 +61,7 @@ USER app
 WORKDIR /home/app
 
 # Add reference sequence BWA index
-COPY --from=schmitzr1984/tcss702-bwa-mem-reference --chown=app /GRCh38.d1.vd1_BWA.tar.zst function/genome/
+COPY --from=schmitzr1984/tcss702-bwa-reference --chown=app /GRCh38.d1.vd1_BWA.tar.zst function/genome/
 
 COPY --from=builder --chown=app /home/app /home/app
 ENV PATH=/home/app/.local/bin:$PATH
@@ -74,4 +74,5 @@ ENV upstream_url="http://127.0.0.1:5000"
 
 HEALTHCHECK --interval=5s CMD [ -e /tmp/.lock ] || exit 1
 
+ENTRYPOINT ["/home/app/function/entrypoint.sh"]
 CMD ["fwatchdog"]

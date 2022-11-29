@@ -2,7 +2,7 @@ from minio import Minio
 import json
 import os
 from .SAAF import Inspector
-from .sebs import SeBS
+from .SeBS import SeBS
 
 # Create Minio client
 def minio_client():
@@ -41,8 +41,7 @@ def handle(event, context):
         mc = minio_client()
         key = body['key']
         bucket = body['bucket']
-        postfix = body['postfix'] if 'postfix' in body else ''
-        fn[fn_name](mc, key, bucket, bucket, postfix)
+        fn[fn_name](mc, key, bucket, bucket)
     else:
         size = body['size']
         fn[fn_name](size)
@@ -50,10 +49,15 @@ def handle(event, context):
     # Collect inspector deltas
     inspector.inspectAllDeltas()
 
-    # Include functionName
+    # Include function name
     inspector.addAttribute("functionName", f'sebs-{fn_name}')
 
     iret = inspector.finish()
+
+    # If DNA visualization was executed, remove output object
+    if fn_name == "dna_visualization":
+        mc.remove_object(bucket, sebs.get_dna_visualization_output())
+
     ret = {
         "status": 200,
         "body": iret

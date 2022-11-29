@@ -2,7 +2,7 @@ from minio import Minio
 import json
 import os
 from .SAAF import Inspector
-from .topic_model import topic_model
+from .BWA import BWA
 
 # Create Minio client
 def minio_client():
@@ -17,30 +17,38 @@ def minio_client():
         secure=False)
 
 def handle(event, context):
-    mc = minio_client()
-
-    tm = topic_model(mc)
-
-    # Collect data
+    # Start inspector
     inspector = Inspector()
     inspector.inspectAll()
 
+    # Parse input json data
     body = json.loads(event.body)
-    fn_name = body['fn']
 
-    fn = {"preprocess": tm.preprocess,
-          "train": tm.train,
-          "query": tm.query}
+    # assume input file file is tar and compressed
+    inputfile = body['inputfile']
+    bucket = body['bucket']
 
-    fn[fn_name]()
+    # Get minio client object to download/upload data
+    mc = minio_client()
 
+    # Initalize BWA object
+    bwa = BWA()
+
+    # Align input file using bwa
+    bwa.process(mc, inputfile, bucket)
+
+    # Collect inspector deltas
     inspector.inspectAllDeltas()
 
     # Include functionName
-    inspector.addAttribute("functionName", f'nlp-{fn_name}')
+    inspector.addAttribute("functionName", 'bwa-mem')
 
     iret = inspector.finish()
 
+    # Removed aligned sample, we have no use for it after workload is complete
+    mc.remove_object(bucket, bwa.get_aligned_sample())
+
+    # Construct json return from function
     ret = {
         "status": 200,
         "body": iret
