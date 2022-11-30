@@ -11,12 +11,17 @@ for ((i=0; i<$ITERATION; i++)); do
 	prompt_info "Iteration $i\n--"
 	prompt_info "SeBS function, dna_visualization"
 	execute_fn 'sebs' '{"fn":"dna_visualization", "key":"bacillus_subtilis.fasta", "bucket":"sebs"}' "dna_visualization_$i" $CONCURRENT
-	for f in graph_bfs graph_mst graph_pagerank; do
+done
+check_concurrent_fn
+
+for f in graph_bfs graph_mst graph_pagerank; do
+	for ((i=0; i<$ITERATION; i++)); do
+		prompt_info "Iteration $i\n--"
 		prompt_info "SeBS function, $f"
 		execute_fn 'sebs' "{\"fn\":\"$f\", \"size\":10000}" "${f}_$i" $CONCURRENT
 	done
+	check_concurrent_fn
 done
 
-check_concurrent_fn
 
 printf "\nTotal iterations: $ITERATION, Total runtime: $SECONDS sec\n"
