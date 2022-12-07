@@ -12,7 +12,7 @@ for f in normal tumor; do
 	for ((i=0; i<$ITERATION; i++)); do
 		prompt_info "Iteration $i\n--"
 		prompt_info "BWA function, align $f sample"
-		execute_fn 'bwa' "{\"inputfile\":\"$f.tar.zst\", \"bucket\":\"bwa\", \"threads\":2}" "${f}_$i" $CONCURRENT
+		execute_fn 'bwa' "{\"inputfile\":\"$f.tar.zst\", \"bucket\":\"bwa\", \"thread_cnt\":2}" "${f}_$i"
 	done
 	check_concurrent_fn
 done

@@ -4,8 +4,17 @@ cd $(dirname $0)
 
 . ./lib-openfaas.sh
 
+# Remove function
+if [[ -n "$1" && "$1" = '-d' ]]; then
+	remove_fn bwa.yml
+	exit $?
+fi
+
 # Deploy function
 deploy_fn bwa.yml || exit 1
+
+# Deploy minio
+deploy_minio || exit 1
 
 # Make bwa bucket
 bucket=minio/bwa

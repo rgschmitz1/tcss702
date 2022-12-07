@@ -56,7 +56,6 @@ class SeBS():
         return (graph, graph_generating_time)
 
 
-
     def graph_bfs(self, size):
         graph, graph_generating_time = self._generate_barabasi_graph(size)
 

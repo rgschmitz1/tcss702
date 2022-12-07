@@ -4,14 +4,13 @@ BWA utility wrapper
 @author: Bob Schmitz
 @version: 2022-11-29
 """
-from multiprocessing import cpu_count
 from shutil import rmtree
 from subprocess import run
 from tempfile import mkdtemp
 from uuid import uuid4
 
 class BWA:
-    def process(self, mc, inputfile, bucket):
+    def process(self, mc, inputfile: str, bucket: str, thread_cnt: int=1) -> None:
         # Create a temp directory
         tmp = mkdtemp()
 
@@ -32,13 +31,10 @@ class BWA:
         inputfile = inputfile.split('.')[0]
         fastq = [f'{inputfile}_1.fq', f'{inputfile}_2.fq']
 
-        # Match the threads to the processor count
-        #threads = cpu_count()
-        threads = 2
         aligned_bam = f'{inputfile}_realign-{uuid4()}.bam'
 
         # Align sample and convert to bam
-        align_sample = run(f'bwa mem -t {threads} -T 0 /tmp/GRCh38.d1.vd1.fa {tmp}/{fastq[0]} {tmp}/{fastq[1]} | samtools sort -o {tmp}/{aligned_bam}', shell=True)
+        align_sample = run(f'bwa mem -t {thread_cnt} -T 0 /tmp/GRCh38.d1.vd1.fa {tmp}/{fastq[0]} {tmp}/{fastq[1]} | samtools sort -o {tmp}/{aligned_bam}', shell=True)
         print(align_sample, flush=True)
         if align_sample.returncode:
             self._cleanup(tmp)
@@ -57,7 +53,7 @@ class BWA:
         return {'status': 0, 'body': aligned_bam}
 
 
-    def _cleanup(self, tmp):
+    def _cleanup(self, tmp) -> None:
         # Remove temp directory
         try:
             rmtree(tmp)

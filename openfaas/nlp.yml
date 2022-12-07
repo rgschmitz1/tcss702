@@ -16,7 +16,7 @@ functions:
       read_timeout: 600s
       exec_timeout: 600s
       minio_hostname: minio.default.svc.cluster.local:9000
-      write_debug: true
+      mode: http
       NLTK_DATA: /home/app/function/nltk_data
     secrets:
     - minio-access-key

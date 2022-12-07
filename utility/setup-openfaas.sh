@@ -10,6 +10,8 @@ cd $(dirname $0)
 TIMEOUT=10m
 REPLICAS=2
 
+[ -z "$1" ] && ELB=true || ELB=false
+
 # The AWS Elastic Load Balancer defaults to a 1 minute timeout, increase timeout
 set_elb_idle_timeout() {
 	# convert timeout to seconds
@@ -34,10 +36,19 @@ set_elb_idle_timeout() {
 	aws elb modify-load-balancer-attributes \
 		--load-balancer-name $(echo $OPENFAAS_URL | sed 's/-.*//') \
 		--load-balancer-attributes "$json"
+	return $?
 }
 
 # Check if openfaas is installed in cluster already
 kubectl rollout status --timeout=0s -n openfaas deploy/gateway && exit 0
+
+# If AWS Elastic Load Balancer is used we need to check for a valid AWS account
+if $ELB && ! aws sts get-caller-identity > /dev/null; then
+	. ./color-prompt.sh
+	prompt_error "aws cli is not configured correctly or AWS_PROFILE is not set."
+	echo "Export AWS_PROFILE user (e.g. export AWS_PROFILE=kops) and try again."
+	exit 1
+fi
 
 # Install openfaas with arkade, configure for long running functions
 cmd="arkade install openfaas
@@ -50,15 +61,15 @@ cmd="arkade install openfaas
 	--set gateway.replicas=$REPLICAS
 	--set queueWorker.replicas=$REPLICAS"
 # Check if external load balancer is used
-[ -z "$1" ] && cmd+=" --set serviceType=LoadBalancer --set operator.create=true"
+$ELB && cmd+=" --set serviceType=LoadBalancer --set operator.create=true"
 eval $cmd
 
 # check that openfaas is deployed
 kubectl rollout status -n openfaas deploy/gateway
 
 # Configure external load balancer timeout
-if [ -z "$1" ]; then
-	set_elb_idle_timeout
+if $ELB; then
+	set_elb_idle_timeout || exit $?
 else
 	# Forward the gateway to your machine
 	pgrep -f kubectl.*8080 > /dev/null && (pkill -f kubectl.*8080; sleep 3)

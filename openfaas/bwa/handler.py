@@ -27,6 +27,7 @@ def handle(event, context):
     # assume input file file is tar and compressed
     inputfile = body['inputfile']
     bucket = body['bucket']
+    thread_cnt = body['thread_cnt']
 
     # Get minio client object to download/upload data
     mc = minio_client()
@@ -35,7 +36,7 @@ def handle(event, context):
     bwa = BWA()
 
     # Align input file using bwa
-    ret = bwa.process(mc, inputfile, bucket)
+    ret = bwa.process(mc, inputfile, bucket, thread_cnt)
 
     # Collect inspector deltas
     inspector.inspectAllDeltas()
@@ -45,14 +46,21 @@ def handle(event, context):
 
     iret = inspector.finish()
 
-    # Removed aligned sample, we have no use for it after workload is complete
     if ret['status'] == 0:
+        # Removed aligned sample, we have no use for it after workload is complete
         mc.remove_object(bucket, ret['body'])
-
-        # Construct json return from function
         ret = {
-            "status": 200,
-            "body": iret
+            "body": {
+                "status": 200,
+                "saaf": iret
+            }
+        }
+    else:
+        ret = {
+            "body": {
+                "status": ret['status'],
+                "message": ret['body']
+            }
         }
 
     return ret

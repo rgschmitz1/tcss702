@@ -4,6 +4,9 @@ provider:
   gateway: http://127.0.0.1:8080
 functions:
   bwa:
+#    labels:
+#      com.openfaas.scale.min: 8
+#      com.openfaas.scale.max: 8
     lang: bwa-python3.11.0-http-debian
     handler: ./bwa
     image: schmitzr1984/bwa:latest
@@ -16,7 +19,7 @@ functions:
       read_timeout: 600s
       exec_timeout: 600s
       minio_hostname: minio.default.svc.cluster.local:9000
-      write_debug: true
+      mode: http
     secrets:
     - minio-access-key
     - minio-secret-key

@@ -15,12 +15,16 @@ export_gateway_url() {
 	fi
 }
 
+deploy_minio() {
+	../utility/setup-minio.sh || return $?
+	../utility/pass-minio-secrets.sh
+	return $?
+}
+
 # Build, push, and deploy OpenFaaS function
 deploy_fn() {
 	../utility/setup-openfaas.sh || return $?
-	../utility/setup-minio.sh || return $?
 	../utility/install-docker.sh || return $?
-	../utility/pass-minio-secrets.sh || return $?
 
 	export_gateway_url
 
@@ -32,7 +36,7 @@ deploy_fn() {
 	local yaml="$1"
 	local image=$(awk '/image:/ {print $NF}' $yaml)
 	if [ -z "$(docker images -q $image)" ]; then
-		faas-cli up -f $yaml
+		faas-cli up -f $yaml || return $?
 	else
 		read -n 1 -p "docker image is already present locally, enter 'y' to rebuild. " ANS
 		echo
@@ -40,11 +44,37 @@ deploy_fn() {
 		kubectl get service/${yaml%.*} -n openfaas-fn &> /dev/null && \
 		faas-cli remove -f $yaml
 		if [ "${ANS,}" = 'y' ]; then
-			faas-cli up -f $yaml
+			faas-cli up -f $yaml || return $?
 		else
 			faas-cli push -f $yaml && faas-cli deploy -f $yaml
+			[ $? -ne 0 ] && return 1
 		fi
 	fi
+	# Check deployment status, this might take longer for some functions
+	local i
+	for ((i=0; i<60; i++)); do
+		if [ $(kubectl get deployment.app/${yaml%.*} -n openfaas-fn \
+				--output="jsonpath={.status.conditions[0].status}") = 'True' ]; then
+			return 0
+		fi
+		sleep 1
+	done
+	return 1
+}
+
+# Remove OpenFaaS function
+remove_fn() {
+	../utility/setup-openfaas.sh || return $?
+
+	export_gateway_url
+
+	# login faas-cli
+	kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | \
+	base64 --decode | \
+	faas-cli login --username admin --password-stdin || return $?
+
+	local yaml="$1"
+	faas-cli remove -f $yaml
 	return $?
 }
 
@@ -86,14 +116,16 @@ execute_fn() {
 	local fn_discription="$3"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
 	local log="$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"
-	if [ -n "$4" ]; then
-		curl -s -f -H "Content-Type: application/json" -X POST -d "$payload" \
-		http://$OPENFAAS_URL/function/$fn_name -o "$log" &
+	if [ -n "$CONCURRENT" ]; then
+		curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
+			http://$OPENFAAS_URL/function/$fn_name -o "$log" &
 		PROCESSES+=($!)
 		LOGS+=("$log")
-	elif curl -s -f -H "Content-Type: application/json" -X POST -d "$payload" \
-		http://$OPENFAAS_URL/function/$fn_name -o "$log"; then
-		cat "$log"
+	elif curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
+			http://$OPENFAAS_URL/function/$fn_name -o "$log"; then
+		local status=$(jq -r '.status' $log)
+		[ $status -ne 200 ] && prompt_error "function exit status is $status"
+		printf "\nSuccessfully executed function\nSee $log\n"
 		sleep 2
 	else
 		prompt_error "Failed to execute $fn_name $fn_discription"
@@ -105,10 +137,16 @@ execute_fn() {
 check_concurrent_fn() {
 	local i
 	for ((i=0; i<${#PROCESSES[@]}; i++)); do
-		if wait ${PROCESSES[$i]}; then
-			printf "\nSuccessfully completed process ${PROCESSES[$i]}\nSee ${LOGS[$i]}\n"
+		wait ${PROCESSES[$i]}
+		local ret=$?
+		if [ $ret -eq 0 ]; then
+			printf "\nCompleted process ${PROCESSES[$i]}\nSee ${LOGS[$i]}\n"
+			local status=$(jq -r '.status' ${LOGS[$i]})
+			[ $status -ne 200 ] && prompt_error "function exit status is $status"
 		else
-			prompt_error "Encountered an error with process ${PROCESSES[$i]}\nSee ${LOGS[$i]}"
+			prompt_error "Encountered an error status ($ret) with process ${PROCESSES[$i]}\nSee ${LOGS[$i]}"
 		fi
 	done
+	unset PROCESSES
+	unset LOGS
 }

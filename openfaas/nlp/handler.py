@@ -42,7 +42,9 @@ def handle(event, context):
     iret = inspector.finish()
 
     ret = {
-        "status": 200,
-        "body": iret
+        "body": {
+            "status": 200,
+            "saaf": iret
+        }
     }
     return ret

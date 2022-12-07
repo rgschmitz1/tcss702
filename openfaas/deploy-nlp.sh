@@ -4,11 +4,20 @@ cd $(dirname $0)
 
 . ./lib-openfaas.sh
 
+# Remove function
+if [[ -n "$1" && "$1" = '-d' ]]; then
+	remove_fn nlp.yml
+	exit $?
+fi
+
 # Install Zstandard
 ../utility/install-zstd.sh || exit $?
 
 # Deploy function
 deploy_fn nlp.yml || exit $?
+
+# Deploy minio
+deploy_minio || exit 1
 
 # Make nlp buckets
 bucket=minio/topic-modeling-us-east-1

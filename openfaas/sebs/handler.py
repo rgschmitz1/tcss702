@@ -59,7 +59,9 @@ def handle(event, context):
         mc.remove_object(bucket, sebs.get_dna_visualization_output())
 
     ret = {
-        "status": 200,
-        "body": iret
+        "body": {
+            "status": 200,
+            "saaf": iret
+        }
     }
     return ret
