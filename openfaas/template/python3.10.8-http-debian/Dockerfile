@@ -1,4 +1,4 @@
-FROM ghcr.io/openfaas/of-watchdog:0.9.6 AS watchdog
+FROM ghcr.io/openfaas/of-watchdog:0.9.10 AS watchdog
 
 # Build image stage
 FROM python:3.10.8-slim-bullseye AS builder
