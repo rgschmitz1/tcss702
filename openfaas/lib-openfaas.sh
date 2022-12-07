@@ -9,10 +9,9 @@ export_gateway_url() {
 	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080
 	if [ "$OPENFAAS_URL" = ":8080" ]; then
 		export OPENFAAS_URL="localhost:8080"
-		echo "OpenFaaS load balancer gateway not found"
-	else
-		echo "OpenFaaS load balancer gateway: $OPENFAAS_URL"
+		echo "OpenFaaS load balancer endpoint not found"
 	fi
+	echo "OpenFaas using gateway: $OPENFAAS_URL"
 }
 
 deploy_minio() {
