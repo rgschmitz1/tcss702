@@ -2,9 +2,11 @@
 
 cd $(dirname $0)
 
+. color-prompt.sh
+
 # Install dependencies
-./install-arkade_helm_faas-cli_mc.sh
-./install-kubectl.sh
+./install-arkade_helm_faas-cli_mc.sh || exit $?
+./install-kubectl.sh || exit $?
 
 # Timeout in minutes
 TIMEOUT=10m
@@ -42,9 +44,10 @@ set_elb_idle_timeout() {
 # Check if openfaas is installed in cluster already
 kubectl rollout status --timeout=0s -n openfaas deploy/gateway && exit 0
 
+prompt_info "Setting up OpenFaas"
+
 # If AWS Elastic Load Balancer is used we need to check for a valid AWS account
 if $ELB && ! aws sts get-caller-identity > /dev/null; then
-	. ./color-prompt.sh
 	prompt_error "aws cli is not configured correctly or AWS_PROFILE is not set."
 	echo "Export AWS_PROFILE user (e.g. export AWS_PROFILE=kops) and try again."
 	exit 1

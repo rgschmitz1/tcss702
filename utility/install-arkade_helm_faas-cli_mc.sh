@@ -1,25 +1,26 @@
 #!/bin/bash
 
 cd $(dirname $0)
+. color-prompt.sh
 
-# Install arkade
 if ! which arkade > /dev/null; then
-	curl -SLfs https://get.arkade.dev | sudo sh
+	prompt_info "Installing arkade"
+	curl -SLfs https://get.arkade.dev | sudo sh || exit 1
 fi
 
-# Install helm
 if ! which helm > /dev/null; then
-	curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash
+	prompt_info "Installing helm"
+	curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | sudo bash || exit 1
 fi
 
-# Install faas-cli
 if ! which faas-cli > /dev/null; then
-	curl -sSL https://cli.openfaas.com | sudo -E sh
+	prompt_info "Installing faas-cli"
+	curl -sSL https://cli.openfaas.com | sudo -E sh || exit 1
 fi
 
-# Install minio clent
-if ! which mc > /dev/null; then
-	wget https://dl.min.io/client/mc/release/linux-amd64/mc
-	sudo install -o root -g root -m 0755 mc /usr/local/bin/mc
-	rm mc
-fi
+which mc > /dev/null && exit 0
+prompt_info "Installing minio client"
+curl https://dl.min.io/client/mc/release/linux-amd64/mc && \
+chmod +x mc && \
+sudo mv mc /usr/local/bin/mc
+exit $?

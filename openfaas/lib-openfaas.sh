@@ -46,13 +46,12 @@ deploy_fn() {
 		if [ "${ANS,}" = 'y' ]; then
 			faas-cli up -f $yaml || return $?
 		else
-			faas-cli push -f $yaml && faas-cli deploy -f $yaml
-			[ $? -ne 0 ] && return 1
+			faas-cli push -f $yaml && faas-cli deploy -f $yaml || return 1
 		fi
 	fi
-	# Check deployment status, this might take longer for some functions
+	echo "Checking deployment status, this might take awhile for some functions"
 	local i
-	for ((i=0; i<60; i++)); do
+	for ((i=0; i<100; i++)); do
 		if [ $(kubectl get deployment.app/${yaml%.*} -n openfaas-fn \
 				--output="jsonpath={.status.conditions[0].status}") = 'True' ]; then
 			return 0

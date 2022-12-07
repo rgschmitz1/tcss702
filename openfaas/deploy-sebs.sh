@@ -10,11 +10,11 @@ if [[ -n "$1" && "$1" = '-d' ]]; then
 	exit $?
 fi
 
-# Deploy function
-deploy_fn sebs.yml || exit 1
-
 # Deploy minio
 deploy_minio || exit 1
+
+# Deploy function
+deploy_fn sebs.yml || exit 1
 
 # Make SeBS bucket
 bucket=minio/sebs

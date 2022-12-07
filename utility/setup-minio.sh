@@ -2,11 +2,13 @@
 
 cd $(dirname $0)
 
+. color-prompt.sh
+
 # Install dependencies
 ./install-arkade_helm_faas-cli_mc.sh
 ./install-kubectl.sh
 
-# Install minio with arkade
+prompt_info "Setting up Minio"
 if ! kubectl rollout status --timeout=0s deploy/minio; then
 	arkade install minio
 	# TODO: figure out persistant storage

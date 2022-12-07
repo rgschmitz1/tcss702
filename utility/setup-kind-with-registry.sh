@@ -3,12 +3,10 @@ set -o errexit
 
 cd $(dirname $0)
 
-# install docker
-./install-docker.sh
-# install kind
-./install-kind.sh
-# install kubectl
-./install-kubectl.sh
+# Install dependencies
+./install-docker.sh || exit 1
+./install-kind.sh || exit 1
+./install-kubectl.sh || exit 1
 
 # create registry container unless it already exists
 reg_name='kind-registry'

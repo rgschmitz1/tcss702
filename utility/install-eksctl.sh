@@ -1,6 +1,7 @@
 #!/bin/bash
-if ! which eksctl > /dev/null; then
-	curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-	sudo mv /tmp/eksctl /usr/local/bin
-	eksctl version 2> /dev/null || exit $?
-fi
+which eksctl > /dev/null && exit 0
+curl -sL "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | \
+	tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version 2> /dev/null
+exit $?

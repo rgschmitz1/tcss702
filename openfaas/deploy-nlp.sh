@@ -13,11 +13,11 @@ fi
 # Install Zstandard
 ../utility/install-zstd.sh || exit $?
 
-# Deploy function
-deploy_fn nlp.yml || exit $?
-
 # Deploy minio
 deploy_minio || exit 1
+
+# Deploy function
+deploy_fn nlp.yml || exit $?
 
 # Make nlp buckets
 bucket=minio/topic-modeling-us-east-1
