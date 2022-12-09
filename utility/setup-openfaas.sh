@@ -42,7 +42,7 @@ set_elb_idle_timeout() {
 }
 
 # Check if openfaas is installed in cluster already
-kubectl rollout status --timeout=0s -n openfaas deploy/gateway && exit 0
+kubectl rollout status --timeout=0s -n openfaas deploy/gateway 2> /dev/null && exit 0
 
 prompt_info "Setting up OpenFaas"
 

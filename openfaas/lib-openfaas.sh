@@ -15,8 +15,7 @@ export_gateway_url() {
 }
 
 deploy_minio() {
-	../utility/setup-minio.sh || return $?
-	../utility/pass-minio-secrets.sh
+	../utility/setup-minio.sh
 	return $?
 }
 
@@ -24,6 +23,7 @@ deploy_minio() {
 deploy_fn() {
 	../utility/setup-openfaas.sh || return $?
 	../utility/install-docker.sh || return $?
+	../utility/pass-minio-secrets.sh || return $?
 
 	export_gateway_url
 

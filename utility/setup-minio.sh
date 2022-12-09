@@ -9,7 +9,7 @@ cd $(dirname $0)
 ./install-kubectl.sh
 
 prompt_info "Setting up Minio"
-if ! kubectl rollout status --timeout=0s deploy/minio; then
+if ! kubectl rollout status --timeout=0s deploy/minio 2> /dev/null; then
 	arkade install minio
 	# TODO: figure out persistant storage
 	#    --set persistence.enabled=true
