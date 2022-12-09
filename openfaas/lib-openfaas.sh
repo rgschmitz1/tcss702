@@ -71,12 +71,12 @@ main() {
 usage() {
 	cat <<-_OPTIONS
 	OPTIONS:
-	  -i <int> | --iterations <int>	Number of function iterations (defaults to 1)
-	  -t <str> | --type <str>	Cluster type
 	  -c | --concurrent		Execute functions concurrently (defaults to false)
 	  -d | --delete			Remove function
-	  -r <int> | --replicas <int>	Number of function replicas to spawn (defaults to 1)
 	  -h | --help			Print this usage message then exit
+	  -i <int> | --iterations <int>	Number of function iterations (defaults to 1)
+	  -r <int> | --replicas <int>	Number of function replicas to spawn (defaults to 1)
+	  -t <str> | --type <str>	Cluster type
 	_OPTIONS
 	exit $1
 }
