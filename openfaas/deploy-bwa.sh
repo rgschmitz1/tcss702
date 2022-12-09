@@ -1,24 +1,15 @@
 #!/bin/bash
 
-. $(dirname $0)/lib-openfaas.sh
-
-# Remove function
-if [[ -n "$1" && "$1" = '-d' ]]; then
-	remove_fn bwa.yml
-	exit $?
-fi
+. $(dirname $0)/lib-openfaas.sh bwa $@
 
 # Deploy minio
 deploy_minio || exit 1
 
-# Deploy function
-deploy_fn bwa.yml || exit 1
-
-# Make bwa bucket
-bucket=minio/bwa
+# Make bucket
+bucket=minio/$FN_NAME
 mc ls $bucket 2> /dev/null || mc mb $bucket
 
-# Move sample data into bwa input bucket
+# Move sample data into input bucket
 pushd ../data > /dev/null
 for f in normal.tar.zst tumor.tar.zst; do
 	[ -n "$(mc ls $bucket/$f)" ] && continue
@@ -33,3 +24,6 @@ for f in normal.tar.zst tumor.tar.zst; do
 	fi
 done
 popd > /dev/null
+
+# Deploy function
+deploy_fn || exit 1

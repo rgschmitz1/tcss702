@@ -1,12 +1,6 @@
 #!/bin/bash
 
-. $(dirname $0)/lib-openfaas.sh
-
-# Remove function
-if [[ -n "$1" && "$1" = '-d' ]]; then
-	remove_fn nlp.yml
-	exit $?
-fi
+. $(dirname $0)/lib-openfaas.sh nlp $@
 
 # Install Zstandard
 ../utility/install-zstd.sh || exit $?
@@ -14,23 +8,23 @@ fi
 # Deploy minio
 deploy_minio || exit 1
 
-# Deploy function
-deploy_fn nlp.yml || exit $?
-
-# Make nlp buckets
+# Make buckets
 bucket=minio/topic-modeling-us-east-1
 mc ls $bucket 2> /dev/null || mc mb $bucket
 mc ls ${bucket}-x86-64 2> /dev/null || mc mb ${bucket}-x86-64
 
-# Move nlp objects to input bucket
+# Move objects to input bucket
 if [ -z "$(mc ls $bucket)" ]; then
-	# Move data into bucket for nlp pipeline
 	temp=$(mktemp -d)
 	tar -xvf $PWD/../data/news_data.tar.zst -C $temp
+	# Move data into bucket for pipeline
 	if ! mc cp $temp/* $bucket; then
-		prompt_error "failed to copy nlp object(s) to $bucket"
+		prompt_error "failed to copy object(s) to $bucket"
 		rm -fr $temp
 		exit 1
 	fi
 	rm -fr $temp
 fi
+
+# Deploy function
+deploy_fn || exit $?

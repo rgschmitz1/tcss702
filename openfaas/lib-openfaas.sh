@@ -2,17 +2,87 @@
 
 set -o pipefail
 
-cd $(dirname $0)
+main() {
+	cd $(dirname $0)
 
-# Add colorized console prompts
-. ../utility/color-prompt.sh
+	# Add colorized console prompts
+	. ../utility/color-prompt.sh
+
+	# Deploy OpenFaaS
+	if ! ../utility/setup-openfaas.sh; then
+		prompt_error "OpenFaaS failed to deploy"
+		exit 1
+	fi
+
+	# Export OpenFaaS gateway
+	export_gateway_url
+
+	# Check that function name is passed
+	if [ -z "$1" ]; then
+		prompt_error "Function name must be passed as the first positional argument"
+		exit 1
+	fi
+	FN_NAME=$1
+	shift
+
+	# Default arguments
+	ITERATION=1
+	REPLICAS=1
+
+	# Parse parameters
+	while [ -n "$1" ]; do
+		case $1 in
+			-i|--iterations)
+				ITERATION=$2
+				shift
+				shift
+			;;
+			-t|--type)
+				CLUSTER_TYPE="$2"
+				shift
+				shift
+			;;
+			-c|--concurrent)
+				CONCURRENT=true
+				shift
+			;;
+			-d|--delete)
+				remove_fn
+				exit $?
+			;;
+			-r|--replicas)
+				REPLICAS=$2
+				echo "Replicas set to $REPLICAS"
+				shift
+				shift
+			;;
+			-h|--help)
+				usage 0
+			;;
+			*)
+				prompt_error "Invalid argument passed '$1'"
+				usage 1
+			;;
+		esac
+	done
+}
+
+usage() {
+	cat <<-_OPTIONS
+	OPTIONS:
+	  -i <int> | --iterations <int>	Number of function iterations (defaults to 1)
+	  -t <str> | --type <str>	Cluster type
+	  -c | --concurrent		Execute functions concurrently
+	  -d | --delete			Remove function
+	  -r <int> | --replicas <int>	Number of function replicas to spawn (defaults to 1)
+	  -h | --help			Print this usage message then exit
+	_OPTIONS
+	exit $1
+}
 
 export_gateway_url() {
 	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080
-	if [ "$OPENFAAS_URL" = ":8080" ]; then
-		export OPENFAAS_URL="localhost:8080"
-		echo "OpenFaaS load balancer endpoint not found"
-	fi
+	[ "$OPENFAAS_URL" = ":8080" ] && export OPENFAAS_URL="localhost:8080"
 	echo "OpenFaas using gateway: $OPENFAAS_URL"
 }
 
@@ -22,9 +92,15 @@ deploy_minio() {
 	return $?
 }
 
+# Login faas-cli
+faas_login() {
+	kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | \
+	base64 --decode | \
+	faas-cli login --username admin --password-stdin || return $?
+}
+
 # Build, push, and deploy OpenFaaS function
 deploy_fn() {
-	../utility/setup-openfaas.sh || return $?
 	../utility/install-docker.sh || return $?
 
 	# If Minio is deployed also pass minio secrets to OpenFaaS
@@ -32,108 +108,81 @@ deploy_fn() {
 		../utility/pass-minio-secrets.sh || return $?
 	fi
 
-	export_gateway_url
+	faas_login || return $?
 
-	# login faas-cli
-	kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | \
-	base64 --decode | \
-	faas-cli login --username admin --password-stdin || return $?
-
-	local yaml="$1"
+	local yaml="$FN_NAME.yml"
 	local image=$(awk '/image:/ {print $NF}' $yaml)
 	if [ -z "$(docker images -q $image)" ]; then
-		faas-cli up -f $yaml || return $?
+		faas-cli up -f $yaml \
+			--label com.openfaas.scale.min=$REPLICAS \
+			--label com.openfaas.scale.max=$REPLICAS || return $?
 	else
 		read -n 1 -p "docker image is already present locally, enter 'y' to rebuild. " ANS
 		echo
 		# faas-cli doesn't seem to update or replace existing functions correctly, we need to remove first
-		kubectl get service/${yaml%.*} -n openfaas-fn &> /dev/null && \
+		kubectl get service/$FN_NAME -n openfaas-fn &> /dev/null && \
 		faas-cli remove -f $yaml
 		if [ "${ANS,}" = 'y' ]; then
-			faas-cli up -f $yaml || return $?
+			faas-cli up -f $yaml \
+				--label com.openfaas.scale.min=$REPLICAS \
+				--label com.openfaas.scale.max=$REPLICAS || return $?
 		else
-			faas-cli push -f $yaml && faas-cli deploy -f $yaml || return 1
+			faas-cli push -f $yaml && \
+			faas-cli deploy -f $yaml \
+				--label com.openfaas.scale.min=$REPLICAS \
+				--label com.openfaas.scale.max=$REPLICAS || return $?
 		fi
 	fi
 	echo "Checking deployment status, this might take awhile for some functions"
 	local i
 	for ((i=0; i<100; i++)); do
-		if [ $(kubectl get deployment.app/${yaml%.*} -n openfaas-fn \
+		if [ $(kubectl get deployment.app/$FN_NAME -n openfaas-fn \
 				--output="jsonpath={.status.conditions[0].status}") = 'True' ]; then
 			return 0
 		fi
 		sleep 1
 	done
+	prompt_error "Failed checking deployment status of function"
 	return 1
 }
 
 # Remove OpenFaaS function
 remove_fn() {
-	../utility/setup-openfaas.sh || return $?
+	faas_login || return $?
 
-	export_gateway_url
-
-	# login faas-cli
-	kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | \
-	base64 --decode | \
-	faas-cli login --username admin --password-stdin || return $?
-
-	local yaml="$1"
-	faas-cli remove -f $yaml
-	return $?
-}
-
-# Setup for OpenFaaS function invocation
-invoke_setup() {
-	# Verify all arguments are set
-	if [ -z "$3" ]; then
-		cat <<-_USAGE
-		Argumentes include
-		\$1 - iterations (set to '$1')
-		\$2 - cluster type (set to '$2')
-		\$3 - function name (set to '$3')
-		_USAGE
-		exit 1
-	fi
-
-	# Verify arguments are all set
-	ITERATION=$1
-	CLUSTER_TYPE="$2"
-	FUNCTION_NAME="$3"
-	if [[ -n "$4" && "$4" = '-c' ]]; then
-		CONCURRENT=true
-	fi
-
-
-	# Check for OpenFaaS endpoint associated with load balancer URL
-	export_gateway_url
-
-	# Create a directory to store logs
-	LOG_DIR="logs/$CLUSTER_TYPE/$FUNCTION_NAME"
-	[ -d "$LOG_DIR" ] || mkdir -p "$LOG_DIR"
+	faas-cli remove -f $FN_NAME.yml
 	return $?
 }
 
 # Execute OpenFaaS
 execute_fn() {
-	local fn_name="$1"
-	local payload="$2"
-	local fn_discription="$3"
+	if [ -z "$CLUSTER_TYPE" ]; then
+		prompt_error "CLUSTER_TYPE must be passed (e.g. kops)"
+		usage 1
+	fi
+
+	local payload="$1"
+	local fn_discription="$2"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
-	local log="$LOG_DIR/${datetime}_${fn_name}_${fn_discription}.log"
+	local log_dir="logs/$CLUSTER_TYPE/$FN_NAME"
+	local log="$log_dir/${datetime}_${FN_NAME}_${fn_discription}.log"
+
+	# Create a directory to store logs
+	mkdir -p "$log_dir" || exit $?
+
 	if [ -n "$CONCURRENT" ]; then
 		curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
-			http://$OPENFAAS_URL/function/$fn_name -o "$log" &
+			http://$OPENFAAS_URL/function/$FN_NAME -o "$log" &
 		PROCESSES+=($!)
 		LOGS+=("$log")
 	elif curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
-			http://$OPENFAAS_URL/function/$fn_name -o "$log"; then
+			http://$OPENFAAS_URL/function/$FN_NAME -o "$log"; then
 		local status=$(jq -r '.status' $log)
 		[ $status -ne 200 ] && prompt_error "function exit status is $status"
 		printf "\nSuccessfully executed function\nSee $log\n"
 		sleep 2
 	else
-		prompt_error "Failed to execute $fn_name $fn_discription"
+		prompt_error "Failed to execute $FN_NAME $fn_discription"
 		exit 1
 	fi
 }
@@ -155,3 +204,5 @@ check_concurrent_fn() {
 	unset PROCESSES
 	unset LOGS
 }
+
+main $@

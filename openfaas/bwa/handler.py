@@ -42,7 +42,7 @@ def handle(event, context):
     inspector.inspectAllDeltas()
 
     # Include functionName
-    inspector.addAttribute("functionName", 'bwa-mem')
+    inspector.addAttribute("functionName", 'bwa')
 
     iret = inspector.finish()
 

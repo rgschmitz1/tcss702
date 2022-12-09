@@ -1,25 +1,23 @@
 #!/bin/bash
 
 # Add library to invoke functions
-. $(dirname $0)/lib-openfaas.sh
+. $(dirname $0)/lib-openfaas.sh sebs $@
 
-invoke_setup $1 "$2" 'sebs' "$3" || exit 1
-
+f=dna_visualization
 for ((i=0; i<$ITERATION; i++)); do
 	prompt_info "Iteration $i\n--"
-	prompt_info "SeBS function, dna_visualization"
-	execute_fn 'sebs' '{"fn":"dna_visualization", "key":"bacillus_subtilis.fasta", "bucket":"sebs"}' "dna_visualization_$i"
+	prompt_info "Executing $FN_NAME, $f"
+	execute_fn "{\"fn\":\"$f\", \"key\":\"bacillus_subtilis.fasta\", \"bucket\":\"$FN_NAME\"}" "${f}_$i"
 done
 check_concurrent_fn
 
 for f in graph_bfs graph_mst graph_pagerank; do
 	for ((i=0; i<$ITERATION; i++)); do
 		prompt_info "Iteration $i\n--"
-		prompt_info "SeBS function, $f"
-		execute_fn 'sebs' "{\"fn\":\"$f\", \"size\":10000}" "${f}_$i"
+		prompt_info "Executing $FN_NAME, $f"
+		execute_fn "{\"fn\":\"$f\", \"size\":10000}" "${f}_$i"
 	done
 	check_concurrent_fn
 done
-
 
 printf "\nTotal iterations: $ITERATION, Total runtime: $SECONDS sec\n"
