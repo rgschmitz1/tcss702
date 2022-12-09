@@ -1,9 +1,7 @@
 #!/bin/bash
 
-cd $(dirname $0)
-
 # Add library to invoke functions
-. lib-openfaas.sh
+. $(dirname $0)/lib-openfaas.sh
 
 invoke_setup $1 "$2" 'nlp' || exit 1
 

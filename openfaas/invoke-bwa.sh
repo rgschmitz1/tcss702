@@ -1,9 +1,7 @@
 #!/bin/bash
 
-cd $(dirname $0)
-
 # Add library to invoke functions
-. lib-openfaas.sh
+. $(dirname $0)/lib-openfaas.sh
 
 # if third optional argument is set to '-c' then concurrent function runs will take place
 invoke_setup $1 "$2" 'bwa' "$3" || exit 1

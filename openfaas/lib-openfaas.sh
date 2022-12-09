@@ -2,8 +2,10 @@
 
 set -o pipefail
 
+cd $(dirname $0)
+
 # Add colorized console prompts
-. $(dirname $0)/../utility/color-prompt.sh
+. ../utility/color-prompt.sh
 
 export_gateway_url() {
 	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080
@@ -15,6 +17,7 @@ export_gateway_url() {
 }
 
 deploy_minio() {
+	DEPLOY_MINIO=true
 	../utility/setup-minio.sh
 	return $?
 }
@@ -23,7 +26,11 @@ deploy_minio() {
 deploy_fn() {
 	../utility/setup-openfaas.sh || return $?
 	../utility/install-docker.sh || return $?
-	../utility/pass-minio-secrets.sh || return $?
+
+	# If Minio is deployed also pass minio secrets to OpenFaaS
+	if [ -n "$DEPLOY_MINIO" ]; then
+		../utility/pass-minio-secrets.sh || return $?
+	fi
 
 	export_gateway_url
 

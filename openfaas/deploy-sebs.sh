@@ -1,8 +1,6 @@
 #!/bin/bash
 
-cd $(dirname $0)
-
-. ./lib-openfaas.sh
+. $(dirname $0)/lib-openfaas.sh
 
 # Remove function
 if [[ -n "$1" && "$1" = '-d' ]]; then
