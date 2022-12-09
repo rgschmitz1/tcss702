@@ -70,19 +70,19 @@ create_kops_iam_user() {
 		AmazonEventBridgeFullAccess \
 	)
 
-	aws iam create-group --group-name $PROFILE || return $?
-
-	# Attach policies to group
-	for p in ${policy[@]}; do
-		aws iam attach-group-policy \
-			--policy-arn arn:aws:iam::aws:policy/$p \
-			--group-name $PROFILE || return $?
-	done
-
-	aws iam create-user --user-name $PROFILE || return $?
-
-	aws iam add-user-to-group --user-name $PROFILE --group-name $PROFILE || \
-		return $?
+	# Create user and group
+	if ! aws iam list-users | grep -q "UserName.*$PROFILE"; then
+		aws iam create-group --group-name $PROFILE || return $?
+		# Attach policies to group
+		for p in ${policy[@]}; do
+			aws iam attach-group-policy \
+				--policy-arn arn:aws:iam::aws:policy/$p \
+				--group-name $PROFILE || return $?
+		done
+		aws iam create-user --user-name $PROFILE || return $?
+		aws iam add-user-to-group --user-name $PROFILE --group-name $PROFILE || \
+			return $?
+	fi
 
 	# Create Access Key ID and Secret Access Key
 	local tmp=$(mktemp)

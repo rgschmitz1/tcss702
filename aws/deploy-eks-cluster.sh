@@ -65,34 +65,36 @@ create_eks_iam_user() {
 	# get AWS account ID
 	local aws_id=$(aws sts get-caller-identity | jq -r .Account)
 
-	aws iam create-group --group-name $PROFILE || return $?
+	if ! aws iam list-users | grep -q "UserName.*$PROFILE"; then
+		aws iam create-group --group-name $PROFILE || return $?
 
-	# Attach managed policies to group
-	for p in ${managed_policies[@]}; do
-		aws iam attach-group-policy \
-			--policy-arn arn:aws:iam::aws:policy/$p \
-			--group-name $PROFILE || return $?
-	done
+		# Attach managed policies to group
+		for p in ${managed_policies[@]}; do
+			aws iam attach-group-policy \
+				--policy-arn arn:aws:iam::aws:policy/$p \
+				--group-name $PROFILE || return $?
+		done
 
-	# Attach self-managed policies to group
-	for p in ${policies[@]}; do
-		# Check if policy has already been created
-		if ! aws iam get-policy --policy-arn arn:aws:iam::$aws_id:policy/$p 2> /dev/null; then
-			# policy json
-			local json=$(sed "s/<account_id>/$aws_id/" eks/$p.json)
-			aws iam create-policy \
-				--policy-name $p \
-				--policy-document "$json"
-		fi
-		aws iam attach-group-policy \
-			--policy-arn arn:aws:iam::$aws_id:policy/$p \
-			--group-name $PROFILE || return $?
-	done
+		# Attach self-managed policies to group
+		for p in ${policies[@]}; do
+			# Check if policy has already been created
+			if ! aws iam get-policy --policy-arn arn:aws:iam::$aws_id:policy/$p 2> /dev/null; then
+				# policy json
+				local json=$(sed "s/<account_id>/$aws_id/" eks/$p.json)
+				aws iam create-policy \
+					--policy-name $p \
+					--policy-document "$json"
+			fi
+			aws iam attach-group-policy \
+				--policy-arn arn:aws:iam::$aws_id:policy/$p \
+				--group-name $PROFILE || return $?
+		done
 
-	aws iam create-user --user-name $PROFILE || return $?
+		aws iam create-user --user-name $PROFILE || return $?
 
-	aws iam add-user-to-group --user-name $PROFILE --group-name $PROFILE || \
-		return $?
+		aws iam add-user-to-group --user-name $PROFILE --group-name $PROFILE || \
+			return $?
+	fi
 
 	# Create Access Key ID and Secret Access Key
 	local tmp=$(mktemp)
