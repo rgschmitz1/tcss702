@@ -8,13 +8,13 @@ cd $(dirname $0)
 ./install-arkade_helm_faas-cli_mc.sh
 ./install-kubectl.sh
 
+kubectl rollout status --timeout=0s deploy/minio 2> /dev/null && exit 0
+
 prompt_info "Setting up Minio"
-if ! kubectl rollout status --timeout=0s deploy/minio 2> /dev/null; then
-	arkade install minio
-	# TODO: figure out persistant storage
-	#    --set persistence.enabled=true
-	kubectl rollout status deploy/minio
-fi
+arkade install minio
+# TODO: figure out persistant storage
+#    --set persistence.enabled=true
+kubectl rollout status deploy/minio
     
 # Forward the minio port to your machine
 pgrep -f kubectl.*9000 && (pkill -f kubectl.*9000 > /dev/null; sleep 3)
