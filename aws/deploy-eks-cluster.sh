@@ -65,7 +65,7 @@ create_eks_iam_user() {
 	# get AWS account ID
 	local aws_id=$(aws sts get-caller-identity | jq -r .Account)
 
-	if ! aws iam list-users | grep -q "UserName.*$PROFILE"; then
+	if ! aws iam get-user --user $PROFILE &> /dev/null; then
 		aws iam create-group --group-name $PROFILE || return $?
 
 		# Attach managed policies to group
@@ -91,42 +91,41 @@ create_eks_iam_user() {
 		done
 
 		aws iam create-user --user-name $PROFILE || return $?
-
 		aws iam add-user-to-group --user-name $PROFILE --group-name $PROFILE || \
 			return $?
 	fi
 
 	# Create Access Key ID and Secret Access Key
-	local tmp=$(mktemp)
-	if ! aws iam create-access-key --user-name $PROFILE > $tmp; then
-		local ret=$?
+	if ! grep -q $PROFILE $HOME/.aws/credentials; then
+		local tmp=$(mktemp)
+		if ! aws iam create-access-key --user-name $PROFILE > $tmp; then
+			local ret=$?
+			rm $tmp
+			return $ret
+		fi
+		local access_key=$(jq -r .AccessKey.AccessKeyId < $tmp)
+		local secret_key=$(jq -r .AccessKey.SecretAccessKey < $tmp)
+
+		# Populate AWS credentials
+		cat <<- _CREDENTIALS >> $HOME/.aws/credentials
+
+		[$PROFILE]
+		aws_access_key_id=$access_key
+		aws_secret_access_key=$secret_key
+		_CREDENTIALS
+
+		# Populate AWS config
+		cat <<- _CONFIG >> $HOME/.aws/config
+
+		[profile $PROFILE]
+		region=$REGION
+		_CONFIG
+
+		# Remove temporary AWS config file
 		rm $tmp
-		return $ret
 	fi
-	local access_key=$(jq -r .AccessKey.AccessKeyId < $tmp)
-	local secret_key=$(jq -r .AccessKey.SecretAccessKey < $tmp)
 
-	# Populate AWS credentials
-	cat <<- _CREDENTIALS >> $HOME/.aws/credentials
-
-	[$PROFILE]
-	aws_access_key_id=$access_key
-	aws_secret_access_key=$secret_key
-	_CREDENTIALS
-
-	# Populate AWS config
-	cat <<- _CONFIG >> $HOME/.aws/config
-
-	[profile $PROFILE]
-	region=$REGION
-	_CONFIG
-
-	# Remove temporary AWS config file
-	rm $tmp
-
-	# Verify kops user was successfully created
-	aws iam get-user --user $PROFILE
-	return $?
+	return 0
 }
 
 
@@ -166,12 +165,11 @@ if ! install_dependencies; then
 fi
 
 # Verify eks user has been created
-if ! (grep -q $PROFILE $HOME/.aws/credentials || create_eks_iam_user); then
+if ! create_eks_iam_user; then
 	prompt_error "failed to generate $PROFILE user"
 	exit 1
-else
-	export AWS_PROFILE=$PROFILE
 fi
+export AWS_PROFILE=$PROFILE
 
 # Check for user input
 while [ -n "$1" ]; do
