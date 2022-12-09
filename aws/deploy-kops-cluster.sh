@@ -112,6 +112,10 @@ create_kops_iam_user() {
 
 		# Remove temporary AWS config file
 		rm $tmp
+
+		# Give some time for credentials to be activated
+		# for some reason this does not seem to happen quickly
+		sleep 10
 	fi
 
 	return 0
