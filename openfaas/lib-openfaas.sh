@@ -28,6 +28,7 @@ main() {
 	# Default arguments
 	ITERATION=1
 	REPLICAS=1
+	CONCURRENT=false
 
 	# Parse parameters
 	while [ -n "$1" ]; do
@@ -72,7 +73,7 @@ usage() {
 	OPTIONS:
 	  -i <int> | --iterations <int>	Number of function iterations (defaults to 1)
 	  -t <str> | --type <str>	Cluster type
-	  -c | --concurrent		Execute functions concurrently
+	  -c | --concurrent		Execute functions concurrently (defaults to false)
 	  -d | --delete			Remove function
 	  -r <int> | --replicas <int>	Number of function replicas to spawn (defaults to 1)
 	  -h | --help			Print this usage message then exit
@@ -170,7 +171,7 @@ execute_fn() {
 	# Create a directory to store logs
 	mkdir -p "$log_dir" || exit $?
 
-	if [ -n "$CONCURRENT" ]; then
+	if $CONCURRENT; then
 		curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
 			http://$OPENFAAS_URL/function/$FN_NAME -o "$log" &
 		PROCESSES+=($!)
@@ -189,6 +190,7 @@ execute_fn() {
 
 # Check concurrent functions
 check_concurrent_fn() {
+	$CONCURRENT || return
 	local i
 	for ((i=0; i<${#PROCESSES[@]}; i++)); do
 		wait ${PROCESSES[$i]}
