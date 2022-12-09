@@ -51,6 +51,8 @@ install_dependencies() {
 
 # An IAM user must be created in AWS with permissions to create a cluster
 create_eks_iam_user() {
+	grep -q $PROFILE $HOME/.aws/credentials && return 0
+
 	# minimum IAM policies per,
 	# https://eksctl.io/usage/minimum-iam-policies
 	local managed_policies=(\
@@ -96,38 +98,36 @@ create_eks_iam_user() {
 	fi
 
 	# Create Access Key ID and Secret Access Key
-	if ! grep -q $PROFILE $HOME/.aws/credentials; then
-		local tmp=$(mktemp)
-		if ! aws iam create-access-key --user-name $PROFILE > $tmp; then
-			local ret=$?
-			rm $tmp
-			return $ret
-		fi
-		local access_key=$(jq -r .AccessKey.AccessKeyId < $tmp)
-		local secret_key=$(jq -r .AccessKey.SecretAccessKey < $tmp)
-
-		# Populate AWS credentials
-		cat <<- _CREDENTIALS >> $HOME/.aws/credentials
-
-		[$PROFILE]
-		aws_access_key_id=$access_key
-		aws_secret_access_key=$secret_key
-		_CREDENTIALS
-
-		# Populate AWS config
-		cat <<- _CONFIG >> $HOME/.aws/config
-
-		[profile $PROFILE]
-		region=$REGION
-		_CONFIG
-
-		# Remove temporary AWS config file
+	local tmp=$(mktemp)
+	if ! aws iam create-access-key --user-name $PROFILE > $tmp; then
+		local ret=$?
 		rm $tmp
-
-		# Give some time for credentials to be activated
-		# for some reason this does not seem to happen quickly
-		sleep 10
+		return $ret
 	fi
+	local access_key=$(jq -r .AccessKey.AccessKeyId < $tmp)
+	local secret_key=$(jq -r .AccessKey.SecretAccessKey < $tmp)
+
+	# Populate AWS credentials
+	cat <<- _CREDENTIALS >> $HOME/.aws/credentials
+
+	[$PROFILE]
+	aws_access_key_id=$access_key
+	aws_secret_access_key=$secret_key
+	_CREDENTIALS
+
+	# Populate AWS config
+	cat <<- _CONFIG >> $HOME/.aws/config
+
+	[profile $PROFILE]
+	region=$REGION
+	_CONFIG
+
+	# Remove temporary AWS config file
+	rm $tmp
+
+	# Give some time for credentials to be activated
+	# for some reason this does not seem to happen quickly
+	sleep 10
 
 	return 0
 }
