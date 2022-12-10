@@ -87,12 +87,6 @@ export_gateway_url() {
 	echo "OpenFaas using gateway: $OPENFAAS_URL"
 }
 
-deploy_minio() {
-	DEPLOY_MINIO=true
-	../utility/setup-minio.sh
-	return $?
-}
-
 # Login faas-cli
 faas_login() {
 	kubectl get secret -n openfaas basic-auth -o jsonpath="{.data.basic-auth-password}" | \
@@ -103,11 +97,6 @@ faas_login() {
 # Build, push, and deploy OpenFaaS function
 deploy_fn() {
 	../utility/install-docker.sh || return $?
-
-	# If Minio is deployed also pass minio secrets to OpenFaaS
-	if [ -n "$DEPLOY_MINIO" ]; then
-		../utility/pass-minio-secrets.sh || return $?
-	fi
 
 	faas_login || return $?
 

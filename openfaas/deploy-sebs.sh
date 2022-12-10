@@ -3,7 +3,8 @@
 . $(dirname $0)/lib-openfaas.sh sebs $@
 
 # Deploy minio
-deploy_minio || exit 1
+../utility/setup-minio.sh || exit 1
+../utility/pass-minio-secrets.sh || exit 1
 
 # Make SeBS bucket
 bucket=minio/$FN_NAME

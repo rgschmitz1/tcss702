@@ -6,7 +6,8 @@
 ../utility/install-zstd.sh || exit $?
 
 # Deploy minio
-deploy_minio || exit 1
+../utility/setup-minio.sh || exit 1
+../utility/pass-minio-secrets.sh || exit 1
 
 # Make buckets
 bucket=minio/topic-modeling-us-east-1
