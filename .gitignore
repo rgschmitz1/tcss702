@@ -11,3 +11,5 @@ normal.tar.zst
 tumor.tar.zst
 # Ignore temporary files
 tmp.*
+# Ignore notebook checkpoints
+.ipynb_checkpoints

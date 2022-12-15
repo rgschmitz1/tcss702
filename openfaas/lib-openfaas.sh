@@ -154,7 +154,7 @@ execute_fn() {
 	local payload="$1"
 	local fn_discription="$2"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
-	local log_dir="logs/$CLUSTER_TYPE/$FN_NAME"
+	local log_dir="../logs/openfaas/$CLUSTER_TYPE/$FN_NAME"
 	local log="$log_dir/${datetime}_${FN_NAME}_${fn_discription}.log"
 
 	# Create a directory to store logs

@@ -35,6 +35,7 @@ usage() {
 	  -e|--edit, edit cluster configuration before deployment
 	  -f|--filename <cluster-spec.yml>, pass a custom cluster spec
 	  -h|--help, print this message
+	  -s|--suffix, appended folder on log directory (e.g. logs/eks/<suffix>)
 	_USAGE
 }
 
@@ -204,6 +205,11 @@ while [ -n "$1" ]; do
 			usage
 			exit
 		;;
+		-s|--suffix)
+			SUFFIX="$2"
+			shift
+			shift
+		;;
 		*)
 			prompt_error "invalid argument!"
 			usage
@@ -213,9 +219,10 @@ while [ -n "$1" ]; do
 done
 
 # Create log for EKS deployment
-log_dir=logs/eks
-[ -d "$log_dir" ] || mkdir -p $log_dir
-LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_eks.log
+log_dir='../logs/eks'
+[ -n "$SUFFIX" ] && log_dir+="/${SUFFIX}"
+mkdir -p $log_dir
+LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_eks_deployment.log
 
 # Create a k8s cluster on AWS EKS
 if create_custer; then

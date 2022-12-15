@@ -42,7 +42,7 @@ usage() {
 	  -e|--edit, edit cluster configuration before deployment
 	  -f|--filename <cluster-spec.yml>, pass a custom cluster spec
 	  -h|--help, print this message
-	  -s|--suffix, appended suffix on log file (e.g. <datetime>_kops_<suffix>.log)
+	  -s|--suffix, appended folder on log directory (e.g. logs/kops/<suffix>)
 	_USAGE
 }
 
@@ -246,7 +246,7 @@ while [ -n "$1" ]; do
 			exit
 		;;
 		-s|--suffix)
-			SUFFIX="_$2"
+			SUFFIX="$2"
 			shift
 			shift
 		;;
@@ -271,9 +271,10 @@ fi
 #fi
 
 # Create log for kops deployment
-log_dir=logs/kops
-[ -d "$log_dir" ] || mkdir -p $log_dir
-LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops${SUFFIX}.log
+log_dir='../logs/kops'
+[ -n "$SUFFIX" ] && log_dir+="/${SUFFIX}"
+mkdir -p $log_dir
+LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops_deployment.log
 
 # Wait until the cluster is up and ready to use
 start=$(date +%s)
