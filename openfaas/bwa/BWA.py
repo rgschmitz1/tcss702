@@ -22,7 +22,7 @@ class BWA:
             return {'status': 500, 'body': f'failed to download sample {inputfile}'}
 
         # Uncompress sample
-        uncompress_sample = run(f'tar -xf {tmp}/{inputfile} -C {tmp}', shell=True)
+        uncompress_sample = run(['tar', '-xf', f'{tmp}/{inputfile}', '-C', tmp])
         print(uncompress_sample, flush=True)
         if uncompress_sample.returncode:
             self._cleanup(tmp)

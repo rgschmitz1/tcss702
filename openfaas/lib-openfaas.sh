@@ -168,8 +168,10 @@ execute_fn() {
 	elif curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
 			http://$OPENFAAS_URL/function/$FN_NAME -o "$log"; then
 		local status=$(jq -r '.status' $log)
-		[ $status -ne 200 ] && prompt_error "function exit status is $status"
-		printf "\nSuccessfully executed function\nSee $log\n"
+		if [ -z "$status" ] || [ $status -ne 200 ]; then
+			prompt_error "function exit status is $status"
+		fi
+		printf "\nFunction completed\nSee $log\n"
 		sleep 2
 	else
 		prompt_error "Failed to execute $FN_NAME $fn_discription"
