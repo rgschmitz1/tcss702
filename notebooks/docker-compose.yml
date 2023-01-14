@@ -1,0 +1,8 @@
+services:
+  jupyter:
+    build: .
+    container_name: notebook
+    ports:
+      - 8888:8888
+    volumes:
+      - $PWD/..:/home/jovyan/work
