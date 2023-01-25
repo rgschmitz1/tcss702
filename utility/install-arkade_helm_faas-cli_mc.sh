@@ -20,7 +20,6 @@ fi
 
 which mc > /dev/null && exit 0
 prompt_info "Installing minio client"
-curl https://dl.min.io/client/mc/release/linux-amd64/mc && \
-chmod +x mc && \
-sudo mv mc /usr/local/bin/mc
+sudo curl https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/local/bin/mc && \
+sudo chmod +x /usr/local/bin/mc
 exit $?
