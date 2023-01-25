@@ -274,7 +274,11 @@ fi
 log_dir='../logs/kops'
 [ -n "$SUFFIX" ] && log_dir+="/${SUFFIX}"
 mkdir -p $log_dir
-LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops_deployment.log
+if [ -z "$CLUSTER_SPEC" ]; then
+	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops_deployment.log
+else
+	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_${CLUSTER_SPEC}_deployment.log
+fi
 
 # Wait until the cluster is up and ready to use
 start=$(date +%s)

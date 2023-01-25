@@ -4,20 +4,20 @@ provider:
   gateway: http://127.0.0.1:8080
 functions:
   bwa:
-#    labels:
-#      com.openfaas.scale.min: 8
-#      com.openfaas.scale.max: 8
     lang: bwa-python3.11.0-http-debian
     handler: ./bwa
     image: schmitzr1984/bwa:latest
+    annotations:
+      com.openfaas.ready.http.path: /_/ready
     build_args:
-#      ADDITIONAL_BUILD_PACKAGE: 'gcc g++ cmake unzip libcurl4-openssl-dev'
       ADDITIONAL_PACKAGE: 'bwa samtools zstd'
       TEST_ENABLED: false
     environment:
       write_timeout: 600s
       read_timeout: 600s
       exec_timeout: 600s
+      # Allow only one concurrent call per pod
+      max_inflight: 1
       minio_hostname: minio.default.svc.cluster.local:9000
       mode: http
     secrets:

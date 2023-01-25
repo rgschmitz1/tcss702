@@ -222,7 +222,11 @@ done
 log_dir='../logs/eks'
 [ -n "$SUFFIX" ] && log_dir+="/${SUFFIX}"
 mkdir -p $log_dir
-LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_eks_deployment.log
+if [ -z "$CLUSTER_SPEC" ]; then
+	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_eks_deployment.log
+else
+	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_${CLUSTER_SPEC}_deployment.log
+fi
 
 # Create a k8s cluster on AWS EKS
 if create_custer; then

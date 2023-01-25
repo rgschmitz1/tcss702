@@ -62,9 +62,10 @@ cmd="arkade install openfaas
 	--set faasnetes.readTimeout=$TIMEOUT
 	--set queueWorker.ackWait=$TIMEOUT
 	--set gateway.replicas=$REPLICAS
-	--set queueWorker.replicas=$REPLICAS"
+	--set queueWorker.replicas=$REPLICAS
+	--set queueWorker.maxInflight=100"
 # Check if external load balancer is used
-$ELB && cmd+=" --set serviceType=LoadBalancer --set operator.create=true"
+$ELB && cmd+=" --set serviceType=LoadBalancer"
 eval $cmd
 
 # check that openfaas is deployed
