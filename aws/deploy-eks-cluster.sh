@@ -225,7 +225,7 @@ mkdir -p $log_dir
 if [ -z "$CLUSTER_SPEC" ]; then
 	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_eks_deployment.log
 else
-	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_${CLUSTER_SPEC}_deployment.log
+	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_deployment.log
 fi
 
 # Create a k8s cluster on AWS EKS
