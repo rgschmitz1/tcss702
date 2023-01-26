@@ -6,35 +6,27 @@ which docker > /dev/null && exit 0
 prompt_info "Installing docker"
 
 sudo apt-get update && sudo apt-get install -y \
-	apt-transport-https \
 	ca-certificates \
 	curl \
-	gnupg-agent \
-	software-properties-common || exit $?
+	gnupg || exit $?
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - || exit $?
-case $(uname -m) in
-	x86_64)
-		arch='amd64'
-		;;
-	aarch64)
-		arch='arm64'
-		;;
-	*)
-		echo "ERROR: arch not supported by this script"
-		exit 1
-		;;
-esac
-sudo add-apt-repository \
-	"deb [arch=$arch] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" || exit $?
+# Add Docker’s official GPG key
+sudo mkdir -p /etc/apt/keyrings && \
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 
-# Install docker
+# Setup the repository
+codename=$(awk -F= '/CODENAME/ {print $2; exit}' /etc/os-release)
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+  https://download.docker.com/linux/ubuntu $codename stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install docker-ce and docker-compose
 sudo apt-get update && sudo apt-get install -y \
-	docker-ce docker-ce-cli containerd.io || exit $?
+	docker-ce docker-ce-cli containerd.io docker-compose-plugin || exit $?
 
 # Verify docker is working
 sudo docker run --rm hello-world || exit $?
-sudo docker rmi hello-world:latest || exit $?
+sudo docker rmi hello-world:latest
 
 # Setup so that Docker can be run without sudo
 sudo usermod -aG docker `whoami`
