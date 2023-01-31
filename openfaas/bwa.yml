@@ -17,7 +17,7 @@ functions:
       read_timeout: 600s
       exec_timeout: 600s
       # Allow only one concurrent call per pod
-      max_inflight: 1
+#      max_inflight: 1
       minio_hostname: minio.default.svc.cluster.local:9000
       mode: http
     secrets:
