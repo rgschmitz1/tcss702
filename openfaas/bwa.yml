@@ -9,6 +9,8 @@ functions:
     image: schmitzr1984/bwa:latest
     annotations:
       com.openfaas.ready.http.path: /_/ready
+      # Deplay until the reference genome is extracted
+      com.openfaas.ready.http.initialDelay: 30s
     build_args:
       ADDITIONAL_PACKAGE: 'bwa samtools zstd'
       TEST_ENABLED: false

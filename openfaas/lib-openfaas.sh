@@ -31,6 +31,7 @@ main() {
 	CONCURRENT=false
 
 	# Parse parameters
+	local regex_float='^[0-9]+([.][0-9]+)?$'
 	while [ -n "$1" ]; do
 		case $1 in
 			-i|--iterations)
@@ -46,6 +47,10 @@ main() {
 			-c|--concurrent)
 				CONCURRENT=true
 				shift
+				if [ -n "$1" ] && [[ $1 =~ $regex_float ]]; then
+					DELAY=$1
+					shift
+				fi
 			;;
 			-d|--delete)
 				remove_fn
@@ -152,19 +157,27 @@ execute_fn() {
 	fi
 
 	local payload="$1"
-	local fn_discription="$2"
+	local fn_description="$2"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
 	local log_dir="../logs/openfaas/$CLUSTER_TYPE/$FN_NAME"
-	local log="$log_dir/${datetime}_${FN_NAME}_${fn_discription}.log"
+	local log="$log_dir/${datetime}_${FN_NAME}_${fn_description}.log"
 
 	# Create a directory to store logs
 	mkdir -p "$log_dir" || exit $?
 
 	if $CONCURRENT; then
+		# If retry option is passed set it here, default to 0
+		[ -n "$3" ] && local retry=$3 || local retry=0
+
 		curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
 			http://$OPENFAAS_URL/function/$FN_NAME -o "$log" &
-		PROCESSES+=($!)
-		LOGS+=("$log")
+		[ -n "$DELAY" ] && sleep $DELAY
+		local proc_num=$!
+		DESCRIPTION[$proc_num]="$fn_description"
+		LOGS[$proc_num]="$log"
+		PAYLOAD[$proc_num]="$payload"
+		PROCESSES[$proc_num]=$proc_num
+		RETRY[$proc_num]=$retry
 	elif curl -s -H "Content-Type: application/json" -X POST -d "$payload" \
 			http://$OPENFAAS_URL/function/$FN_NAME -o "$log"; then
 		local status=$(jq -r '.status' $log)
@@ -174,28 +187,66 @@ execute_fn() {
 		printf "\nFunction completed\nSee $log\n"
 		sleep 2
 	else
-		prompt_error "Failed to execute $FN_NAME $fn_discription"
+		prompt_error "Failed to execute $FN_NAME $fn_description"
 		exit 1
 	fi
 }
 
 # Check concurrent functions
 check_concurrent_fn() {
+	# If script is not run in concurrent mode, just return
 	$CONCURRENT || return
-	local i
-	for ((i=0; i<${#PROCESSES[@]}; i++)); do
-		wait ${PROCESSES[$i]}
+
+	# Check that bash version is supported
+	if [ -z "$BASH_VERSION" ] || ([ ${BASH_VERSINFO[0]} -le 5 ] && [ ${BASH_VERSINFO[1]} -lt 1 ]); then
+		printf "Run script using bash-5.1 or newer...\ncurrent version is $BASH_VERSION\n"
+		exit 1
+	fi
+
+	local pid
+	while [ ${#PROCESSES[*]} -gt 0 ]; do
+		# Wait until the first child process completes
+		# NOTE: the '-p' flag is implemented in bash 5.1 and higher
+		wait -p pid -n ${PROCESSES[@]}
+
+		# Store return status
 		local ret=$?
+
+		# Store args in local variables
+		local description="${DESCRIPTION[$pid]}"
+		local log="${LOGS[$pid]}"
+		local payload="${PAYLOAD[$pid]}"
+		local process=${PROCESSES[$pid]}
+		local retry=${RETRY[$pid]}
+
+		# Unset global array items
+		unset DESCRIPTION[$pid]
+		unset LOGS[$pid]
+		unset PAYLOAD[$pid]
+		unset PROCESSES[$pid]
+		unset RETRY[$pid]
+
+		# Check exist status from function
 		if [ $ret -eq 0 ]; then
-			printf "\nCompleted process ${PROCESSES[$i]}\nSee ${LOGS[$i]}\n"
-			local status=$(jq -r '.status' ${LOGS[$i]})
-			[ $status -ne 200 ] && prompt_error "function exit status is $status"
+			if [ -n "$retry" ] && [ $retry -gt 0 ]; then
+				# Subtract 1 from retry argument
+				let retry--
+				rm "$log"
+				echo "Retrying function $description due to issue encountered (retries remaining $retry)."
+				execute_fn "$payload" "$description" $retry
+				continue
+			fi
+			printf "\nCompleted process ${process}\nSee ${log}\n"
+			local status=$(jq -r '.status' $log)
+			if [ -n "$status" ] && [ $status -ne 200 ]; then
+				prompt_error "function exit status is $status"
+			elif [ -z "$status" ]; then
+				prompt_error "failed to parse function exist status!"
+			fi
 		else
-			prompt_error "Encountered an error status ($ret) with process ${PROCESSES[$i]}\nSee ${LOGS[$i]}"
+			prompt_error "Encountered an error status ($ret) with process ${process}\nSee ${log}"
 		fi
 	done
-	unset PROCESSES
-	unset LOGS
 }
 
 main $@
