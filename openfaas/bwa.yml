@@ -8,10 +8,10 @@ functions:
     handler: ./bwa
     image: schmitzr1984/bwa:latest
     annotations:
-      com.openfaas.ready.http.path: /readiness
+#      com.openfaas.ready.http.path: /readiness
       # Deplay until the reference genome is extracted
-      com.openfaas.ready.http.initialDelay: 30s
-      com.openfaas.ready.http.periodSeconds: 2s
+#      com.openfaas.ready.http.initialDelay: 30s
+#      com.openfaas.ready.http.periodSeconds: 2s
     build_args:
       ADDITIONAL_PACKAGE: 'bwa samtools zstd'
       TEST_ENABLED: false
@@ -20,7 +20,7 @@ functions:
       read_timeout: 600s
       exec_timeout: 600s
       # Allow only one concurrent call per pod
-      max_concurrent: 1
+#      max_concurrent: 1
 #      max_inflight: 1
       minio_hostname: minio.default.svc.cluster.local:9000
       mode: http

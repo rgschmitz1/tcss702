@@ -4,9 +4,9 @@ import os
 from .SAAF import Inspector
 from .BWA import BWA
 
-fn_ready = os.getenv('max_concurrent')
-if not fn_ready:
-    fn_ready=10
+#fn_ready = os.getenv('max_concurrent')
+#if not fn_ready:
+#    fn_ready=10
 
 # Create Minio client
 def minio_client():
@@ -21,17 +21,17 @@ def minio_client():
         secure=False)
 
 def handle(event, context):
-    global fn_ready
+#    global fn_ready
 
     # Custom readiness check
-    if event.path == "/readiness":
-        ready_code=200 if fn_ready > 0 else 500
-        return {
-            "statusCode": ready_code,
-            "body": "ready response"
-        }
-
-    fn_ready-=1
+#    if event.path == "/readiness":
+#        ready_code=200 if fn_ready > 0 else 500
+#        return {
+#            "statusCode": ready_code,
+#            "body": "ready response"
+#        }
+#
+#    fn_ready-=1
 
     # Start inspector
     inspector = Inspector()
@@ -62,7 +62,7 @@ def handle(event, context):
 
     iret = inspector.finish()
 
-    fn_ready+=1
+ #   fn_ready+=1
 
     if ret['status'] == 0:
         # Removed aligned sample, we have no use for it after workload is complete
