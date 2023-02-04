@@ -15,7 +15,7 @@ SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 #NETWORK_CNI=calico
 K8S_VERSION=1.23
 # Kubernetes and kubectl version must be within one minor version of each other
-export KUBECTL_VERSION='v1.23.9'
+export KUBECTL_VERSION='v1.24.10'
 
 cd $(dirname $0)
 
@@ -136,22 +136,29 @@ create_eks_iam_user() {
 
 # Create an EKS cluster
 create_custer() {
-	local ret
 	local start=$(date +%s)
-	eksctl create cluster \
-		--name $NAME \
-		--region $REGION \
-		--zones $ZONES \
-		--instance-types $NODE_SIZE \
-		--nodes $NODE_COUNT \
-		--version $K8S_VERSION \
-		--ssh-access=true \
-		--ssh-public-key=$SSH_PUBLIC_KEY \
-		--auto-kubeconfig \
-		--spot | tee $LOG
-	ret=$?
+	# Create cluster configuration
+	if [ -z "$CLUSTER_SPEC" ]; then
+		eksctl create cluster \
+			--name $NAME \
+			--region $REGION \
+			--zones $ZONES \
+			--instance-types $NODE_SIZE \
+			--nodes $NODE_COUNT \
+			--version $K8S_VERSION \
+			--ssh-access=true \
+			--ssh-public-key=$SSH_PUBLIC_KEY \
+			--auto-kubeconfig \
+			--spot | tee $LOG
+	else
+		# Edit cluster spec before deploying
+		[ -n "$_EDIT" ] && vim $CLUSTER_SPEC
+		eksctl create cluster -f $CLUSTER_SPEC | tee $LOG
+	fi
+	local ret=$?
 	local end=$(date +%s)
 	RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
+
 	return $ret
 }
 
@@ -232,6 +239,8 @@ fi
 if create_custer; then
 	printf "\nSuccessfully deployed cluster in $RUNTIME\n" | tee -a $LOG
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
+	prompt_info "\nTo use your cluster, run the following:"
+	prompt_info "export KUBECONFIG=$HOME/.kube/eksctl/clusters/tcss702-eks"
 else
 	prompt_error "failed to deploy cluster"
 	exit 1

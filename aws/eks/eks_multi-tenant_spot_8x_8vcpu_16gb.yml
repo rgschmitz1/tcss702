@@ -11,8 +11,8 @@ kind: ClusterConfig
 kubernetesNetworkConfig:
   ipFamily: IPv4
 managedNodeGroups:
-- amiFamily: AmazonLinux2
-  desiredCapacity: 1
+- amiFamily: Ubuntu2004
+  desiredCapacity: 8
   disableIMDSv1: false
   disablePodIMDS: false
   iam:
@@ -35,7 +35,7 @@ managedNodeGroups:
   - c5.2xlarge
   labels:
     alpha.eksctl.io/cluster-name: tcss702-eks
-    alpha.eksctl.io/nodegroup-name: ng-5b846ccd
+    alpha.eksctl.io/nodegroup-name: ng-4b846ccd
   maxSize: 8
   minSize: 8
   name: ng-5b846ccd
@@ -47,12 +47,12 @@ managedNodeGroups:
   spot: true
   ssh:
     allow: true
-    publicKeyPath: /home/rgs1/.ssh/id_rsa.pub
+    publicKeyPath: ~/.ssh/id_rsa.pub
   tags:
     alpha.eksctl.io/nodegroup-name: ng-5b846ccd
     alpha.eksctl.io/nodegroup-type: managed
   volumeIOPS: 3000
-  volumeSize: 16
+  volumeSize: 32
   volumeThroughput: 125
   volumeType: gp3
 metadata:

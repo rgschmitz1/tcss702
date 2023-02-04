@@ -17,8 +17,8 @@ NODE_COUNT=1
 SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 NETWORK_CNI=calico
 K8S_VERSION=1.23.9
-export KUBECTL_VERSION='v1.23.9'
-export KOPS_VERSION='v1.23.4'
+export KUBECTL_VERSION='v1.24.10'
+export KOPS_VERSION='v1.24.5'
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
 # The cluster will be deleted if this timeout is exceeded during validation
