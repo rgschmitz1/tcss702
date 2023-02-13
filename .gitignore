@@ -1,3 +1,5 @@
+# Ignore iframe_figures produced by jupyter notebooks
+notebooks/iframe_figures
 # Ignore OpenFaaS build directory
 build
 # Ignore data files

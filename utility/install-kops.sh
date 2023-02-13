@@ -3,7 +3,7 @@
 cd $(dirname $0)
 . color-prompt.sh
 
-[ -z "$KOPS_VERSION" ] && KOPS_VERSION='v1.23.4'
+[ -z "$KOPS_VERSION" ] && KOPS_VERSION='v1.24.5'
 which kops > /dev/null && \
 	[ "v$(kops version | awk '{print $2}')" = "$KOPS_VERSION" ] && \
 	exit 0
