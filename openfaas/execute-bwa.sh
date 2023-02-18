@@ -9,7 +9,9 @@ if [ -z "$BASH_VERSION" ] || ([ ${BASH_VERSINFO[0]} -le 5 ] && [ ${BASH_VERSINFO
 fi
 
 # Add library to invoke functions
-. $(dirname $0)/lib-openfaas.sh bwa $@
+. $(dirname $0)/lib-openfaas.sh
+
+main -f bwa $@
 
 for f in normal tumor; do
 	for ((i=0; i<$ITERATION; i++)); do

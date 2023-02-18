@@ -3,32 +3,16 @@
 set -o pipefail
 
 main() {
-	cd $(dirname $0)
-
-	# Add colorized console prompts
-	. ../utility/color-prompt.sh
-
-	# Deploy OpenFaaS
-	if ! ../utility/setup-openfaas.sh; then
-		prompt_error "OpenFaaS failed to deploy"
-		exit 1
-	fi
-
-	# Export OpenFaaS gateway
-	export_gateway_url
-
-	# Check that function name is passed
-	if [ -z "$1" ]; then
-		prompt_error "Function name must be passed as the first positional argument"
-		exit 1
-	fi
-	FN_NAME=$1
-	shift
-
 	# Default arguments
 	ITERATION=1
 	REPLICAS=1
 	CONCURRENT=false
+	DELETE=false
+
+	cd $(dirname $0)
+
+	# Add colorized console prompts
+	. ../utility/color-prompt.sh
 
 	# Parse parameters
 	local regex_float='^[0-9]+([.][0-9]+)?$'
@@ -53,8 +37,12 @@ main() {
 				fi
 			;;
 			-d|--delete)
-				remove_fn
-				exit $?
+				DELETE=true
+				shift
+			;;
+			-f|--function)
+				FN_NAME=$1
+				shift
 			;;
 			-r|--replicas)
 				REPLICAS=$2
@@ -71,6 +59,26 @@ main() {
 			;;
 		esac
 	done
+
+	# Check that function name is passed
+	if [ -z "$FN_NAME" ]; then
+		prompt_error "Function name must be set (e.g. -f bwa)"
+		exit 1
+	fi
+
+	# Deploy OpenFaaS
+	if ! ../utility/setup-openfaas.sh; then
+		prompt_error "OpenFaaS failed to deploy"
+		exit 1
+	fi
+
+	# Export OpenFaaS gateway
+	export_gateway_url
+
+	if $DELETE; then
+		remove_fn
+		exit $?
+	fi
 }
 
 usage() {
@@ -160,6 +168,7 @@ execute_fn() {
 	local fn_description="$2"
 	local datetime=$(date +"%Y-%m-%d_%H-%M-%S")
 	local log_dir="../logs/openfaas/$CLUSTER_TYPE/$FN_NAME"
+	$CONCURRENT && log_dir+="/concurrent/$ITERATION"
 	local log="$log_dir/${datetime}_${FN_NAME}_${fn_description}.log"
 
 	# Create a directory to store logs
@@ -248,5 +257,3 @@ check_concurrent_fn() {
 		fi
 	done
 }
-
-main $@

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-. $(dirname $0)/lib-openfaas.sh nlp $@
+. $(dirname $0)/lib-openfaas.sh
+
+main -f nlp $@
 
 # Install Zstandard
 ../utility/install-zstd.sh || exit $?

@@ -1,6 +1,8 @@
 #!/bin/bash
 
-. $(dirname $0)/lib-openfaas.sh sebs $@
+. $(dirname $0)/lib-openfaas.sh
+
+main -f sebs $@
 
 # Deploy minio
 ../utility/setup-minio.sh || exit 1
