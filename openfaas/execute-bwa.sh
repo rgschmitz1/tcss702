@@ -17,7 +17,7 @@ for f in normal tumor; do
 	for ((i=0; i<$ITERATION; i++)); do
 		prompt_info "Iteration $i\n--"
 		prompt_info "Executing $FN_NAME function, align $f sample"
-		execute_fn "{\"inputfile\":\"$f.tar.zst\", \"bucket\":\"$FN_NAME\", \"thread_cnt\":2}" "${f}_$i"
+		execute_fn "{\"inputfile\":\"$f.tar.zst\", \"bucket\":\"$FN_NAME\", \"thread_cnt\":8}" "${f}_$i"
 	done
 	check_concurrent_fn
 done
