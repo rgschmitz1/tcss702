@@ -4,9 +4,9 @@ cd $(dirname $0)
 . color-prompt.sh
 
 [ -z "$KOPS_VERSION" ] && KOPS_VERSION='v1.24.5'
-which kops > /dev/null && \
-	[ "v$(kops version | awk '{print $2}')" = "$KOPS_VERSION" ] && \
+if which kops > /dev/null && [ "v$(kops version --short)" = "$KOPS_VERSION" ]; then
 	exit 0
+fi
 prompt_info "Installing kops ($KOPS_VERSION)"
 curl -LO https://github.com/kubernetes/kops/releases/download/$KOPS_VERSION/kops-linux-amd64 && \
 chmod +x kops-linux-amd64 && \

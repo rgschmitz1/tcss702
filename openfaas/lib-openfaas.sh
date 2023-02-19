@@ -41,7 +41,8 @@ main() {
 				shift
 			;;
 			-f|--function)
-				FN_NAME=$1
+				FN_NAME=$2
+				shift
 				shift
 			;;
 			-r|--replicas)

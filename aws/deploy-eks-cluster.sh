@@ -13,7 +13,7 @@ NODE_SIZE=c5.2xlarge
 NODE_COUNT=1
 SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 #NETWORK_CNI=calico
-K8S_VERSION=1.23
+K8S_VERSION=1.24
 # Kubernetes and kubectl version must be within one minor version of each other
 export KUBECTL_VERSION='v1.24.10'
 

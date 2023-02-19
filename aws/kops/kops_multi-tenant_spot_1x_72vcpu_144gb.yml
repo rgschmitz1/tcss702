@@ -17,7 +17,7 @@ spec:
   - cpuRequest: 200m
     etcdMembers:
     - encryptedVolume: true
-      instanceGroup: master-us-east-2c
+      instanceGroup: master-us-east-2a
       name: c
       volumeSize: 8
     memoryRequest: 100Mi
@@ -25,7 +25,7 @@ spec:
   - cpuRequest: 100m
     etcdMembers:
     - encryptedVolume: true
-      instanceGroup: master-us-east-2c
+      instanceGroup: master-us-east-2a
       name: c
       volumeSize: 8
     memoryRequest: 100Mi
@@ -38,7 +38,7 @@ spec:
   kubernetesApiAccess:
   - 0.0.0.0/0
   - ::/0
-  kubernetesVersion: 1.23.9
+  kubernetesVersion: 1.24.10
   masterPublicName: api.tcss702.k8s.local
   networkCIDR: 172.20.0.0/16
   networking:
@@ -49,9 +49,9 @@ spec:
   - ::/0
   subnets:
   - cidr: 172.20.32.0/19
-    name: us-east-2c
+    name: us-east-2a
     type: Public
-    zone: us-east-2c
+    zone: us-east-2a
   topology:
     dns:
       type: Public
@@ -66,23 +66,23 @@ metadata:
   creationTimestamp: null
   labels:
     kops.k8s.io/cluster: tcss702.k8s.local
-  name: master-us-east-2c
+  name: master-us-east-2a
 spec:
   image: 099720109477/ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-20221018
   instanceMetadata:
     httpPutResponseHopLimit: 3
     httpTokens: required
-  machineType: m5.large
-  maxPrice: "0.10"
+  machineType: m5n.2xlarge
+  maxPrice: "0.15"
   maxSize: 1
   minSize: 1
   nodeLabels:
-    kops.k8s.io/instancegroup: master-us-east-2c
+    kops.k8s.io/instancegroup: master-us-east-2a
   role: Master
   rootVolumeSize: 16
   rootVolumeType: gp3
   subnets:
-  - us-east-2c
+  - us-east-2a
 
 ---
 
@@ -113,4 +113,4 @@ spec:
   rootVolumeSize: 32
   rootVolumeType: gp3
   subnets:
-  - us-east-2c
+  - us-east-2a
