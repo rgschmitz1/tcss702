@@ -38,7 +38,9 @@ set_elb_idle_timeout() {
 	aws elb modify-load-balancer-attributes \
 		--load-balancer-name $(echo $OPENFAAS_URL | sed 's/-.*//') \
 		--load-balancer-attributes "$json"
-	return $?
+	local ret=$?
+	[ $ret -eq 0 ] && sleep 5
+	return $ret
 }
 
 # Check if openfaas is installed in cluster already

@@ -3,7 +3,7 @@
 cd $(dirname $0)
 . color-prompt.sh
 
-[ -z "$KOPS_VERSION" ] && KOPS_VERSION='v1.24.5'
+[ -z "$KOPS_VERSION" ] && KOPS_VERSION='v1.25.3'
 if which kops > /dev/null && [ "v$(kops version --short)" = "$KOPS_VERSION" ]; then
 	exit 0
 fi
