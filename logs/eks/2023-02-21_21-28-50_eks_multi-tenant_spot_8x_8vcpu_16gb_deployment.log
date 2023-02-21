@@ -1,0 +1,72 @@
+2023-02-21 21:28:51 [ℹ]  eksctl version 0.130.0
+2023-02-21 21:28:51 [ℹ]  using region us-east-2
+2023-02-21 21:28:52 [ℹ]  subnets for us-east-2a - public:192.168.0.0/19 private:192.168.64.0/19
+2023-02-21 21:28:52 [ℹ]  subnets for us-east-2b - public:192.168.32.0/19 private:192.168.96.0/19
+2023-02-21 21:28:52 [ℹ]  nodegroup "ng-5b846ccd" will use "ami-055cd5e1dec7dabb7" [Ubuntu2004/1.24]
+2023-02-21 21:28:52 [ℹ]  using SSH public key "/home/bschmitz/.ssh/id_rsa.pub" as "eksctl-tcss702-eks-nodegroup-ng-5b846ccd-2c:86:4f:38:01:42:a7:2d:7f:aa:4c:b3:0d:f9:35:0c" 
+2023-02-21 21:28:52 [ℹ]  using Kubernetes version 1.24
+2023-02-21 21:28:52 [ℹ]  creating EKS cluster "tcss702-eks" in "us-east-2" region with managed nodes
+2023-02-21 21:28:52 [ℹ]  1 nodegroup (ng-5b846ccd) was included (based on the include/exclude rules)
+2023-02-21 21:28:52 [ℹ]  will create a CloudFormation stack for cluster itself and 0 nodegroup stack(s)
+2023-02-21 21:28:52 [ℹ]  will create a CloudFormation stack for cluster itself and 1 managed nodegroup stack(s)
+2023-02-21 21:28:52 [ℹ]  if you encounter any issues, check CloudFormation console or try 'eksctl utils describe-stacks --region=us-east-2 --cluster=tcss702-eks'
+2023-02-21 21:28:52 [ℹ]  Kubernetes API endpoint access will use default of {publicAccess=true, privateAccess=false} for cluster "tcss702-eks" in "us-east-2"
+2023-02-21 21:28:52 [ℹ]  CloudWatch logging will not be enabled for cluster "tcss702-eks" in "us-east-2"
+2023-02-21 21:28:52 [ℹ]  you can enable it with 'eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=us-east-2 --cluster=tcss702-eks'
+2023-02-21 21:28:52 [ℹ]  
+2 sequential tasks: { create cluster control plane "tcss702-eks", 
+    2 sequential sub-tasks: { 
+        wait for control plane to become ready,
+        create managed nodegroup "ng-5b846ccd",
+    } 
+}
+2023-02-21 21:28:52 [ℹ]  building cluster stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:28:53 [ℹ]  deploying stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:29:23 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:29:53 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:30:53 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:31:53 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:32:54 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:33:55 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:34:55 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:35:55 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:36:57 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:37:57 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:38:57 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:39:57 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-cluster"
+2023-02-21 21:41:59 [ℹ]  building managed nodegroup stack "eksctl-tcss702-eks-nodegroup-ng-5b846ccd"
+2023-02-21 21:41:59 [ℹ]  deploying stack "eksctl-tcss702-eks-nodegroup-ng-5b846ccd"
+2023-02-21 21:41:59 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-5b846ccd"
+2023-02-21 21:42:30 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-5b846ccd"
+2023-02-21 21:43:25 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-5b846ccd"
+2023-02-21 21:45:09 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-5b846ccd"
+2023-02-21 21:45:52 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-5b846ccd"
+2023-02-21 21:47:46 [ℹ]  waiting for CloudFormation stack "eksctl-tcss702-eks-nodegroup-ng-5b846ccd"
+2023-02-21 21:47:46 [ℹ]  waiting for the control plane to become ready
+2023-02-21 21:47:47 [✔]  saved kubeconfig as "/home/bschmitz/.kube/config"
+2023-02-21 21:47:47 [ℹ]  no tasks
+2023-02-21 21:47:47 [✔]  all EKS cluster resources for "tcss702-eks" have been created
+2023-02-21 21:47:47 [ℹ]  nodegroup "ng-5b846ccd" has 8 node(s)
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-17-115.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-26-40.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-3-168.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-31-80.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-32-40.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-34-113.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-35-144.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-50-9.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  waiting for at least 8 node(s) to become ready in "ng-5b846ccd"
+2023-02-21 21:47:47 [ℹ]  nodegroup "ng-5b846ccd" has 8 node(s)
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-17-115.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-26-40.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-3-168.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-31-80.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-32-40.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-34-113.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-35-144.us-east-2.compute.internal" is ready
+2023-02-21 21:47:47 [ℹ]  node "ip-192-168-50-9.us-east-2.compute.internal" is ready
+2023-02-21 21:47:49 [ℹ]  kubectl command should work with "/home/bschmitz/.kube/config", try 'kubectl get nodes'
+2023-02-21 21:47:49 [✔]  EKS cluster "tcss702-eks" in "us-east-2" region is ready
+
+Successfully deployed cluster in 18 minutes, 59 seconds
+Deployed from cluster spec, "eks/eks_multi-tenant_spot_8x_8vcpu_16gb.yml"

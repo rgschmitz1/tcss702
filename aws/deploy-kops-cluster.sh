@@ -23,6 +23,7 @@ export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
 # The cluster will be deleted if this timeout is exceeded during validation
 TIMEOUT=20m
+LOG_DIR='../logs/kops'
 
 cd $(dirname $0)
 
@@ -196,8 +197,20 @@ create_cluster() {
 
 # Delete kubernetes cluster
 delete_cluster() {
+	[ -n "$SUFFIX" ] && LOG_DIR+="/${SUFFIX}"
+	if [ -z "$CLUSTER_SPEC" ]; then
+		LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_kops_shutdown.log
+	else
+		LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_shutdown.log
+	fi
+	local start=$(date +%s)
 	kops delete cluster --name $NAME --yes
-	return $?
+	local ret=$?
+	local end=$(date +%s)
+	local runtime=$(date -d "@$((end-start))" "+%M minutes, %S seconds")
+	printf "\nShutdown cluster in $runtime\n" | tee -a $LOG
+
+	return $ret
 }
 
 
@@ -272,13 +285,12 @@ fi
 #fi
 
 # Create log for kops deployment
-log_dir='../logs/kops'
-[ -n "$SUFFIX" ] && log_dir+="/${SUFFIX}"
-mkdir -p $log_dir
+[ -n "$SUFFIX" ] && LOG_DIR+="/${SUFFIX}"
+mkdir -p $LOG_DIR
 if [ -z "$CLUSTER_SPEC" ]; then
-	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_kops_deployment.log
+	LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_kops_deployment.log
 else
-	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_deployment.log
+	LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_deployment.log
 fi
 
 # Wait until the cluster is up and ready to use

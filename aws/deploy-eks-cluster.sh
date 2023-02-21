@@ -17,6 +17,8 @@ K8S_VERSION=1.24
 # Kubernetes and kubectl version must be within one minor version of each other
 export KUBECTL_VERSION='v1.24.10'
 
+LOG_DIR='../logs/eks'
+
 cd $(dirname $0)
 
 # Add colorized console prompt
@@ -165,8 +167,20 @@ create_custer() {
 
 # Delete EKS cluster
 delete_cluster() {
-	eksctl delete cluster --name $NAME --region $REGION
-	return $?
+	[ -n "$SUFFIX" ] && LOG_DIR+="/${SUFFIX}"
+	if [ -z "$CLUSTER_SPEC" ]; then
+		LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_eks_shutdown.log
+	else
+		LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_shutdown.log
+	fi
+	local start=$(date +%s)
+	eksctl delete cluster --name $NAME --region $REGION | tee $LOG
+	local ret=$?
+	local end=$(date +%s)
+	local runtime=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
+	printf "\nSuccessfully deployed cluster in $runtime\n" | tee -a $LOG
+
+	return $ret
 }
 
 
@@ -226,13 +240,12 @@ while [ -n "$1" ]; do
 done
 
 # Create log for EKS deployment
-log_dir='../logs/eks'
-[ -n "$SUFFIX" ] && log_dir+="/${SUFFIX}"
-mkdir -p $log_dir
+[ -n "$SUFFIX" ] && LOG_DIR+="/${SUFFIX}"
+mkdir -p $LOG_DIR
 if [ -z "$CLUSTER_SPEC" ]; then
-	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_eks_deployment.log
+	LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_eks_deployment.log
 else
-	LOG=$log_dir/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_deployment.log
+	LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_deployment.log
 fi
 
 # Create a k8s cluster on AWS EKS
