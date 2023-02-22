@@ -253,7 +253,7 @@ if create_custer; then
 	printf "\nSuccessfully deployed cluster in $RUNTIME\n" | tee -a $LOG
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 	prompt_info "\nTo use your cluster, run the following:"
-	prompt_info "export KUBECONFIG=$HOME/.kube/eksctl/clusters/tcss702-eks"
+	prompt_info "export KUBECONFIG=$HOME/.kube/eksctl/clusters/$NAME"
 else
 	prompt_error "failed to deploy cluster"
 	exit 1

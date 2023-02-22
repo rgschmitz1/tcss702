@@ -17,6 +17,7 @@ NODE_COUNT=1
 SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 NETWORK_CNI=calico
 K8S_VERSION=1.24.10
+export KUBECONFIG=$HOME/.kube/kops/clusters/$NAME.config
 export KUBECTL_VERSION='v1.24.10'
 export KOPS_VERSION='v1.25.3'
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
@@ -163,6 +164,8 @@ create_route53_dns() {
 
 # Create kubernetes cluster
 create_cluster() {
+	mkdir -p $(dirname $KUBECONFIG)
+
 	# Create cluster configuration
 	if [ -z "$CLUSTER_SPEC" ]; then
 		cmd="kops create cluster
@@ -300,6 +303,8 @@ if create_cluster && kops validate cluster --wait $TIMEOUT | tee -a $LOG; then
 	runtime=$(date -d "@$((end-start))" "+%M minutes, %S seconds")
 	printf "\nSuccessfully deployed cluster in $runtime\n" | tee -a $LOG
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
+	prompt_info "\nTo use your cluster, run the following:"
+	prompt_info "export KUBECONFIG=$KUBECONFIG"
 else
 	prompt_error "Failed to deploy cluster"
 	exit 1
