@@ -155,7 +155,7 @@ create_custer() {
 	else
 		# Edit cluster spec before deploying
 		[ -n "$_EDIT" ] && vim $CLUSTER_SPEC
-		eksctl create cluster -f $CLUSTER_SPEC | tee $LOG
+		eksctl create cluster -f $CLUSTER_SPEC --auto-kubeconfig | tee $LOG
 	fi
 	local ret=$?
 	local end=$(date +%s)
@@ -178,7 +178,7 @@ delete_cluster() {
 	local ret=$?
 	local end=$(date +%s)
 	local runtime=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
-	printf "\nSuccessfully deployed cluster in $runtime\n" | tee -a $LOG
+	printf "\nShutdown cluster in $runtime\n" | tee -a $LOG
 
 	return $ret
 }
