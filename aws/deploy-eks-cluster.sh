@@ -15,6 +15,7 @@ SSH_PUBLIC_KEY=$HOME/.ssh/id_rsa.pub
 #NETWORK_CNI=calico
 K8S_VERSION=1.24
 # Kubernetes and kubectl version must be within one minor version of each other
+export KUBECONFIG=$HOME/.kube/eksctl/clusters/$NAME
 export KUBECTL_VERSION='v1.24.10'
 
 LOG_DIR='../logs/eks'
@@ -138,6 +139,9 @@ create_eks_iam_user() {
 
 # Create an EKS cluster
 create_custer() {
+	# Make kube config directory
+	mkdir -p $(dirname $KUBECONFIG)
+
 	local start=$(date +%s)
 	# Create cluster configuration
 	if [ -z "$CLUSTER_SPEC" ]; then
@@ -155,7 +159,7 @@ create_custer() {
 	else
 		# Edit cluster spec before deploying
 		[ -n "$_EDIT" ] && vim $CLUSTER_SPEC
-		eksctl create cluster -f $CLUSTER_SPEC --auto-kubeconfig | tee $LOG
+		eksctl create cluster -f $CLUSTER_SPEC | tee $LOG
 	fi
 	local ret=$?
 	local end=$(date +%s)
@@ -201,12 +205,8 @@ export AWS_PROFILE=$PROFILE
 while [ -n "$1" ]; do
 	case $1 in
 		-d|--delete)
-			if delete_cluster; then
-				exit 0
-			else
-				prompt_error "Encountered an issue deleting cluster"
-				exit 1
-			fi
+			DELETE=true
+			shift
 		;;
 		-e|--edit)
 			_EDIT=1
@@ -239,6 +239,15 @@ while [ -n "$1" ]; do
 	esac
 done
 
+if [ -n "$DELETE" ] && $DELETE; then
+	if delete_cluster; then
+		exit 0
+	else
+		prompt_error "Encountered an issue deleting cluster"
+		exit 1
+	fi
+fi
+
 # Create log for EKS deployment
 [ -n "$SUFFIX" ] && LOG_DIR+="/${SUFFIX}"
 mkdir -p $LOG_DIR
@@ -253,7 +262,7 @@ if create_custer; then
 	printf "\nSuccessfully deployed cluster in $RUNTIME\n" | tee -a $LOG
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 	prompt_info "\nTo use your cluster, run the following:"
-	prompt_info "export KUBECONFIG=$HOME/.kube/eksctl/clusters/$NAME"
+	prompt_info "export KUBECONFIG=$KUBECONFIG\nexport AWS_PROFILE=$PROFILE"
 else
 	prompt_error "failed to deploy cluster"
 	exit 1

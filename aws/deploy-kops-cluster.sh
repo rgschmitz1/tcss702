@@ -237,12 +237,8 @@ export AWS_SECRET_ACCESS_KEY=$(aws configure get aws_secret_access_key)
 while [ -n "$1" ]; do
 	case $1 in
 		-d|--delete)
-			if delete_cluster; then
-				exit 0
-			else
-				prompt_error "encountered an issue deleting cluster"
-				exit 1
-			fi
+			DELETE=true
+			shift
 		;;
 		-e|--edit)
 			_EDIT=1
@@ -275,6 +271,15 @@ while [ -n "$1" ]; do
 	esac
 done
 
+if [ -n "$DELETE" ] && $DELETE; then
+	if delete_cluster; then
+		exit 0
+	else
+		prompt_error "encountered an issue deleting cluster"
+		exit 1
+	fi
+fi
+
 # Verify kops state store has been created
 if ! create_kops_state_store; then
 	prompt_error "failed to create kops state store in S3"
@@ -304,7 +309,7 @@ if create_cluster && kops validate cluster --wait $TIMEOUT | tee -a $LOG; then
 	printf "\nSuccessfully deployed cluster in $runtime\n" | tee -a $LOG
 	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
 	prompt_info "\nTo use your cluster, run the following:"
-	prompt_info "export KUBECONFIG=$KUBECONFIG"
+	prompt_info "export KUBECONFIG=$KUBECONFIG\nexport AWS_PROFILE=$PROFILE"
 else
 	prompt_error "Failed to deploy cluster"
 	exit 1
