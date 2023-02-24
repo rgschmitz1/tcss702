@@ -34,7 +34,7 @@ managedNodeGroups:
   instanceTypes:
   - c5.2xlarge
   labels:
-    alpha.eksctl.io/cluster-name: tcss702-eks
+    alpha.eksctl.io/cluster-name: eks-multi-tenant-spot-8x-8vcpu-16gb
     alpha.eksctl.io/nodegroup-name: ng-4b846ccd
   maxSize: 8
   minSize: 8
@@ -56,7 +56,7 @@ managedNodeGroups:
   volumeThroughput: 125
   volumeType: gp3
 metadata:
-  name: tcss702-eks
+  name: eks-multi-tenant-spot-8x-8vcpu-16gb
   region: us-east-2
   version: "1.24"
 privateCluster:

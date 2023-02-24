@@ -139,6 +139,13 @@ create_eks_iam_user() {
 
 # Create an EKS cluster
 create_custer() {
+	# Create log for EKS deployment
+	if [ -z "$CLUSTER_SPEC" ]; then
+		LOG+=_eks_deployment.log
+	else
+		LOG+=_${NAME}_deployment.log
+	fi
+
 	# Make kube config directory
 	mkdir -p $(dirname $KUBECONFIG)
 
@@ -162,8 +169,14 @@ create_custer() {
 		eksctl create cluster -f $CLUSTER_SPEC | tee $LOG
 	fi
 	local ret=$?
-	local end=$(date +%s)
-	RUNTIME=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
+	if [ $ret -eq 0 ]; then
+		local end=$(date +%s)
+		printf "\nTime: $((end-start)) seconds\n" | tee -a $LOG
+		prompt_info "\nTo use your cluster, run the following:"
+		prompt_info "export KUBECONFIG=$KUBECONFIG\nexport AWS_PROFILE=$PROFILE"
+	else
+		prompt_error "failed to deploy cluster"
+	fi
 
 	return $ret
 }
@@ -171,18 +184,20 @@ create_custer() {
 
 # Delete EKS cluster
 delete_cluster() {
-	[ -n "$SUFFIX" ] && LOG_DIR+="/${SUFFIX}"
 	if [ -z "$CLUSTER_SPEC" ]; then
-		LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_eks_shutdown.log
+		LOG+=_eks_shutdown.log
 	else
-		LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_shutdown.log
+		LOG+=_${NAME}_shutdown.log
 	fi
 	local start=$(date +%s)
 	eksctl delete cluster --name $NAME --region $REGION | tee $LOG
 	local ret=$?
-	local end=$(date +%s)
-	local runtime=$(date -ud "@$((end-start))" "+%M minutes, %S seconds")
-	printf "\nShutdown cluster in $runtime\n" | tee -a $LOG
+	if [ $ret -eq 0 ]; then
+		local end=$(date +%s)
+		printf "\nTime: $((end-start)) seconds\n" | tee -a $LOG
+	else
+		prompt_error "Encountered an issue deleting cluster"
+	fi
 
 	return $ret
 }
@@ -199,6 +214,7 @@ if ! create_eks_iam_user; then
 	prompt_error "failed to generate $PROFILE user"
 	exit 1
 fi
+
 export AWS_PROFILE=$PROFILE
 
 # Check for user input
@@ -219,6 +235,8 @@ while [ -n "$1" ]; do
 				exit 1
 			fi
 			CLUSTER_SPEC="$2"
+			NAME=$(echo $2 | sed 's|.*/\(.*\)\.yml|\1|')
+			export KUBECONFIG=$HOME/.kube/eksctl/clusters/$NAME
 			shift
 			shift
 		;;
@@ -228,6 +246,7 @@ while [ -n "$1" ]; do
 		;;
 		-s|--suffix)
 			SUFFIX="$2"
+			LOG_DIR+="/${SUFFIX}"
 			shift
 			shift
 		;;
@@ -239,31 +258,15 @@ while [ -n "$1" ]; do
 	esac
 done
 
-if [ -n "$DELETE" ] && $DELETE; then
-	if delete_cluster; then
-		exit 0
-	else
-		prompt_error "Encountered an issue deleting cluster"
-		exit 1
-	fi
-fi
-
-# Create log for EKS deployment
-[ -n "$SUFFIX" ] && LOG_DIR+="/${SUFFIX}"
 mkdir -p $LOG_DIR
-if [ -z "$CLUSTER_SPEC" ]; then
-	LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_eks_deployment.log
-else
-	LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_deployment.log
-fi
+LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")
 
-# Create a k8s cluster on AWS EKS
-if create_custer; then
-	printf "\nSuccessfully deployed cluster in $RUNTIME\n" | tee -a $LOG
-	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
-	prompt_info "\nTo use your cluster, run the following:"
-	prompt_info "export KUBECONFIG=$KUBECONFIG\nexport AWS_PROFILE=$PROFILE"
+if [ -n "$DELETE" ] && $DELETE; then
+	delete_cluster
 else
-	prompt_error "failed to deploy cluster"
-	exit 1
+	# Create a k8s cluster on AWS EKS
+	create_custer
 fi
+ret=$?
+prompt_info "\nLog can be found here: $LOG"
+exit $ret

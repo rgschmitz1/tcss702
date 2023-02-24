@@ -22,9 +22,10 @@ export KUBECTL_VERSION='v1.24.10'
 export KOPS_VERSION='v1.25.3'
 export KOPS_STATE_STORE=s3://tcss702-rgschmitz-com-state-store
 
+LOG_DIR='../logs/kops'
+
 # The cluster will be deleted if this timeout is exceeded during validation
 TIMEOUT=20m
-LOG_DIR='../logs/kops'
 
 cd $(dirname $0)
 
@@ -145,6 +146,9 @@ create_kops_state_store() {
 
 # Setup AWS Route53 to access cluster via DNS subdomain,
 create_route53_dns() {
+	# Gossip based DNS use '*.k8s.local' cluster name
+	echo $NAME | grep -q '\.k8s\.local$' && return 0
+
 	aws route53 list-hosted-zones | grep -q $NAME && return 0
 
 	local id=$(uuidgen) && \
@@ -164,6 +168,14 @@ create_route53_dns() {
 
 # Create kubernetes cluster
 create_cluster() {
+	# Create log for kops deployment
+	if [ -z "$CLUSTER_SPEC" ]; then
+		LOG+=_kops_deployment.log
+	else
+		LOG+=_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_deployment.log
+	fi
+
+	local start=$(date +%s)
 	mkdir -p $(dirname $KUBECONFIG)
 
 	# Create cluster configuration
@@ -185,33 +197,50 @@ create_cluster() {
 		fi
 		eval $cmd
 	fi
+
 	# Edit cluster spec before deploying
 	[ -n "$_EDIT" ] && vim $CLUSTER_SPEC
+
 	# Create a ssh publickey if deployed from cluster spec
 	if [ -n "$CLUSTER_SPEC" ]; then
 		kops create -f $CLUSTER_SPEC
 		kops create sshpublickey $NAME -i $SSH_PUBLIC_KEY
 	fi
+
 	# Deploy cluster
 	kops update cluster --name $NAME --yes --admin=8760h | tee $LOG
-	return $?
+	local ret=$?
+	if [ $ret -eq 0 ] && kops validate cluster --wait $TIMEOUT | tee -a $LOG; then
+		local end=$(date +%s)
+		printf "\nTime: $((end-start)) seconds\n" | tee -a $LOG
+		prompt_info "\nTo use your cluster, run the following:"
+		prompt_info "export KUBECONFIG=$KUBECONFIG\nexport AWS_PROFILE=$PROFILE"
+	else
+		prompt_error "Failed to deploy cluster"
+	fi
+
+	return $ret
 }
 
 
 # Delete kubernetes cluster
 delete_cluster() {
-	[ -n "$SUFFIX" ] && LOG_DIR+="/${SUFFIX}"
+	# Create log for kops shutdown
 	if [ -z "$CLUSTER_SPEC" ]; then
-		LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_kops_shutdown.log
+		LOG+=_kops_shutdown.log
 	else
-		LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_shutdown.log
+		LOG+=_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_shutdown.log
 	fi
+
 	local start=$(date +%s)
-	kops delete cluster --name $NAME --yes
+	kops delete cluster --name $NAME --yes | tee $LOG
 	local ret=$?
-	local end=$(date +%s)
-	local runtime=$(date -d "@$((end-start))" "+%M minutes, %S seconds")
-	printf "\nShutdown cluster in $runtime\n" | tee -a $LOG
+	if [ $ret -eq 0 ]; then
+		local end=$(date +%s)
+		printf "\nTime: $((end-start)) seconds\n" | tee -a $LOG
+	else
+		prompt_error "encountered an issue deleting cluster"
+	fi
 
 	return $ret
 }
@@ -228,6 +257,7 @@ if ! create_kops_iam_user; then
 	prompt_error "failed to generate $PROFILE user"
 	exit 1
 fi
+
 # awscli does not export these variables for kops to use
 export AWS_PROFILE=$PROFILE
 export AWS_ACCESS_KEY_ID=$(aws configure get aws_access_key_id)
@@ -251,6 +281,8 @@ while [ -n "$1" ]; do
 				exit 1
 			fi
 			CLUSTER_SPEC="$2"
+			NAME=$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|').k8s.local
+			export KUBECONFIG=$HOME/.kube/kops/clusters/$NAME.config
 			shift
 			shift
 		;;
@@ -260,6 +292,7 @@ while [ -n "$1" ]; do
 		;;
 		-s|--suffix)
 			SUFFIX="$2"
+			LOG_DIR+="/${SUFFIX}"
 			shift
 			shift
 		;;
@@ -271,14 +304,6 @@ while [ -n "$1" ]; do
 	esac
 done
 
-if [ -n "$DELETE" ] && $DELETE; then
-	if delete_cluster; then
-		exit 0
-	else
-		prompt_error "encountered an issue deleting cluster"
-		exit 1
-	fi
-fi
 
 # Verify kops state store has been created
 if ! create_kops_state_store; then
@@ -287,30 +312,20 @@ if ! create_kops_state_store; then
 fi
 
 # Route53 DNS needs to be deployed to use kops unless using gossip based DNS
-#if ! create_route53_dns; then
-#	prompt_error "failed to create Route53"
-#	exit 1
-#fi
-
-# Create log for kops deployment
-[ -n "$SUFFIX" ] && LOG_DIR+="/${SUFFIX}"
-mkdir -p $LOG_DIR
-if [ -z "$CLUSTER_SPEC" ]; then
-	LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_kops_deployment.log
-else
-	LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")_$(echo $CLUSTER_SPEC | sed 's|.*/\(.*\)\.yml|\1|')_deployment.log
-fi
-
-# Wait until the cluster is up and ready to use
-start=$(date +%s)
-if create_cluster && kops validate cluster --wait $TIMEOUT | tee -a $LOG; then
-	end=$(date +%s)
-	runtime=$(date -d "@$((end-start))" "+%M minutes, %S seconds")
-	printf "\nSuccessfully deployed cluster in $runtime\n" | tee -a $LOG
-	[ -n "$CLUSTER_SPEC" ] && echo "Deployed from cluster spec, \"$CLUSTER_SPEC\"" | tee -a $LOG
-	prompt_info "\nTo use your cluster, run the following:"
-	prompt_info "export KUBECONFIG=$KUBECONFIG\nexport AWS_PROFILE=$PROFILE"
-else
-	prompt_error "Failed to deploy cluster"
+if ! create_route53_dns; then
+	prompt_error "failed to create Route53"
 	exit 1
 fi
+
+mkdir -p $LOG_DIR
+LOG=$LOG_DIR/$(date +"%Y-%m-%d_%H-%M-%S")
+
+if [ -n "$DELETE" ] && $DELETE; then
+	delete_cluster
+else
+	# Create kOps cluster
+	create_cluster
+fi
+ret=$?
+prompt_info "\nLog can be found here: $LOG"
+exit $ret

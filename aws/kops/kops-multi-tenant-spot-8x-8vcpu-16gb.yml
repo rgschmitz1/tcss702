@@ -2,7 +2,7 @@ apiVersion: kops.k8s.io/v1alpha2
 kind: Cluster
 metadata:
   creationTimestamp: null
-  name: tcss702.k8s.local
+  name: kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
 spec:
   api:
     loadBalancer:
@@ -12,7 +12,7 @@ spec:
     rbac: {}
   channel: stable
   cloudProvider: aws
-  configBase: s3://tcss702-rgschmitz-com-state-store/tcss702.k8s.local
+  configBase: s3://tcss702-rgschmitz-com-state-store/kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
   etcdClusters:
   - cpuRequest: 200m
     etcdMembers:
@@ -39,7 +39,7 @@ spec:
   - 0.0.0.0/0
   - ::/0
   kubernetesVersion: 1.24.10
-  masterPublicName: api.tcss702.k8s.local
+  masterPublicName: api.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
   networkCIDR: 172.20.0.0/16
   networking:
     calico: {}
@@ -65,7 +65,7 @@ kind: InstanceGroup
 metadata:
   creationTimestamp: null
   labels:
-    kops.k8s.io/cluster: tcss702.k8s.local
+    kops.k8s.io/cluster: kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
   name: master-us-east-2a
 spec:
   image: ssm:/aws/service/canonical/ubuntu/server/20.04/stable/current/amd64/hvm/ebs-gp2/ami-id
@@ -91,24 +91,24 @@ kind: InstanceGroup
 metadata:
   creationTimestamp: null
   labels:
-    kops.k8s.io/cluster: tcss702.k8s.local
-  name: spot-group-base-72vcpus-144gb
+    kops.k8s.io/cluster: kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+  name: spot-group-base-8vcpus-16gb
 spec:
   cloudLabels:
     k8s.io/cluster-autoscaler/enabled: "1"
-    k8s.io/cluster-autoscaler/tcss702.k8s.local: "1"
+    k8s.io/cluster-autoscaler/kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local: "1"
   image: ssm:/aws/service/canonical/ubuntu/server/20.04/stable/current/amd64/hvm/ebs-gp2/ami-id
-  machineType: c5.18xlarge
-  maxSize: 1
-  minSize: 1
+  machineType: c5.2xlarge
+  maxSize: 8
+  minSize: 8
   mixedInstancesPolicy:
     instances:
-    - c5.18xlarge
+    - c5.2xlarge
     onDemandAboveBase: 0
     onDemandBase: 0
     spotAllocationStrategy: capacity-optimized
   nodeLabels:
-    kops.k8s.io/instancegroup: spot-group-base-72vcpus-144gb
+    kops.k8s.io/instancegroup: spot-group-base-8vcpus-16gb
   role: Node
   rootVolumeSize: 32
   rootVolumeType: gp3
