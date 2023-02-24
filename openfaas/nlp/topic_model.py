@@ -26,7 +26,6 @@ import io
 
 # Determine CPU arch for S3 buckets
 arch = platform.machine().replace('_', '-')
-region = os.environ.get('AWS_REGION', 'us-east-1')
 
 # Model files
 model_files=['/tmp/lda.model',
@@ -41,8 +40,8 @@ class topic_model:
 
     def preprocess(self,
                    training_data='/tmp/news_train.csv',
-                   bucket_name_in=f'topic-modeling-{region}',
-                   bucket_name_out=f'topic-modeling-{region}-{arch}'):
+                   bucket_name_in=f'topic-modeling',
+                   bucket_name_out=f'topic-modeling-{arch}'):
         # =============================================================================
         #     LOAD news_train.csv FROM S3 BUCKET
         #     We will use the last 80% of the dataset for model training
@@ -59,6 +58,9 @@ class topic_model:
         # =============================================================================
         with open('/tmp/dictionary.p', 'wb') as f:
             pickle.dump(dictionary, f)
+        # Create an out bucket if it does not exist
+        if not self.__mc.bucket_exists(bucket_name_out):
+            self.__mc.make_bucket(bucket_name_out)
         self.__mc.fput_object(bucket_name_out, 'dictionary.p', '/tmp/dictionary.p')
         with open('/tmp/corpus_tfidf.p', 'wb') as f:
             pickle.dump(corpus_tfidf, f)
@@ -68,8 +70,8 @@ class topic_model:
     def train(self,
               corpus_tfidf='/tmp/corpus_tfidf.p',
               dictionary='/tmp/dictionary.p',
-              bucket_name_in=f'topic-modeling-{region}-{arch}',
-              bucket_name_out=f'topic-modeling-{region}-{arch}'):
+              bucket_name_in=f'topic-modeling-{arch}',
+              bucket_name_out=f'topic-modeling-{arch}'):
         # =============================================================================
         #     LOAD corpus_tfidf AND dictionary FROM S3 BUCKET
         # =============================================================================
@@ -97,9 +99,9 @@ class topic_model:
     def query(self,
               test_data='/tmp/news_test_smaller.csv',
               dictionary='/tmp/dictionary.p',
-              bucket_name_in=[f'topic-modeling-{region}',
-                              f'topic-modeling-{region}-{arch}'],
-              bucket_name_out=f'topic-modeling-{region}-{arch}'):
+              bucket_name_in=[f'topic-modeling',
+                              f'topic-modeling-{arch}'],
+              bucket_name_out=f'topic-modeling-{arch}'):
         # =============================================================================
         #     LOAD lda_model AND dictionary AND news_test.csv FROM S3 BUCKET
         #     We will use the last 20% of the dataset to query the model

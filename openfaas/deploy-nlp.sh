@@ -12,9 +12,8 @@ main -f nlp $@
 ../utility/pass-minio-secrets.sh || exit 1
 
 # Make buckets
-bucket=minio/topic-modeling-us-east-1
+bucket=minio/topic-modeling
 mc ls $bucket 2> /dev/null || mc mb $bucket
-mc ls ${bucket}-x86-64 2> /dev/null || mc mb ${bucket}-x86-64
 
 # Move objects to input bucket
 if [ -z "$(mc ls $bucket)" ]; then
