@@ -1,0 +1,319 @@
+TYPE			NAME														ID
+autoscaling-config	master-us-east-2a.masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					lt-01782636877052044
+autoscaling-config	spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					lt-0cf3ab1a3c17c157d
+autoscaling-group	master-us-east-2a.masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					master-us-east-2a.masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+autoscaling-group	spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+dhcp-options		kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local									dopt-0c25168e0f0f4db8d
+iam-instance-profile	masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local								masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+iam-instance-profile	nodes.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local								nodes.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+iam-role		masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local								masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+iam-role		nodes.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local								nodes.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+instance		master-us-east-2a.masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					i-0697c50f8da5a0fb9
+instance		spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					i-01a037dc23de3e963
+instance		spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					i-020fae282adab6877
+instance		spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					i-07781f506a6fce8fa
+instance		spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					i-0a24b6059d46e05b0
+instance		spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					i-0a27805119426a9db
+instance		spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					i-0cbd9eeaaaba48085
+instance		spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					i-0d9c8bfd4c9da3f86
+instance		spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					i-0f54a34fffd1ecec8
+internet-gateway	kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local									igw-0e96005ea8ff244fa
+keypair			kubernetes.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local-4d:80:ed:89:18:48:88:b4:f8:df:3e:d9:39:3a:5d:48	key-0f6fb79eb7b8562c1
+load-balancer		api.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local								api-kops-multi-tenant-spo-vpoln0
+route-table		kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local									rtb-0cd1091e4e7739cc8
+security-group		api-elb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local								sg-08f6ce6507431b9e0
+security-group		masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local								sg-04fa0f0330edd6a6a
+security-group		nodes.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local								sg-0686ae78bd29613bf
+subnet			us-east-2a.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local							subnet-0e5ebc7d21f87d76e
+volume			c.etcd-events.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local							vol-07f513328989f99fa
+volume			c.etcd-main.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local							vol-07b5b8b98a6e491d6
+volume			master-us-east-2a.masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					vol-0bcf77ddbb8304793
+volume			spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					vol-0138ab51d6c1b95f3
+volume			spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					vol-02d1279c0a654fe46
+volume			spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					vol-0423d52cfa024ac6f
+volume			spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					vol-061f01a12625ef9fa
+volume			spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					vol-0c08c2f8bd5d47a82
+volume			spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					vol-0ca1492a582e872ef
+volume			spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					vol-0cfa838057b28f14e
+volume			spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local					vol-0e698c1ca303c8d4f
+vpc			kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local									vpc-03785ff26d032c256
+
+load-balancer:api-kops-multi-tenant-spo-vpoln0	ok
+iam-instance-profile:nodes.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local	ok
+iam-instance-profile:masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local	ok
+autoscaling-config:lt-0cf3ab1a3c17c157d	ok
+autoscaling-config:lt-01782636877052044	ok
+instance:i-0a24b6059d46e05b0	ok
+autoscaling-group:master-us-east-2a.masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local	ok
+internet-gateway:igw-0e96005ea8ff244fa	still has dependencies, will retry
+instance:i-07781f506a6fce8fa	ok
+autoscaling-group:spot-group-base-8vcpus-16gb.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local	ok
+instance:i-0d9c8bfd4c9da3f86	ok
+instance:i-0697c50f8da5a0fb9	ok
+instance:i-020fae282adab6877	ok
+instance:i-01a037dc23de3e963	ok
+instance:i-0f54a34fffd1ecec8	ok
+instance:i-0a27805119426a9db	ok
+keypair:key-0f6fb79eb7b8562c1	ok
+instance:i-0cbd9eeaaaba48085	ok
+subnet:subnet-0e5ebc7d21f87d76e	still has dependencies, will retry
+volume:vol-07f513328989f99fa	still has dependencies, will retry
+volume:vol-0e698c1ca303c8d4f	still has dependencies, will retry
+volume:vol-0c08c2f8bd5d47a82	still has dependencies, will retry
+volume:vol-0bcf77ddbb8304793	still has dependencies, will retry
+volume:vol-0ca1492a582e872ef	still has dependencies, will retry
+volume:vol-07b5b8b98a6e491d6	still has dependencies, will retry
+volume:vol-0cfa838057b28f14e	still has dependencies, will retry
+volume:vol-0138ab51d6c1b95f3	still has dependencies, will retry
+volume:vol-061f01a12625ef9fa	still has dependencies, will retry
+volume:vol-02d1279c0a654fe46	still has dependencies, will retry
+volume:vol-0423d52cfa024ac6f	still has dependencies, will retry
+iam-role:nodes.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local	ok
+iam-role:masters.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local	ok
+security-group:sg-08f6ce6507431b9e0	still has dependencies, will retry
+security-group:sg-0686ae78bd29613bf	still has dependencies, will retry
+security-group:sg-04fa0f0330edd6a6a	still has dependencies, will retry
+Not all resources deleted; waiting before reattempting deletion
+	volume:vol-0c08c2f8bd5d47a82
+	dhcp-options:dopt-0c25168e0f0f4db8d
+	volume:vol-0423d52cfa024ac6f
+	volume:vol-0bcf77ddbb8304793
+	subnet:subnet-0e5ebc7d21f87d76e
+	volume:vol-061f01a12625ef9fa
+	volume:vol-07b5b8b98a6e491d6
+	security-group:sg-0686ae78bd29613bf
+	volume:vol-07f513328989f99fa
+	vpc:vpc-03785ff26d032c256
+	security-group:sg-04fa0f0330edd6a6a
+	security-group:sg-08f6ce6507431b9e0
+	volume:vol-0cfa838057b28f14e
+	volume:vol-0138ab51d6c1b95f3
+	volume:vol-0e698c1ca303c8d4f
+	route-table:rtb-0cd1091e4e7739cc8
+	volume:vol-02d1279c0a654fe46
+	volume:vol-0ca1492a582e872ef
+	internet-gateway:igw-0e96005ea8ff244fa
+volume:vol-07f513328989f99fa	still has dependencies, will retry
+volume:vol-0423d52cfa024ac6f	still has dependencies, will retry
+volume:vol-02d1279c0a654fe46	still has dependencies, will retry
+volume:vol-0138ab51d6c1b95f3	still has dependencies, will retry
+volume:vol-0bcf77ddbb8304793	still has dependencies, will retry
+volume:vol-0ca1492a582e872ef	still has dependencies, will retry
+volume:vol-061f01a12625ef9fa	still has dependencies, will retry
+volume:vol-07b5b8b98a6e491d6	still has dependencies, will retry
+volume:vol-0e698c1ca303c8d4f	still has dependencies, will retry
+volume:vol-0c08c2f8bd5d47a82	still has dependencies, will retry
+volume:vol-0cfa838057b28f14e	still has dependencies, will retry
+subnet:subnet-0e5ebc7d21f87d76e	still has dependencies, will retry
+internet-gateway:igw-0e96005ea8ff244fa	still has dependencies, will retry
+security-group:sg-04fa0f0330edd6a6a	still has dependencies, will retry
+security-group:sg-08f6ce6507431b9e0	still has dependencies, will retry
+security-group:sg-0686ae78bd29613bf	still has dependencies, will retry
+Not all resources deleted; waiting before reattempting deletion
+	volume:vol-0e698c1ca303c8d4f
+	route-table:rtb-0cd1091e4e7739cc8
+	volume:vol-02d1279c0a654fe46
+	volume:vol-0ca1492a582e872ef
+	internet-gateway:igw-0e96005ea8ff244fa
+	volume:vol-0c08c2f8bd5d47a82
+	dhcp-options:dopt-0c25168e0f0f4db8d
+	volume:vol-0423d52cfa024ac6f
+	volume:vol-0bcf77ddbb8304793
+	subnet:subnet-0e5ebc7d21f87d76e
+	volume:vol-061f01a12625ef9fa
+	volume:vol-07b5b8b98a6e491d6
+	security-group:sg-0686ae78bd29613bf
+	volume:vol-07f513328989f99fa
+	vpc:vpc-03785ff26d032c256
+	security-group:sg-04fa0f0330edd6a6a
+	security-group:sg-08f6ce6507431b9e0
+	volume:vol-0cfa838057b28f14e
+	volume:vol-0138ab51d6c1b95f3
+volume:vol-0423d52cfa024ac6f	still has dependencies, will retry
+volume:vol-061f01a12625ef9fa	still has dependencies, will retry
+volume:vol-0cfa838057b28f14e	still has dependencies, will retry
+volume:vol-07f513328989f99fa	still has dependencies, will retry
+volume:vol-0bcf77ddbb8304793	still has dependencies, will retry
+volume:vol-0138ab51d6c1b95f3	still has dependencies, will retry
+volume:vol-07b5b8b98a6e491d6	still has dependencies, will retry
+volume:vol-0ca1492a582e872ef	still has dependencies, will retry
+volume:vol-0e698c1ca303c8d4f	still has dependencies, will retry
+volume:vol-02d1279c0a654fe46	still has dependencies, will retry
+volume:vol-0c08c2f8bd5d47a82	still has dependencies, will retry
+subnet:subnet-0e5ebc7d21f87d76e	still has dependencies, will retry
+internet-gateway:igw-0e96005ea8ff244fa	still has dependencies, will retry
+security-group:sg-04fa0f0330edd6a6a	still has dependencies, will retry
+security-group:sg-0686ae78bd29613bf	still has dependencies, will retry
+security-group:sg-08f6ce6507431b9e0	ok
+Not all resources deleted; waiting before reattempting deletion
+	volume:vol-061f01a12625ef9fa
+	volume:vol-07b5b8b98a6e491d6
+	security-group:sg-0686ae78bd29613bf
+	volume:vol-07f513328989f99fa
+	vpc:vpc-03785ff26d032c256
+	security-group:sg-04fa0f0330edd6a6a
+	volume:vol-0cfa838057b28f14e
+	volume:vol-0138ab51d6c1b95f3
+	volume:vol-0e698c1ca303c8d4f
+	route-table:rtb-0cd1091e4e7739cc8
+	volume:vol-02d1279c0a654fe46
+	volume:vol-0ca1492a582e872ef
+	internet-gateway:igw-0e96005ea8ff244fa
+	volume:vol-0c08c2f8bd5d47a82
+	dhcp-options:dopt-0c25168e0f0f4db8d
+	volume:vol-0423d52cfa024ac6f
+	volume:vol-0bcf77ddbb8304793
+	subnet:subnet-0e5ebc7d21f87d76e
+volume:vol-0bcf77ddbb8304793	still has dependencies, will retry
+volume:vol-07f513328989f99fa	still has dependencies, will retry
+volume:vol-061f01a12625ef9fa	still has dependencies, will retry
+volume:vol-0423d52cfa024ac6f	still has dependencies, will retry
+volume:vol-0ca1492a582e872ef	still has dependencies, will retry
+volume:vol-07b5b8b98a6e491d6	still has dependencies, will retry
+volume:vol-02d1279c0a654fe46	still has dependencies, will retry
+volume:vol-0e698c1ca303c8d4f	still has dependencies, will retry
+volume:vol-0138ab51d6c1b95f3	still has dependencies, will retry
+volume:vol-0c08c2f8bd5d47a82	still has dependencies, will retry
+volume:vol-0cfa838057b28f14e	still has dependencies, will retry
+subnet:subnet-0e5ebc7d21f87d76e	still has dependencies, will retry
+internet-gateway:igw-0e96005ea8ff244fa	still has dependencies, will retry
+security-group:sg-04fa0f0330edd6a6a	still has dependencies, will retry
+security-group:sg-0686ae78bd29613bf	still has dependencies, will retry
+Not all resources deleted; waiting before reattempting deletion
+	security-group:sg-0686ae78bd29613bf
+	volume:vol-07f513328989f99fa
+	volume:vol-061f01a12625ef9fa
+	volume:vol-07b5b8b98a6e491d6
+	vpc:vpc-03785ff26d032c256
+	security-group:sg-04fa0f0330edd6a6a
+	volume:vol-0cfa838057b28f14e
+	volume:vol-0138ab51d6c1b95f3
+	internet-gateway:igw-0e96005ea8ff244fa
+	volume:vol-0e698c1ca303c8d4f
+	route-table:rtb-0cd1091e4e7739cc8
+	volume:vol-02d1279c0a654fe46
+	volume:vol-0ca1492a582e872ef
+	volume:vol-0c08c2f8bd5d47a82
+	dhcp-options:dopt-0c25168e0f0f4db8d
+	volume:vol-0423d52cfa024ac6f
+	volume:vol-0bcf77ddbb8304793
+	subnet:subnet-0e5ebc7d21f87d76e
+volume:vol-07f513328989f99fa	still has dependencies, will retry
+volume:vol-0138ab51d6c1b95f3	still has dependencies, will retry
+volume:vol-0cfa838057b28f14e	still has dependencies, will retry
+volume:vol-0ca1492a582e872ef	still has dependencies, will retry
+volume:vol-061f01a12625ef9fa	still has dependencies, will retry
+volume:vol-0423d52cfa024ac6f	still has dependencies, will retry
+volume:vol-07b5b8b98a6e491d6	still has dependencies, will retry
+volume:vol-0bcf77ddbb8304793	still has dependencies, will retry
+volume:vol-0c08c2f8bd5d47a82	still has dependencies, will retry
+volume:vol-02d1279c0a654fe46	still has dependencies, will retry
+volume:vol-0e698c1ca303c8d4f	ok
+subnet:subnet-0e5ebc7d21f87d76e	still has dependencies, will retry
+internet-gateway:igw-0e96005ea8ff244fa	still has dependencies, will retry
+security-group:sg-0686ae78bd29613bf	still has dependencies, will retry
+security-group:sg-04fa0f0330edd6a6a	still has dependencies, will retry
+Not all resources deleted; waiting before reattempting deletion
+	vpc:vpc-03785ff26d032c256
+	volume:vol-0cfa838057b28f14e
+	volume:vol-0138ab51d6c1b95f3
+	security-group:sg-04fa0f0330edd6a6a
+	volume:vol-02d1279c0a654fe46
+	volume:vol-0ca1492a582e872ef
+	internet-gateway:igw-0e96005ea8ff244fa
+	route-table:rtb-0cd1091e4e7739cc8
+	dhcp-options:dopt-0c25168e0f0f4db8d
+	volume:vol-0c08c2f8bd5d47a82
+	subnet:subnet-0e5ebc7d21f87d76e
+	volume:vol-0423d52cfa024ac6f
+	volume:vol-0bcf77ddbb8304793
+	volume:vol-07b5b8b98a6e491d6
+	security-group:sg-0686ae78bd29613bf
+	volume:vol-07f513328989f99fa
+	volume:vol-061f01a12625ef9fa
+volume:vol-0423d52cfa024ac6f	ok
+volume:vol-0cfa838057b28f14e	ok
+volume:vol-0ca1492a582e872ef	still has dependencies, will retry
+volume:vol-0bcf77ddbb8304793	still has dependencies, will retry
+volume:vol-07b5b8b98a6e491d6	still has dependencies, will retry
+volume:vol-02d1279c0a654fe46	still has dependencies, will retry
+volume:vol-07f513328989f99fa	still has dependencies, will retry
+volume:vol-0138ab51d6c1b95f3	still has dependencies, will retry
+volume:vol-061f01a12625ef9fa	ok
+volume:vol-0c08c2f8bd5d47a82	ok
+internet-gateway:igw-0e96005ea8ff244fa	still has dependencies, will retry
+subnet:subnet-0e5ebc7d21f87d76e	still has dependencies, will retry
+security-group:sg-04fa0f0330edd6a6a	still has dependencies, will retry
+security-group:sg-0686ae78bd29613bf	still has dependencies, will retry
+Not all resources deleted; waiting before reattempting deletion
+	dhcp-options:dopt-0c25168e0f0f4db8d
+	volume:vol-0bcf77ddbb8304793
+	subnet:subnet-0e5ebc7d21f87d76e
+	volume:vol-07b5b8b98a6e491d6
+	security-group:sg-0686ae78bd29613bf
+	volume:vol-07f513328989f99fa
+	vpc:vpc-03785ff26d032c256
+	security-group:sg-04fa0f0330edd6a6a
+	volume:vol-0138ab51d6c1b95f3
+	route-table:rtb-0cd1091e4e7739cc8
+	volume:vol-02d1279c0a654fe46
+	volume:vol-0ca1492a582e872ef
+	internet-gateway:igw-0e96005ea8ff244fa
+volume:vol-07b5b8b98a6e491d6	still has dependencies, will retry
+volume:vol-02d1279c0a654fe46	ok
+volume:vol-0ca1492a582e872ef	ok
+volume:vol-0138ab51d6c1b95f3	ok
+volume:vol-07f513328989f99fa	still has dependencies, will retry
+volume:vol-0bcf77ddbb8304793	still has dependencies, will retry
+internet-gateway:igw-0e96005ea8ff244fa	still has dependencies, will retry
+subnet:subnet-0e5ebc7d21f87d76e	still has dependencies, will retry
+security-group:sg-0686ae78bd29613bf	ok
+security-group:sg-04fa0f0330edd6a6a	still has dependencies, will retry
+Not all resources deleted; waiting before reattempting deletion
+	volume:vol-07b5b8b98a6e491d6
+	volume:vol-07f513328989f99fa
+	vpc:vpc-03785ff26d032c256
+	security-group:sg-04fa0f0330edd6a6a
+	route-table:rtb-0cd1091e4e7739cc8
+	internet-gateway:igw-0e96005ea8ff244fa
+	dhcp-options:dopt-0c25168e0f0f4db8d
+	volume:vol-0bcf77ddbb8304793
+	subnet:subnet-0e5ebc7d21f87d76e
+volume:vol-07f513328989f99fa	still has dependencies, will retry
+volume:vol-0bcf77ddbb8304793	still has dependencies, will retry
+volume:vol-07b5b8b98a6e491d6	still has dependencies, will retry
+internet-gateway:igw-0e96005ea8ff244fa	still has dependencies, will retry
+subnet:subnet-0e5ebc7d21f87d76e	still has dependencies, will retry
+security-group:sg-04fa0f0330edd6a6a	still has dependencies, will retry
+Not all resources deleted; waiting before reattempting deletion
+	internet-gateway:igw-0e96005ea8ff244fa
+	route-table:rtb-0cd1091e4e7739cc8
+	dhcp-options:dopt-0c25168e0f0f4db8d
+	volume:vol-0bcf77ddbb8304793
+	subnet:subnet-0e5ebc7d21f87d76e
+	volume:vol-07f513328989f99fa
+	volume:vol-07b5b8b98a6e491d6
+	vpc:vpc-03785ff26d032c256
+	security-group:sg-04fa0f0330edd6a6a
+volume:vol-07b5b8b98a6e491d6	ok
+volume:vol-07f513328989f99fa	ok
+volume:vol-0bcf77ddbb8304793	ok
+subnet:subnet-0e5ebc7d21f87d76e	still has dependencies, will retry
+security-group:sg-04fa0f0330edd6a6a	still has dependencies, will retry
+internet-gateway:igw-0e96005ea8ff244fa	ok
+Not all resources deleted; waiting before reattempting deletion
+	dhcp-options:dopt-0c25168e0f0f4db8d
+	subnet:subnet-0e5ebc7d21f87d76e
+	vpc:vpc-03785ff26d032c256
+	security-group:sg-04fa0f0330edd6a6a
+	route-table:rtb-0cd1091e4e7739cc8
+subnet:subnet-0e5ebc7d21f87d76e	ok
+security-group:sg-04fa0f0330edd6a6a	ok
+route-table:rtb-0cd1091e4e7739cc8	ok
+vpc:vpc-03785ff26d032c256	ok
+dhcp-options:dopt-0c25168e0f0f4db8d	ok
+Deleted kubectl config for kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+
+Deleted cluster: "kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local"
+
+Time: 107 seconds

@@ -1,0 +1,310 @@
+kOps has set your kubectl context to kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to the master: ssh -i ~/.ssh/id_rsa ubuntu@api.kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/addons.
+
+Validating cluster kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local
+
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME			MESSAGE
+Machine	i-0261cc17295717660	machine "i-0261cc17295717660" has not yet joined cluster
+Machine	i-0266a403ba7f9083d	machine "i-0266a403ba7f9083d" has not yet joined cluster
+Machine	i-03e1cb4c1cd6a297d	machine "i-03e1cb4c1cd6a297d" has not yet joined cluster
+Machine	i-05513ffd79b757754	machine "i-05513ffd79b757754" has not yet joined cluster
+Machine	i-0753ac9387d1cf0d9	machine "i-0753ac9387d1cf0d9" has not yet joined cluster
+Machine	i-08fe0afaf51d123e5	machine "i-08fe0afaf51d123e5" has not yet joined cluster
+Machine	i-099981995428eea0d	machine "i-099981995428eea0d" has not yet joined cluster
+Machine	i-09d756e44f86df0cc	machine "i-09d756e44f86df0cc" has not yet joined cluster
+Machine	i-0ed19fc25410ec6cf	machine "i-0ed19fc25410ec6cf" has not yet joined cluster
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME							MESSAGE
+Machine	i-0261cc17295717660					machine "i-0261cc17295717660" has not yet joined cluster
+Machine	i-0266a403ba7f9083d					machine "i-0266a403ba7f9083d" has not yet joined cluster
+Machine	i-03e1cb4c1cd6a297d					machine "i-03e1cb4c1cd6a297d" has not yet joined cluster
+Machine	i-05513ffd79b757754					machine "i-05513ffd79b757754" has not yet joined cluster
+Machine	i-0753ac9387d1cf0d9					machine "i-0753ac9387d1cf0d9" has not yet joined cluster
+Machine	i-08fe0afaf51d123e5					machine "i-08fe0afaf51d123e5" has not yet joined cluster
+Machine	i-099981995428eea0d					machine "i-099981995428eea0d" has not yet joined cluster
+Machine	i-09d756e44f86df0cc					machine "i-09d756e44f86df0cc" has not yet joined cluster
+Machine	i-0ed19fc25410ec6cf					machine "i-0ed19fc25410ec6cf" has not yet joined cluster
+Pod	kube-system/kube-controller-manager-i-0261cc17295717660	system-cluster-critical pod "kube-controller-manager-i-0261cc17295717660" is not ready (kube-controller-manager)
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME			MESSAGE
+Machine	i-0261cc17295717660	machine "i-0261cc17295717660" has not yet joined cluster
+Machine	i-0266a403ba7f9083d	machine "i-0266a403ba7f9083d" has not yet joined cluster
+Machine	i-03e1cb4c1cd6a297d	machine "i-03e1cb4c1cd6a297d" has not yet joined cluster
+Machine	i-05513ffd79b757754	machine "i-05513ffd79b757754" has not yet joined cluster
+Machine	i-0753ac9387d1cf0d9	machine "i-0753ac9387d1cf0d9" has not yet joined cluster
+Machine	i-08fe0afaf51d123e5	machine "i-08fe0afaf51d123e5" has not yet joined cluster
+Machine	i-099981995428eea0d	machine "i-099981995428eea0d" has not yet joined cluster
+Machine	i-09d756e44f86df0cc	machine "i-09d756e44f86df0cc" has not yet joined cluster
+Machine	i-0ed19fc25410ec6cf	machine "i-0ed19fc25410ec6cf" has not yet joined cluster
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME	ROLE	READY
+
+VALIDATION ERRORS
+KIND	NAME							MESSAGE
+Machine	i-0261cc17295717660					machine "i-0261cc17295717660" has not yet joined cluster
+Machine	i-0266a403ba7f9083d					machine "i-0266a403ba7f9083d" has not yet joined cluster
+Machine	i-03e1cb4c1cd6a297d					machine "i-03e1cb4c1cd6a297d" has not yet joined cluster
+Machine	i-05513ffd79b757754					machine "i-05513ffd79b757754" has not yet joined cluster
+Machine	i-0753ac9387d1cf0d9					machine "i-0753ac9387d1cf0d9" has not yet joined cluster
+Machine	i-08fe0afaf51d123e5					machine "i-08fe0afaf51d123e5" has not yet joined cluster
+Machine	i-099981995428eea0d					machine "i-099981995428eea0d" has not yet joined cluster
+Machine	i-09d756e44f86df0cc					machine "i-09d756e44f86df0cc" has not yet joined cluster
+Machine	i-0ed19fc25410ec6cf					machine "i-0ed19fc25410ec6cf" has not yet joined cluster
+Pod	kube-system/aws-cloud-controller-manager-m4m88		system-cluster-critical pod "aws-cloud-controller-manager-m4m88" is pending
+Pod	kube-system/calico-kube-controllers-8b548fb5d-tvjj5	system-cluster-critical pod "calico-kube-controllers-8b548fb5d-tvjj5" is pending
+Pod	kube-system/calico-node-6cbb4				system-node-critical pod "calico-node-6cbb4" is pending
+Pod	kube-system/coredns-6b5bc459c-st42s			system-cluster-critical pod "coredns-6b5bc459c-st42s" is pending
+Pod	kube-system/coredns-autoscaler-5685d4f67b-8ncvg		system-cluster-critical pod "coredns-autoscaler-5685d4f67b-8ncvg" is pending
+Pod	kube-system/dns-controller-7988b4697f-v9dz9		system-cluster-critical pod "dns-controller-7988b4697f-v9dz9" is pending
+Pod	kube-system/ebs-csi-controller-66fd694d94-nvrrf		system-cluster-critical pod "ebs-csi-controller-66fd694d94-nvrrf" is pending
+Pod	kube-system/ebs-csi-node-czd7c				system-node-critical pod "ebs-csi-node-czd7c" is pending
+Pod	kube-system/etcd-manager-events-i-0261cc17295717660	system-cluster-critical pod "etcd-manager-events-i-0261cc17295717660" is pending
+Pod	kube-system/kops-controller-4bqkc			system-cluster-critical pod "kops-controller-4bqkc" is pending
+Pod	kube-system/kube-scheduler-i-0261cc17295717660		system-cluster-critical pod "kube-scheduler-i-0261cc17295717660" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME			ROLE	READY
+i-0261cc17295717660	master	False
+
+VALIDATION ERRORS
+KIND	NAME							MESSAGE
+Machine	i-0266a403ba7f9083d					machine "i-0266a403ba7f9083d" has not yet joined cluster
+Machine	i-03e1cb4c1cd6a297d					machine "i-03e1cb4c1cd6a297d" has not yet joined cluster
+Machine	i-05513ffd79b757754					machine "i-05513ffd79b757754" has not yet joined cluster
+Machine	i-0753ac9387d1cf0d9					machine "i-0753ac9387d1cf0d9" has not yet joined cluster
+Machine	i-08fe0afaf51d123e5					machine "i-08fe0afaf51d123e5" has not yet joined cluster
+Machine	i-099981995428eea0d					machine "i-099981995428eea0d" has not yet joined cluster
+Machine	i-09d756e44f86df0cc					machine "i-09d756e44f86df0cc" has not yet joined cluster
+Machine	i-0ed19fc25410ec6cf					machine "i-0ed19fc25410ec6cf" has not yet joined cluster
+Node	i-0261cc17295717660					node "i-0261cc17295717660" of role "master" is not ready
+Pod	kube-system/calico-kube-controllers-8b548fb5d-tvjj5	system-cluster-critical pod "calico-kube-controllers-8b548fb5d-tvjj5" is pending
+Pod	kube-system/calico-node-6cbb4				system-node-critical pod "calico-node-6cbb4" is pending
+Pod	kube-system/coredns-6b5bc459c-st42s			system-cluster-critical pod "coredns-6b5bc459c-st42s" is pending
+Pod	kube-system/coredns-autoscaler-5685d4f67b-8ncvg		system-cluster-critical pod "coredns-autoscaler-5685d4f67b-8ncvg" is pending
+Pod	kube-system/ebs-csi-controller-66fd694d94-nvrrf		system-cluster-critical pod "ebs-csi-controller-66fd694d94-nvrrf" is pending
+Pod	kube-system/ebs-csi-node-czd7c				system-node-critical pod "ebs-csi-node-czd7c" is pending
+Pod	kube-system/kube-apiserver-i-0261cc17295717660		system-cluster-critical pod "kube-apiserver-i-0261cc17295717660" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME			ROLE	READY
+i-0261cc17295717660	master	True
+i-0266a403ba7f9083d	node	False
+i-05513ffd79b757754	node	False
+i-099981995428eea0d	node	False
+
+VALIDATION ERRORS
+KIND	NAME							MESSAGE
+Machine	i-03e1cb4c1cd6a297d					machine "i-03e1cb4c1cd6a297d" has not yet joined cluster
+Machine	i-0753ac9387d1cf0d9					machine "i-0753ac9387d1cf0d9" has not yet joined cluster
+Machine	i-08fe0afaf51d123e5					machine "i-08fe0afaf51d123e5" has not yet joined cluster
+Machine	i-09d756e44f86df0cc					machine "i-09d756e44f86df0cc" has not yet joined cluster
+Machine	i-0ed19fc25410ec6cf					machine "i-0ed19fc25410ec6cf" has not yet joined cluster
+Node	i-0266a403ba7f9083d					node "i-0266a403ba7f9083d" of role "node" is not ready
+Node	i-05513ffd79b757754					node "i-05513ffd79b757754" of role "node" is not ready
+Node	i-099981995428eea0d					node "i-099981995428eea0d" of role "node" is not ready
+Pod	kube-system/calico-node-9z4hm				system-node-critical pod "calico-node-9z4hm" is pending
+Pod	kube-system/calico-node-nb9q2				system-node-critical pod "calico-node-nb9q2" is pending
+Pod	kube-system/calico-node-q8kb5				system-node-critical pod "calico-node-q8kb5" is pending
+Pod	kube-system/calico-node-tb884				system-node-critical pod "calico-node-tb884" is pending
+Pod	kube-system/coredns-6b5bc459c-st42s			system-cluster-critical pod "coredns-6b5bc459c-st42s" is pending
+Pod	kube-system/coredns-autoscaler-5685d4f67b-8ncvg		system-cluster-critical pod "coredns-autoscaler-5685d4f67b-8ncvg" is pending
+Pod	kube-system/ebs-csi-controller-66fd694d94-nvrrf		system-cluster-critical pod "ebs-csi-controller-66fd694d94-nvrrf" is pending
+Pod	kube-system/ebs-csi-node-czd7c				system-node-critical pod "ebs-csi-node-czd7c" is pending
+Pod	kube-system/ebs-csi-node-n8ft9				system-node-critical pod "ebs-csi-node-n8ft9" is pending
+Pod	kube-system/ebs-csi-node-sckgb				system-node-critical pod "ebs-csi-node-sckgb" is pending
+Pod	kube-system/ebs-csi-node-v8ghm				system-node-critical pod "ebs-csi-node-v8ghm" is pending
+Pod	kube-system/ebs-csi-node-vg8l8				system-node-critical pod "ebs-csi-node-vg8l8" is pending
+Pod	kube-system/etcd-manager-main-i-0261cc17295717660	system-cluster-critical pod "etcd-manager-main-i-0261cc17295717660" is pending
+Pod	kube-system/kube-proxy-i-0261cc17295717660		system-node-critical pod "kube-proxy-i-0261cc17295717660" is pending
+Pod	kube-system/kube-proxy-i-0266a403ba7f9083d		system-node-critical pod "kube-proxy-i-0266a403ba7f9083d" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME			ROLE	READY
+i-0261cc17295717660	master	True
+i-0266a403ba7f9083d	node	False
+i-03e1cb4c1cd6a297d	node	False
+i-05513ffd79b757754	node	False
+i-0753ac9387d1cf0d9	node	False
+i-08fe0afaf51d123e5	node	False
+i-099981995428eea0d	node	False
+i-09d756e44f86df0cc	node	False
+i-0ed19fc25410ec6cf	node	False
+
+VALIDATION ERRORS
+KIND	NAME						MESSAGE
+Node	i-0266a403ba7f9083d				node "i-0266a403ba7f9083d" of role "node" is not ready
+Node	i-03e1cb4c1cd6a297d				node "i-03e1cb4c1cd6a297d" of role "node" is not ready
+Node	i-05513ffd79b757754				node "i-05513ffd79b757754" of role "node" is not ready
+Node	i-0753ac9387d1cf0d9				node "i-0753ac9387d1cf0d9" of role "node" is not ready
+Node	i-08fe0afaf51d123e5				node "i-08fe0afaf51d123e5" of role "node" is not ready
+Node	i-099981995428eea0d				node "i-099981995428eea0d" of role "node" is not ready
+Node	i-09d756e44f86df0cc				node "i-09d756e44f86df0cc" of role "node" is not ready
+Node	i-0ed19fc25410ec6cf				node "i-0ed19fc25410ec6cf" of role "node" is not ready
+Pod	kube-system/calico-node-9z4hm			system-node-critical pod "calico-node-9z4hm" is pending
+Pod	kube-system/calico-node-d4xms			system-node-critical pod "calico-node-d4xms" is pending
+Pod	kube-system/calico-node-kfvxp			system-node-critical pod "calico-node-kfvxp" is pending
+Pod	kube-system/calico-node-nb9q2			system-node-critical pod "calico-node-nb9q2" is pending
+Pod	kube-system/calico-node-q8kb5			system-node-critical pod "calico-node-q8kb5" is pending
+Pod	kube-system/calico-node-rgv4d			system-node-critical pod "calico-node-rgv4d" is pending
+Pod	kube-system/calico-node-tb884			system-node-critical pod "calico-node-tb884" is pending
+Pod	kube-system/calico-node-vxcqt			system-node-critical pod "calico-node-vxcqt" is pending
+Pod	kube-system/coredns-6b5bc459c-st42s		system-cluster-critical pod "coredns-6b5bc459c-st42s" is pending
+Pod	kube-system/coredns-autoscaler-5685d4f67b-8ncvg	system-cluster-critical pod "coredns-autoscaler-5685d4f67b-8ncvg" is pending
+Pod	kube-system/ebs-csi-controller-66fd694d94-nvrrf	system-cluster-critical pod "ebs-csi-controller-66fd694d94-nvrrf" is not ready (ebs-plugin)
+Pod	kube-system/ebs-csi-node-8h65l			system-node-critical pod "ebs-csi-node-8h65l" is pending
+Pod	kube-system/ebs-csi-node-n8ft9			system-node-critical pod "ebs-csi-node-n8ft9" is pending
+Pod	kube-system/ebs-csi-node-qvm9m			system-node-critical pod "ebs-csi-node-qvm9m" is pending
+Pod	kube-system/ebs-csi-node-sckgb			system-node-critical pod "ebs-csi-node-sckgb" is pending
+Pod	kube-system/ebs-csi-node-sq684			system-node-critical pod "ebs-csi-node-sq684" is pending
+Pod	kube-system/ebs-csi-node-v2prp			system-node-critical pod "ebs-csi-node-v2prp" is pending
+Pod	kube-system/ebs-csi-node-v8ghm			system-node-critical pod "ebs-csi-node-v8ghm" is pending
+Pod	kube-system/ebs-csi-node-vg8l8			system-node-critical pod "ebs-csi-node-vg8l8" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME			ROLE	READY
+i-0261cc17295717660	master	True
+i-0266a403ba7f9083d	node	True
+i-03e1cb4c1cd6a297d	node	False
+i-05513ffd79b757754	node	True
+i-0753ac9387d1cf0d9	node	False
+i-08fe0afaf51d123e5	node	True
+i-099981995428eea0d	node	True
+i-09d756e44f86df0cc	node	False
+i-0ed19fc25410ec6cf	node	False
+
+VALIDATION ERRORS
+KIND	NAME				MESSAGE
+Node	i-03e1cb4c1cd6a297d		node "i-03e1cb4c1cd6a297d" of role "node" is not ready
+Node	i-0753ac9387d1cf0d9		node "i-0753ac9387d1cf0d9" of role "node" is not ready
+Node	i-09d756e44f86df0cc		node "i-09d756e44f86df0cc" of role "node" is not ready
+Node	i-0ed19fc25410ec6cf		node "i-0ed19fc25410ec6cf" of role "node" is not ready
+Pod	kube-system/calico-node-9z4hm	system-node-critical pod "calico-node-9z4hm" is not ready (calico-node)
+Pod	kube-system/calico-node-d4xms	system-node-critical pod "calico-node-d4xms" is not ready (calico-node)
+Pod	kube-system/calico-node-kfvxp	system-node-critical pod "calico-node-kfvxp" is not ready (calico-node)
+Pod	kube-system/calico-node-nb9q2	system-node-critical pod "calico-node-nb9q2" is not ready (calico-node)
+Pod	kube-system/calico-node-q8kb5	system-node-critical pod "calico-node-q8kb5" is not ready (calico-node)
+Pod	kube-system/calico-node-rgv4d	system-node-critical pod "calico-node-rgv4d" is not ready (calico-node)
+Pod	kube-system/calico-node-tb884	system-node-critical pod "calico-node-tb884" is not ready (calico-node)
+Pod	kube-system/calico-node-vxcqt	system-node-critical pod "calico-node-vxcqt" is not ready (calico-node)
+Pod	kube-system/ebs-csi-node-8h65l	system-node-critical pod "ebs-csi-node-8h65l" is pending
+Pod	kube-system/ebs-csi-node-qvm9m	system-node-critical pod "ebs-csi-node-qvm9m" is pending
+Pod	kube-system/ebs-csi-node-sckgb	system-node-critical pod "ebs-csi-node-sckgb" is pending
+Pod	kube-system/ebs-csi-node-sq684	system-node-critical pod "ebs-csi-node-sq684" is pending
+Pod	kube-system/ebs-csi-node-v2prp	system-node-critical pod "ebs-csi-node-v2prp" is pending
+Pod	kube-system/ebs-csi-node-v8ghm	system-node-critical pod "ebs-csi-node-v8ghm" is pending
+Pod	kube-system/ebs-csi-node-vg8l8	system-node-critical pod "ebs-csi-node-vg8l8" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME			ROLE	READY
+i-0261cc17295717660	master	True
+i-0266a403ba7f9083d	node	True
+i-03e1cb4c1cd6a297d	node	True
+i-05513ffd79b757754	node	True
+i-0753ac9387d1cf0d9	node	True
+i-08fe0afaf51d123e5	node	True
+i-099981995428eea0d	node	True
+i-09d756e44f86df0cc	node	True
+i-0ed19fc25410ec6cf	node	True
+
+VALIDATION ERRORS
+KIND	NAME				MESSAGE
+Pod	kube-system/calico-node-9z4hm	system-node-critical pod "calico-node-9z4hm" is not ready (calico-node)
+Pod	kube-system/calico-node-d4xms	system-node-critical pod "calico-node-d4xms" is not ready (calico-node)
+Pod	kube-system/ebs-csi-node-sckgb	system-node-critical pod "ebs-csi-node-sckgb" is pending
+Pod	kube-system/ebs-csi-node-sq684	system-node-critical pod "ebs-csi-node-sq684" is pending
+
+Validation Failed
+INSTANCE GROUPS
+NAME				ROLE	MACHINETYPE	MIN	MAX	SUBNETS
+master-us-east-2a		Master	m5n.2xlarge	1	1	us-east-2a
+spot-group-base-8vcpus-16gb	Node	c5.2xlarge	8	8	us-east-2a
+
+NODE STATUS
+NAME			ROLE	READY
+i-0261cc17295717660	master	True
+i-0266a403ba7f9083d	node	True
+i-03e1cb4c1cd6a297d	node	True
+i-05513ffd79b757754	node	True
+i-0753ac9387d1cf0d9	node	True
+i-08fe0afaf51d123e5	node	True
+i-099981995428eea0d	node	True
+i-09d756e44f86df0cc	node	True
+i-0ed19fc25410ec6cf	node	True
+
+Your cluster kops-multi-tenant-spot-8x-8vcpu-16gb.k8s.local is ready
+
+Time: 243 seconds
