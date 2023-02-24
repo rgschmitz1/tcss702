@@ -1,0 +1,116 @@
+apiVersion: kops.k8s.io/v1alpha2
+kind: Cluster
+metadata:
+  creationTimestamp: null
+  name: kops-multi-tenant-spot-8x-8vcpu-16gb-arm64.k8s.local
+spec:
+  api:
+    loadBalancer:
+      class: Classic
+      type: Public
+  authorization:
+    rbac: {}
+  channel: stable
+  cloudProvider: aws
+  configBase: s3://tcss702-rgschmitz-com-state-store/kops-multi-tenant-spot-8x-8vcpu-16gb-arm64.k8s.local
+  etcdClusters:
+  - cpuRequest: 200m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: master-us-east-2a
+      name: c
+      volumeSize: 8
+    memoryRequest: 100Mi
+    name: main
+  - cpuRequest: 100m
+    etcdMembers:
+    - encryptedVolume: true
+      instanceGroup: master-us-east-2a
+      name: c
+      volumeSize: 8
+    memoryRequest: 100Mi
+    name: events
+  iam:
+    allowContainerRegistry: true
+    legacy: false
+  kubelet:
+    anonymousAuth: false
+  kubernetesApiAccess:
+  - 0.0.0.0/0
+  - ::/0
+  kubernetesVersion: 1.24.10
+  masterPublicName: api.kops-multi-tenant-spot-8x-8vcpu-16gb-arm64.k8s.local
+  networkCIDR: 172.20.0.0/16
+  networking:
+    calico: {}
+  nonMasqueradeCIDR: 100.64.0.0/10
+  sshAccess:
+  - 0.0.0.0/0
+  - ::/0
+  subnets:
+  - cidr: 172.20.32.0/19
+    name: us-east-2a
+    type: Public
+    zone: us-east-2a
+  topology:
+    dns:
+      type: Public
+    masters: public
+    nodes: public
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: kops-multi-tenant-spot-8x-8vcpu-16gb-arm64.k8s.local
+  name: master-us-east-2a
+spec:
+  image: ssm:/aws/service/canonical/ubuntu/server/20.04/stable/current/amd64/hvm/ebs-gp2/ami-id
+  instanceMetadata:
+    httpPutResponseHopLimit: 3
+    httpTokens: required
+  machineType: m5n.2xlarge
+  maxPrice: "0.15"
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: master-us-east-2a
+  role: Master
+  rootVolumeSize: 16
+  rootVolumeType: gp3
+  subnets:
+  - us-east-2a
+
+---
+
+apiVersion: kops.k8s.io/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: null
+  labels:
+    kops.k8s.io/cluster: kops-multi-tenant-spot-8x-8vcpu-16gb-arm64.k8s.local
+  name: spot-group-base-8vcpus-16gb
+spec:
+  cloudLabels:
+    k8s.io/cluster-autoscaler/enabled: "1"
+    k8s.io/cluster-autoscaler/kops-multi-tenant-spot-8x-8vcpu-16gb-arm64.k8s.local: "1"
+  image: ssm:/aws/service/canonical/ubuntu/server/20.04/stable/current/arm64/hvm/ebs-gp2/ami-id
+  machineType: c6g.2xlarge
+  maxSize: 8
+  minSize: 8
+  mixedInstancesPolicy:
+    instances:
+    - c6g.2xlarge
+    onDemandAboveBase: 0
+    onDemandBase: 0
+    spotAllocationStrategy: capacity-optimized
+  nodeLabels:
+    kops.k8s.io/instancegroup: spot-group-base-8vcpus-16gb
+  role: Node
+  rootVolumeSize: 32
+  rootVolumeType: gp3
+  subnets:
+  - us-east-2a

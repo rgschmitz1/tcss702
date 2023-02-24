@@ -131,7 +131,6 @@ deploy_fn() {
 				--label com.openfaas.scale.min=$REPLICAS \
 				--label com.openfaas.scale.max=$REPLICAS || return $?
 		else
-			faas-cli push -f $yaml && \
 			faas-cli deploy -f $yaml \
 				--label com.openfaas.scale.min=$REPLICAS \
 				--label com.openfaas.scale.max=$REPLICAS || return $?
