@@ -7,25 +7,16 @@ Created on Thu Nov 18 15:06:52 2021
 
 import os
 from minio import Minio
-import platform
 import pandas as pd
 import pickle
 import gensim
 from gensim import models
-from gensim.test.utils import datapath
-from gensim.parsing.preprocessing import STOPWORDS
-import nltk
+#import nltk
 from nltk.stem import WordNetLemmatizer, SnowballStemmer
-import io
+#import io
 # this will be included in the docker image
 #nltk.download('wordnet', download_dir='/tmp')
 #nltk.download('omw-1.4', download_dir='/tmp')
-
-# Local modules
-#from .s3 import *
-
-# Determine CPU arch for S3 buckets
-arch = platform.machine().replace('_', '-')
 
 # Model files
 model_files=['/tmp/lda.model',
@@ -40,14 +31,14 @@ class topic_model:
 
     def preprocess(self,
                    training_data='/tmp/news_train.csv',
-                   bucket_name_in=f'topic-modeling',
-                   bucket_name_out=f'topic-modeling-{arch}'):
+                   bucket_in='topic-modeling',
+                   bucket_out='topic-modeling'):
         # =============================================================================
         #     LOAD news_train.csv FROM S3 BUCKET
         #     We will use the last 80% of the dataset for model training
         # =============================================================================
         if not os.path.exists(training_data):
-            self.__mc.fget_object(bucket_name_in, os.path.basename(training_data), training_data)
+            self.__mc.fget_object(bucket_in, os.path.basename(training_data), training_data)
         df = pd.read_csv(training_data, on_bad_lines='skip',
                          usecols=['publish_date', 'headline_text'])
         df['processed_text'] = df['headline_text'].apply(lambda x: self.process_data(x))
@@ -59,27 +50,25 @@ class topic_model:
         with open('/tmp/dictionary.p', 'wb') as f:
             pickle.dump(dictionary, f)
         # Create an out bucket if it does not exist
-        if not self.__mc.bucket_exists(bucket_name_out):
-            self.__mc.make_bucket(bucket_name_out)
-        self.__mc.fput_object(bucket_name_out, 'dictionary.p', '/tmp/dictionary.p')
+        if not self.__mc.bucket_exists(bucket_out):
+            self.__mc.make_bucket(bucket_out)
+        self.__mc.fput_object(bucket_out, 'dictionary.p', '/tmp/dictionary.p')
         with open('/tmp/corpus_tfidf.p', 'wb') as f:
             pickle.dump(corpus_tfidf, f)
-        self.__mc.fput_object(bucket_name_out, 'corpus_tfidf.p', '/tmp/corpus_tfidf.p')
+        self.__mc.fput_object(bucket_out, 'corpus_tfidf.p', '/tmp/corpus_tfidf.p')
 
 
     def train(self,
               corpus_tfidf='/tmp/corpus_tfidf.p',
               dictionary='/tmp/dictionary.p',
-              bucket_name_in=f'topic-modeling-{arch}',
-              bucket_name_out=f'topic-modeling-{arch}'):
+              bucket_out='topic-modeling'):
         # =============================================================================
         #     LOAD corpus_tfidf AND dictionary FROM S3 BUCKET
         # =============================================================================
         if not os.path.exists(corpus_tfidf):
-            self.__mc.fget_object(bucket_name_in, os.path.basename(corpus_tfidf), corpus_tfidf)
+            self.__mc.fget_object(bucket_out, os.path.basename(corpus_tfidf), corpus_tfidf)
         if not os.path.exists(dictionary):
-            self.__mc.fget_object(bucket_name_in, os.path.basename(dictionary), dictionary)
-            #s3.s3_download(dictionary, bucket_name_in)
+            self.__mc.fget_object(bucket_out, os.path.basename(dictionary), dictionary)
         corpus_tfidf = pickle.load(open(corpus_tfidf, 'rb'))
         dictionary = pickle.load(open(dictionary, 'rb'))
         # DOESN'T WORK IN LAMBDA
@@ -93,26 +82,25 @@ class topic_model:
         # =============================================================================
         lda_model.save(model_files[0])
         for mfile in model_files:
-            self.__mc.fput_object(bucket_name_out, os.path.basename(mfile), mfile)
+            self.__mc.fput_object(bucket_out, os.path.basename(mfile), mfile)
 
 
     def query(self,
               test_data='/tmp/news_test_smaller.csv',
               dictionary='/tmp/dictionary.p',
-              bucket_name_in=[f'topic-modeling',
-                              f'topic-modeling-{arch}'],
-              bucket_name_out=f'topic-modeling-{arch}'):
+              bucket_in='topic-modeling',
+              bucket_out='topic-modeling'):
         # =============================================================================
         #     LOAD lda_model AND dictionary AND news_test.csv FROM S3 BUCKET
         #     We will use the last 20% of the dataset to query the model
         # =============================================================================
         if not os.path.exists(test_data):
-            self.__mc.fget_object(bucket_name_in[0], os.path.basename(test_data), test_data)
+            self.__mc.fget_object(bucket_in, os.path.basename(test_data), test_data)
         if not os.path.exists(dictionary):
-            self.__mc.fget_object(bucket_name_in[1], os.path.basename(dictionary), dictionary)
+            self.__mc.fget_object(bucket_out, os.path.basename(dictionary), dictionary)
         for mfile in model_files:
             if not os.path.exists(mfile):
-                self.__mc.fget_object(bucket_name_in[1], os.path.basename(mfile), mfile)
+                self.__mc.fget_object(bucket_out, os.path.basename(mfile), mfile)
         with open(dictionary, 'rb') as f:
             dictionary = pickle.load(f)
         lda_model = models.LdaModel.load(model_files[0])
@@ -127,7 +115,7 @@ class topic_model:
         # =============================================================================
         results_file = '/tmp/results.csv'
         df_query.to_csv(results_file)
-        self.__mc.fput_object(bucket_name_out, os.path.basename(results_file), results_file)
+        self.__mc.fput_object(bucket_out, os.path.basename(results_file), results_file)
 
 
     # =============================================================================

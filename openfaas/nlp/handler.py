@@ -27,12 +27,23 @@ def handle(event, context):
 
     body = json.loads(event.body)
     fn_name = body['fn']
+    bucket = body['bucket']
+
+    # Create an out bucket if it does not exist
+    if not mc.bucket_exists(bucket):
+        ret = {
+            "body": {
+                "status": 500,
+                "message": f"bucket {bucket} does not exist!"
+            }
+        }
+        return ret
 
     fn = {"preprocess": tm.preprocess,
           "train": tm.train,
           "query": tm.query}
 
-    fn[fn_name]()
+    fn[fn_name](bucket_out=bucket)
 
     inspector.inspectAllDeltas()
 

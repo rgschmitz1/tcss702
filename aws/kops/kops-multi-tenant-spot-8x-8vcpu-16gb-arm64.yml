@@ -98,12 +98,12 @@ spec:
     k8s.io/cluster-autoscaler/enabled: "1"
     k8s.io/cluster-autoscaler/kops-multi-tenant-spot-8x-8vcpu-16gb-arm64.k8s.local: "1"
   image: ssm:/aws/service/canonical/ubuntu/server/20.04/stable/current/arm64/hvm/ebs-gp2/ami-id
-  machineType: c6g.2xlarge
+  machineType: c7g.2xlarge
   maxSize: 8
   minSize: 8
   mixedInstancesPolicy:
     instances:
-    - c6g.2xlarge
+    - c7g.2xlarge
     onDemandAboveBase: 0
     onDemandBase: 0
     spotAllocationStrategy: capacity-optimized
