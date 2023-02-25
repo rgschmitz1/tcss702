@@ -116,8 +116,9 @@ deploy_fn() {
 
 	local yaml="$FN_NAME.yml"
 	local image=$(awk '/image:/ {print $NF}' $yaml)
-	if [ -z "$(docker images -q $image)" ]; then
-		faas-cli up -f $yaml \
+	if ! docker buildx imagetools inspect $image &> /dev/null; then
+		faas-cli publish -f $yaml --platforms linux/amd64,linux/arm64
+		faas-cli deploy -f $yaml \
 			--label com.openfaas.scale.min=$REPLICAS \
 			--label com.openfaas.scale.max=$REPLICAS || return $?
 	else
@@ -125,9 +126,10 @@ deploy_fn() {
 		echo
 		# faas-cli doesn't seem to update or replace existing functions correctly, we need to remove first
 		kubectl get service/$FN_NAME -n openfaas-fn &> /dev/null && \
-		faas-cli remove -f $yaml
+		faas-cli remove -f $yaml && sleep 5
 		if [ "${ANS,}" = 'y' ]; then
-			faas-cli up -f $yaml \
+			faas-cli publish -f $yaml --platforms linux/amd64,linux/arm64
+			faas-cli deploy -f $yaml \
 				--label com.openfaas.scale.min=$REPLICAS \
 				--label com.openfaas.scale.max=$REPLICAS || return $?
 		else
@@ -152,7 +154,6 @@ deploy_fn() {
 # Remove OpenFaaS function
 remove_fn() {
 	faas_login || return $?
-
 	faas-cli remove -f $FN_NAME.yml
 	return $?
 }
