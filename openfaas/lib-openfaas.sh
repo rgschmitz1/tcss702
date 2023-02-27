@@ -95,9 +95,22 @@ usage() {
 	exit $1
 }
 
+port_forward() {
+	# Forward the openfaas gateway to localhost
+	pgrep -f kubectl.*8080 > /dev/null && (pkill -f kubectl.*8080; sleep 3)
+	kubectl port-forward -n openfaas svc/gateway 8080:8080 &
+	if [ $? -ne 0 ]; then
+		echo "Failed to port-forward openfaas service"
+		exit 1
+	fi
+}
+
 export_gateway_url() {
 	export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080
-	[ "$OPENFAAS_URL" = ":8080" ] && export OPENFAAS_URL="localhost:8080"
+	if [ "$OPENFAAS_URL" = ":8080" ]; then
+		export OPENFAAS_URL="localhost:8080"
+		port_forward
+	fi
 	echo "OpenFaas using gateway: $OPENFAAS_URL"
 }
 
