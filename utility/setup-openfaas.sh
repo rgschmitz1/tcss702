@@ -19,24 +19,31 @@ set_elb_idle_timeout() {
 	# convert timeout to seconds
 	local timeout=$((${TIMEOUT%?}*60))
 	local i
-	echo "Wait while OpenFaaS gateway is configured"
 	for ((i=0; i<180; i++)); do
 		export OPENFAAS_URL=$(kubectl get svc -n openfaas gateway-external -o jsonpath='{.status.loadBalancer.ingress[*].hostname}'):8080
 		if [ "$OPENFAAS_URL" = ":8080" ]; then
 			sleep 1
 			continue
 		fi
-		echo "Your gateway URL is: $OPENFAAS_URL"
 		sleep 3
 		break
 	done
 	if [ "$OPENFAAS_URL" = ":8080" ]; then
-		echo "Failed to detect external gateway endpoint, try again!"
+		prompt_error "Failed to detect external gateway endpoint, try again!"
 		return 1
 	fi
+
+	# If current timeout matches what we will set, then return
+	local load_balancer_name=$(echo $OPENFAAS_URL | sed 's/-.*//')
+	local current_timeout=$(aws elb describe-load-balancer-attributes \
+		--load-balancer-name $load_balancer_name  | awk '/IdleTimeout/ {print $NF; exit}')
+	[ -n "$current_timeout" ] && [ $current_timeout = $timeout ] && return 0
+
+	# Modify load balancer idle timeout for longer running functions
+	echo "Wait while OpenFaaS gateway is configured"
 	local json="{\"ConnectionSettings\":{\"IdleTimeout\":$timeout}}"
 	aws elb modify-load-balancer-attributes \
-		--load-balancer-name $(echo $OPENFAAS_URL | sed 's/-.*//') \
+		--load-balancer-name $load_balancer_name \
 		--load-balancer-attributes "$json"
 	local ret=$?
 	[ $ret -eq 0 ] && sleep 1
