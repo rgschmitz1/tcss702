@@ -1,0 +1,71 @@
+2023-02-27 18:17:39 [ℹ]  eksctl version 0.130.0
+2023-02-27 18:17:39 [ℹ]  using region us-east-2
+2023-02-27 18:17:39 [ℹ]  subnets for us-east-2a - public:192.168.0.0/19 private:192.168.64.0/19
+2023-02-27 18:17:39 [ℹ]  subnets for us-east-2b - public:192.168.32.0/19 private:192.168.96.0/19
+2023-02-27 18:17:39 [ℹ]  nodegroup "ng-5b846ccd" will use "ami-000e3e7443ddf394d" [Ubuntu2004/1.24]
+2023-02-27 18:17:39 [ℹ]  using SSH public key "/home/bschmitz/.ssh/id_rsa.pub" as "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-nodegroup-ng-5b846ccd-2c:86:4f:38:01:42:a7:2d:7f:aa:4c:b3:0d:f9:35:0c" 
+2023-02-27 18:17:40 [ℹ]  using Kubernetes version 1.24
+2023-02-27 18:17:40 [ℹ]  creating EKS cluster "eks-multi-tenant-spot-8x-8vcpu-16gb-arm64" in "us-east-2" region with managed nodes
+2023-02-27 18:17:40 [ℹ]  1 nodegroup (ng-5b846ccd) was included (based on the include/exclude rules)
+2023-02-27 18:17:40 [ℹ]  will create a CloudFormation stack for cluster itself and 0 nodegroup stack(s)
+2023-02-27 18:17:40 [ℹ]  will create a CloudFormation stack for cluster itself and 1 managed nodegroup stack(s)
+2023-02-27 18:17:40 [ℹ]  if you encounter any issues, check CloudFormation console or try 'eksctl utils describe-stacks --region=us-east-2 --cluster=eks-multi-tenant-spot-8x-8vcpu-16gb-arm64'
+2023-02-27 18:17:40 [ℹ]  Kubernetes API endpoint access will use default of {publicAccess=true, privateAccess=false} for cluster "eks-multi-tenant-spot-8x-8vcpu-16gb-arm64" in "us-east-2"
+2023-02-27 18:17:40 [ℹ]  CloudWatch logging will not be enabled for cluster "eks-multi-tenant-spot-8x-8vcpu-16gb-arm64" in "us-east-2"
+2023-02-27 18:17:40 [ℹ]  you can enable it with 'eksctl utils update-cluster-logging --enable-types={SPECIFY-YOUR-LOG-TYPES-HERE (e.g. all)} --region=us-east-2 --cluster=eks-multi-tenant-spot-8x-8vcpu-16gb-arm64'
+2023-02-27 18:17:40 [ℹ]  
+2 sequential tasks: { create cluster control plane "eks-multi-tenant-spot-8x-8vcpu-16gb-arm64", 
+    2 sequential sub-tasks: { 
+        wait for control plane to become ready,
+        create managed nodegroup "ng-5b846ccd",
+    } 
+}
+2023-02-27 18:17:40 [ℹ]  building cluster stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:17:41 [ℹ]  deploying stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:18:11 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:18:41 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:19:41 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:20:43 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:21:43 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:22:44 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:23:44 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:24:44 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:25:44 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:26:45 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:27:45 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:28:45 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-cluster"
+2023-02-27 18:30:47 [ℹ]  building managed nodegroup stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-nodegroup-ng-5b846ccd"
+2023-02-27 18:30:47 [ℹ]  deploying stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-nodegroup-ng-5b846ccd"
+2023-02-27 18:30:47 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-nodegroup-ng-5b846ccd"
+2023-02-27 18:31:18 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-nodegroup-ng-5b846ccd"
+2023-02-27 18:32:17 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-nodegroup-ng-5b846ccd"
+2023-02-27 18:33:13 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-nodegroup-ng-5b846ccd"
+2023-02-27 18:35:02 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-nodegroup-ng-5b846ccd"
+2023-02-27 18:36:26 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-8x-8vcpu-16gb-arm64-nodegroup-ng-5b846ccd"
+2023-02-27 18:36:26 [ℹ]  waiting for the control plane to become ready
+2023-02-27 18:36:27 [✔]  saved kubeconfig as "/home/bschmitz/.kube/eksctl/clusters/eks-multi-tenant-spot-8x-8vcpu-16gb-arm64"
+2023-02-27 18:36:27 [ℹ]  no tasks
+2023-02-27 18:36:27 [✔]  all EKS cluster resources for "eks-multi-tenant-spot-8x-8vcpu-16gb-arm64" have been created
+2023-02-27 18:36:27 [ℹ]  nodegroup "ng-5b846ccd" has 8 node(s)
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-12-187.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-17-31.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-20-68.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-26-175.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-37-182.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-52-252.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-55-184.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-59-55.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  waiting for at least 8 node(s) to become ready in "ng-5b846ccd"
+2023-02-27 18:36:27 [ℹ]  nodegroup "ng-5b846ccd" has 8 node(s)
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-12-187.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-17-31.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-20-68.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-26-175.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-37-182.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-52-252.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-55-184.us-east-2.compute.internal" is ready
+2023-02-27 18:36:27 [ℹ]  node "ip-192-168-59-55.us-east-2.compute.internal" is ready
+2023-02-27 18:36:28 [ℹ]  kubectl command should work with "/home/bschmitz/.kube/eksctl/clusters/eks-multi-tenant-spot-8x-8vcpu-16gb-arm64", try 'kubectl --kubeconfig=/home/bschmitz/.kube/eksctl/clusters/eks-multi-tenant-spot-8x-8vcpu-16gb-arm64 get nodes'
+2023-02-27 18:36:28 [✔]  EKS cluster "eks-multi-tenant-spot-8x-8vcpu-16gb-arm64" in "us-east-2" region is ready
+
+Time: 1130 seconds
