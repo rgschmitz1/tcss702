@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Client architecture
+ARCH=$(dpkg --print-architecture)
+
+# buildx release
+BUILDX_VERSION='v0.10.3'
+BUILDX_PATH="$HOME/.docker/cli-plugins/docker-buildx"
+
 if ! which docker > /dev/null; then
 	. $(dirname $0)/color-prompt.sh
 	prompt_info "Installing docker"
@@ -15,7 +22,7 @@ if ! which docker > /dev/null; then
 
 	# Setup the repository
 	codename=$(awk -F= '/CODENAME/ {print $2; exit}' /etc/os-release)
-	echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+	echo "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.gpg] \
 	  https://download.docker.com/linux/ubuntu $codename stable" \
 	  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
@@ -36,4 +43,13 @@ if ! dpkg -s binfmt-support &> /dev/null || ! dpkg -s qemu-user-static &> /dev/n
 	sudo apt-get update && \
 	sudo apt-get install -y binfmt-support qemu-user-static
 fi
+
+# Install buildx
+if [ ! -f "$BUILDX_PATH" ]; then
+	mkdir -p "$(dirname $BUILDX_PATH)"
+	wget "https://github.com/docker/buildx/releases/download/$BUILDX_VERSION/buildx-$BUILDX_VERSION.linux-$ARCH" -O "$BUILDX_PATH"
+	chmod +x "$BUILDX_PATH"
+	docker buildx install || exit $?
+fi
+
 exit $?
