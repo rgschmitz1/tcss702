@@ -134,7 +134,8 @@ class Inspector:
                 self.__attributes['cpuModel'] = core_list[list_len]['Model']
             self.__attributes['architecture'] = "arm64"
         self.__attributes['cpuCores'] = int(cpu_count)
-        self.__attributes['cpuInfo'] = core_list
+        # RGS - This info pads filesize and does not add a lot of value
+        #self.__attributes['cpuInfo'] = core_list
         
     #
     # Collect timing CPU metrics
