@@ -1,0 +1,21 @@
+2023-03-11 17:56:11 [ℹ]  deleting EKS cluster "eks-multi-tenant-spot-1x-72vcpu-144gb"
+2023-03-11 17:56:11 [ℹ]  will drain 0 unmanaged nodegroup(s) in cluster "eks-multi-tenant-spot-1x-72vcpu-144gb"
+2023-03-11 17:56:11 [ℹ]  starting parallel draining, max in-flight of 1
+2023-03-11 17:56:12 [ℹ]  deleted 0 Fargate profile(s)
+2023-03-11 17:56:13 [ℹ]  cleaning up AWS load balancers created by Kubernetes objects of Kind Service or Ingress
+2023-03-11 17:56:14 [ℹ]  
+2 sequential tasks: { delete nodegroup "ng-5b846ccd", delete cluster control plane "eks-multi-tenant-spot-1x-72vcpu-144gb" [async] 
+}
+2023-03-11 17:56:14 [ℹ]  will delete stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 17:56:14 [ℹ]  waiting for stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd" to get deleted
+2023-03-11 17:56:14 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 17:56:44 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 17:57:29 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 17:59:26 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 18:01:06 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 18:01:59 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 18:03:51 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 18:03:52 [ℹ]  will delete stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-cluster"
+2023-03-11 18:03:52 [✔]  all cluster resources were deleted
+
+Time: 461 seconds

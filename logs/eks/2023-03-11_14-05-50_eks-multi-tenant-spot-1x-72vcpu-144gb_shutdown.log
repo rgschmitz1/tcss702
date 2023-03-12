@@ -1,0 +1,24 @@
+2023-03-11 14:05:50 [ℹ]  deleting EKS cluster "eks-multi-tenant-spot-1x-72vcpu-144gb"
+2023-03-11 14:05:51 [ℹ]  will drain 0 unmanaged nodegroup(s) in cluster "eks-multi-tenant-spot-1x-72vcpu-144gb"
+2023-03-11 14:05:51 [ℹ]  starting parallel draining, max in-flight of 1
+2023-03-11 14:05:51 [ℹ]  deleted 0 Fargate profile(s)
+2023-03-11 14:05:52 [ℹ]  cleaning up AWS load balancers created by Kubernetes objects of Kind Service or Ingress
+2023-03-11 14:05:53 [ℹ]  
+2 sequential tasks: { delete nodegroup "ng-5b846ccd", delete cluster control plane "eks-multi-tenant-spot-1x-72vcpu-144gb" [async] 
+}
+2023-03-11 14:05:53 [ℹ]  will delete stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:05:53 [ℹ]  waiting for stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd" to get deleted
+2023-03-11 14:05:53 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:06:23 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:06:55 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:07:28 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:08:39 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:09:48 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:10:42 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:12:24 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:13:47 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:14:48 [ℹ]  waiting for CloudFormation stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-nodegroup-ng-5b846ccd"
+2023-03-11 14:14:49 [ℹ]  will delete stack "eksctl-eks-multi-tenant-spot-1x-72vcpu-144gb-cluster"
+2023-03-11 14:14:49 [✔]  all cluster resources were deleted
+
+Time: 539 seconds
