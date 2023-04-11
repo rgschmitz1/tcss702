@@ -14,7 +14,7 @@ This repository contains scripts for setting up a development environment to nve
 | src | source code for bash 5.1.x (not needed for distributions using bash 5.1 or newer)
 | utility | shell scripts for installation and setup of prerequsite utilites.
 
-# Kubernetes environements
+# Kubernetes environments
 * __kind__ - Kubernetes in docker, used for local development
 * __kOps__ - For unmanaged Kubernetes clusters, AWS (Amazon Web Services) and GCE (Google Cloud Platform) are currently officially supported, with DigitalOcean, Hetzner and OpenStack in beta support, and Azure in alpha
 * __eks__ - For managed Kubernetes clusters using AWS Elastic Kubernetes Service (EKS)
